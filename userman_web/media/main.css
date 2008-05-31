@@ -1,0 +1,63 @@
+body {
+    margin: 9px 9px 0 9px;
+    padding: 0;
+    background: #ffffff;
+}
+
+h3 {
+    margin-top: 10px;
+    margin-bottom: 2pt;
+}
+
+table.group {
+    margin: 0px 5px 5px 5px;
+    float: left;
+    width: 19%;
+}
+
+table.groupfilter {
+    margin: 0px 0px 0px 5px;
+    float: none;
+}
+
+table {
+    color: black;
+    border: 1px solid black;
+    padding: 0;
+    border-spacing: 1px;
+}
+
+tr.odd {
+    background: #f0f0ff;
+}
+
+tr.even {
+    background: #e5e5f5;
+}
+
+tr.title {
+    background: #ffffff;
+}
+
+tr.total {
+    background: #f0f0ff;
+}
+
+tr {
+    background: #e5e5ff;
+}
+
+
+td {
+    padding: 2px;
+}
+
+img {
+    border : 0;
+}
+
+p.bottomtext {
+    clear: both;
+    color: black;
+    background: none;
+}

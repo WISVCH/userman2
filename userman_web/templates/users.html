@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Users{% endblock %}
+
+{% block content %}
+<form action='' method='get'>
+<table>
+<tr class='title'>
+  <td>&nbsp;</td>
+  <td>&nbsp;</td>
+  <td>UID</td>
+  <td>Common Name</td>
+  <td>UIDNumber</td>
+  <td>Deletion Mark</td>
+  <td>CH L</td>
+  <td>CH S</td>
+  <td>Ank L</td>
+  <td>Ank S</td>
+</tr>
+
+<tr class='title'>
+    <td>&nbsp;</td>
+    <td><input type='image' src='/site_media/filter.gif' alt='Filter'/></td>
+    <td>{{ form.uid }}</td>
+    <td>{{ form.cn }}</td>
+    <td>{{ form.uidnumber }}</td>
+    <td>{{ form.deleted }}</td>
+    <td>{{ form.chlocal }}{{ form.nochlocal }}</td>
+    <td>{{ form.chsamba }}{{ form.nochsamba }}</td>
+    <td>{{ form.anklocal }}{{ form.noanklocal }}</td>
+    <td>{{ form.anksamba }}{{ form.noanksamba }}</td>
+</tr>
+
+{% for user in users %}
+<tr class='{% cycle odd,even %}'>
+    <td><a href='{{ user.uid }}/'><img src='/site_media/edit.gif' alt='Edit'/></a></td>
+    <td><a href='{{ user.uid }}/mailrmwarning/' onclick="return confirm('Really send removal warning to {{ user.uid }}?')"><img src='/site_media/delete.gif' alt='Delete'/></a></td>
+    <td>{{ user.uid }}</td>
+    <td>{{ user.gecos.full_name|default:"&nbsp;" }}</td>
+    <td>{{ user.uidNumber }}</td>
+    <td>{{ user.toBeDeleted|date:"F d Y - H i"|default:"Never" }}</td>
+    <td>{% if user.chLocal  %}+{% else %}-{% endif %}</td>
+    <td>{% if user.chSamba  %}+{% else %}-{% endif %}</td>
+    <td>{% if user.ankLocal %}+{% else %}-{% endif %}</td>
+    <td>{% if user.ankSamba %}+{% else %}-{% endif %}</td>
+</tr>{% endfor %}
+{% comment %}<tr class='total'>
+  <td colspan='3'>Total:</td>
+  <td colspan='3'>$totalcnt</td>
+  <td>$delcnt</td>
+  <td>$chlocalcnt</td>
+  <td>$chsambacnt</td>
+  <td>$anklocalcnt</td>
+  <td>$anksambacnt</td>
+</tr>{% endcomment %}
+</table>
+</form>
+{% endblock %}
