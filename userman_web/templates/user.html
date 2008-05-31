@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}CH User Manager - Editing {{ user.uid }}{% endblock %}
+{% block content %}
+<table>
+<tr class='title'>
+  <td colspan='3'><h3>General Information:</h3></td>
+</tr>
+<tr>
+  <td><a href='chuid'><img src='/site_media/edit.gif' alt='Edit'/></a></td>
+  <td>UID</td><td>{{ user.uid }}</td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+  <td>UID Number</td><td>{{ user.uidNumber }}</td>
+</tr>
+<tr>
+  <td rowspan='4'><a href='chfn'><img src='/site_media/edit.gif' alt='Edit'/></a></td>
+  <td>Full Name</td><td>{{ user.gecos.full_name }}</td>
+</tr>
+<tr>
+  <td>Room Number</td><td>{{ user.gecos.room_number }}</td>
+</tr>
+<tr>
+  <td>Work Phone</td><td>{{ user.gecos.work_phone }}</td>
+</tr>
+<tr>
+  <td>Home Phone</td><td>{{ user.gecos.home_phone }}</td>
+</tr>
+<tr>
+  <td><a href='chdesc'><img src='/site_media/edit.gif' alt='Edit'/></a></td>
+  <td>Description</td><td>{{ user.description }}</td>
+</tr>
+<tr>
+  <td><a href='chsh'><img src='/site_media/edit.gif' alt='Edit'/></a></td>
+  <td>Login Shell</td><td>{{ user.loginShell }}</td>
+</tr>
+<tr>
+  <td><a href='chgroup'><img src='/site_media/edit.gif' alt='Edit'/></a></td>
+  <td>Primary Group ID</td><td>{{ user.gidNumber  }} (<a href='groupedit.php?cn=$groupname'>$groupname</a>)</td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+  <td><a href='/groups?memberuid={{ user.uid }}'>Groups</a></td>
+  <td>{% for group in user.groups %}<a href='/groups/{{ group }}'>{{ group }}</a>{% endfor %}</td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+  <td><a href='/aliases?memberuid={{ user.uid }}'>Aliases</a></td>
+  <td>{% for alias in user.aliases %}<a href='/aliases/{{ alias }}'>{{ alias }}</a>{% endfor %}</td>
+</tr>
+<tr>
+  <td>&nbsp;</td>
+  <td><a href='aliases.php?memberuid={{ user.uid }}'>Indirect Aliases</a></td>
+  <td>{% for alias in user.indirectAliases %}<a href='/aliases/{{ alias }}'>{{ alias }}</a>{% endfor %}</td>
+</tr>
+<tr class='title'>
+  <td colspan='3'><h3>Ank Account:</h3></td>
+</tr>
+<tr>
+  <td rowspan='2'><a href='chpriv'><img src='/site_media/edit.gif' alt='Edit'/></a></td>
+  <td>Local Access</td><td>{{ user.ankLocal }}</td>
+</tr>
+<tr>
+  <td>Samba Access</td><td>{{ user.ankSamba }}</td>
+</tr>
+<tr>
+  <td><a href='chhomeank'><img src='/site_media/edit.gif' alt='Edit'/></a></td>
+  <td>Home Directory</td><td>{{ user.homeDirectoryAnk }}</td>
+</tr>
+<tr class='title'>
+  <td colspan='3'><h3>CH Account:</h3></td>
+</tr>
+<tr>
+  <td rowspan='2'><a href='chpriv'><img src='/site_media/edit.gif' alt='Edit'/></a></td>
+  <td>Local Access</td><td>{{ user.chLocal }}</td>
+</tr>
+<tr>
+  <td>Samba Access</td><td>{{ user.chSamba }}</td>
+</tr>
+<tr>
+  <td><a href='chhomech'><img src='/site_media/edit.gif' alt='Edit'/></a></td>
+  <td>Home Directory</td><td>{{ user.homeDirectoryCH }}</td>
+</tr>
+</table>
+
+<p>
+  <a href='showldif'>Display an LDIF for this user</a>
+</p>
+<p>
+  <a href='chpasswd/'>Change user's password</a>
+  <br/><a href='resetpasswd/' onclick="return confirm('Reset password for {{ user.uid }}?')">Reset user's password</a>
+</p>
+<p>
+  <a href='genloginscript/'>Regenerate user's login script</a>
+  <br/><a href='removeprofile/' onclick="return confirm('Remove profile for {{ user.uid }}?')">Remove user's profile</a>
+  <br/><a href='mailrmwarning/' onclick="return confirm('Send removal warning to user {{ user.uid }}?')">Send Removal Warning</a>
+  <br/><a href='rmuser/' onclick="return confirm('Are you very sure you really want to delete {{ user.uid }}?')">Remove user</a>
+</p>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+  
+{% block content %}
+<form method="post" action="">
+<table>
+<tr class='title'><td colspan='3'><h3>Change {{ uid }}:</h3></td></tr>
+{{ form.as_table }}
+</table>
+<input type="submit" /><input type="reset" />
+</form>
+{% endblock %}
