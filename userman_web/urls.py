@@ -24,5 +24,5 @@ urlpatterns = patterns('',
 
 if settings.DEBUG:
     urlpatterns += patterns('',
-	(r'^site_media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': '/home/adriaan/workspace/userman_web/media'}),
+	(r'^site_media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'media'}),
     )
