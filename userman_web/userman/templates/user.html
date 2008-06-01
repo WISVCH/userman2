@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load userman_tags %}
 {% block title %}CH User Manager - Editing {{ user.uid }}{% endblock %}
 {% block content %}
 <table>
@@ -44,22 +45,22 @@
 </tr>
 <tr>
   <td><a href='chgroup'><img src='/site_media/edit.gif' alt='Edit'/></a></td>
-  <td>Primary Group ID</td><td>{{ user.gidNumber  }} (<a href='groupedit.php?cn=$groupname'>$groupname</a>)</td>
+  <td>Primary Group ID</td><td>{{ user.gidNumber  }} (<a href='/groups/{{user.gidNumber|groupname}}'>{{user.gidNumber|groupname}}</a>)</td>
 </tr>
 <tr>
   <td>&nbsp;</td>
   <td><a href='/groups?memberuid={{ user.uid }}'>Groups</a></td>
-  <td>{% for group in user.groups %}<a href='/groups/{{ group }}'>{{ group }}</a>{% endfor %}</td>
+  <td>{% for group in user.getSecondaryGroups %}<a href='/groups/{{ group }}'>{{ group }}</a> {% endfor %}</td>
 </tr>
 <tr>
   <td>&nbsp;</td>
   <td><a href='/aliases?memberuid={{ user.uid }}'>Aliases</a></td>
-  <td>{% for alias in user.aliases %}<a href='/aliases/{{ alias }}'>{{ alias }}</a>{% endfor %}</td>
+  <td>{% for alias in user.getDirectAliases %}<a href='/aliases/{{ alias }}'>{{ alias }}</a> {% endfor %}</td>
 </tr>
 <tr>
   <td>&nbsp;</td>
   <td><a href='aliases.php?memberuid={{ user.uid }}'>Indirect Aliases</a></td>
-  <td>{% for alias in user.indirectAliases %}<a href='/aliases/{{ alias }}'>{{ alias }}</a>{% endfor %}</td>
+  <td>{% for alias in user.getIndirectAliases %}<a href='/aliases/{{ alias }}'>{{ alias }}</a> {% endfor %}</td>
 </tr>
 <tr class='title'>
   <td colspan='3'><h3>Authorized Services: <a href='chpriv'><img src='/site_media/edit.gif' alt='Edit'/></a></h3></td>

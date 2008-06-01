@@ -3,6 +3,8 @@ import ldap
 from ldapconn import LDAPConn
 from ldap.cidict import cidict
 from django.conf import settings
+from userman.model import group
+from userman.model import alias
 
 class User (LDAPConn):
     """Represents a user in the ldap tree."""
@@ -148,9 +150,14 @@ class User (LDAPConn):
 #	(_, attrs) = res[0]
 #	return attrs["cn"][0];
 	
-#    def getSecondaryGroups(self):
-#	res = self.l.search_s(config.ldapGroupOU, ldap.SCOPE_SUBTREE, 'memberUid=' + self.attrs["uid"][0])
-#	return [ attribs["cn"][0] for dn, attribs in res ]
+    def getSecondaryGroups(self):
+	return group.getCnForUid(self.uid)
+
+    def getDirectAliases(self):
+	return alias.getCnForUid(self.uid)
+
+    def getIndirectAliases(self):
+	return alias.getIndirectCnForUid(self.uid)
 
 #    def getGroups(self):
 #	sec = self.getSecondaryGroups();

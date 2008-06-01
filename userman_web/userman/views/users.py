@@ -1,9 +1,9 @@
-from userman_web.model import user
+from userman.model import user
 from django.shortcuts import render_to_response
 from django.http import Http404, HttpResponseRedirect
 from django.views.decorators.cache import cache_control
 
-from userman_web.forms.user import *
+from userman.forms.user import *
 
 def displayUsers(request):
     if (request.GET):
