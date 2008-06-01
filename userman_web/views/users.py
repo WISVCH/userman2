@@ -79,6 +79,7 @@ def userChsh(request, uid):
 
     return render_to_response('form.html', {'form': form, 'uid': userObj.uid})
 
+
 @cache_control(no_cache=True, must_revalidate=True)
 def userChgroup(request, uid):
     try:
@@ -95,3 +96,34 @@ def userChgroup(request, uid):
 	    form = ChgroupForm( initial={"gid_number": userObj.gidNumber})
 
     return render_to_response('form.html', {'form': form, 'uid': userObj.uid})
+
+@cache_control(no_cache=True, must_revalidate=True)
+def userChpriv(request, uid):
+    try:
+        userObj = user.fromUID(uid)
+    except Exception, e:
+        raise Http404
+    
+    if request.method == 'POST':
+	form = ChprivForm(request.POST)
+	if form.is_valid():
+	    serviceStr = str(form.clean_data["service"]) + "@" + str(form.clean_data["server"])
+	    if not serviceStr in userObj.authorizedServices:
+		userObj.addAuthorizedService(str(form.clean_data["service"]) + "@" + str(form.clean_data["server"]))
+		return HttpResponseRedirect('/users/' + userObj.uid +'/chpriv/')
+    else:
+	    form = ChprivForm()
+
+    return render_to_response('userpriv.html', {'form': form, 'user': userObj})
+
+def userRmpriv(request, uid, service, server):
+    try:
+        userObj = user.fromUID(uid)
+    except Exception, e:
+        raise Http404
+    serviceStr = service + "@" + server
+    if not serviceStr in userObj.authorizedServices:
+        raise Http404
+    userObj.removeAuthorizedService(serviceStr)
+    return HttpResponseRedirect('/users/' + userObj.uid +'/chpriv/')
+    
