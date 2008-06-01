@@ -126,4 +126,14 @@ def userRmpriv(request, uid, service, server):
         raise Http404
     userObj.removeAuthorizedService(serviceStr)
     return HttpResponseRedirect('/users/' + userObj.uid +'/chpriv/')
-    
+
+@cache_control(no_cache=True, must_revalidate=True)
+def userShowldif(request, uid):
+    try:
+        userObj = user.fromUID(uid)
+    except Exception, e:
+        raise Http404
+
+    print userObj.ldif
+
+    return render_to_response('usershowldif.html', {'user': userObj})
