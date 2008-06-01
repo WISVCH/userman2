@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+  
+{% block content %}
+<table>
+</table>
+
+<form method="post" action="">
+<table>
+<tr class='title'><td colspan='2'><h3>Current services:</h3></td></tr>
+{% for service in user.authorizedServices %}
+<tr>
+<td><a href='rm/{{ service }}'><img src='/site_media/delete.gif' alt='Delete'></a>
+<td colspan='2'>{{ service }}</td>
+</tr>
+{% endfor %}
+<tr class='title'><td colspan='2'><h3>Add authorized service:</h3></td></tr>
+<tr><td></td><td>{{form.service}}@{{form.server}}</td></tr>
+</table>
+<input type="submit" /><input type="reset" />
+</form>
+{% endblock %}
