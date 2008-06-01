@@ -35,6 +35,14 @@
   <td>Login Shell</td><td>{{ user.loginShell }}</td>
 </tr>
 <tr>
+  <td><a href='chhomeank'><img src='/site_media/edit.gif' alt='Edit'/></a></td>
+  <td>Home Directory</td><td>{{ user.homeDirectoryAnk }}</td>
+</tr>
+<tr>
+  <td><a href='chhomech'><img src='/site_media/edit.gif' alt='Edit'/></a></td>
+  <td>Home Directory (CH)</td><td>{{ user.homeDirectoryCH }}</td>
+</tr>
+<tr>
   <td><a href='chgroup'><img src='/site_media/edit.gif' alt='Edit'/></a></td>
   <td>Primary Group ID</td><td>{{ user.gidNumber  }} (<a href='groupedit.php?cn=$groupname'>$groupname</a>)</td>
 </tr>
@@ -61,27 +69,6 @@
   <td></td><td>Service</td><td>{{ service }}</td>
 </tr>
 {%endfor%}
-<tr class='title'>
-  <td colspan='3'><h3>Ank Account:</h3></td>
-</tr>
-<tr>
-  <td><a href='chhomeank'><img src='/site_media/edit.gif' alt='Edit'/></a></td>
-  <td>Home Directory</td><td>{{ user.homeDirectoryAnk }}</td>
-</tr>
-<tr class='title'>
-  <td colspan='3'><h3>CH Account:</h3></td>
-</tr>
-<tr>
-  <td rowspan='2'><a href='chpriv'><img src='/site_media/edit.gif' alt='Edit'/></a></td>
-  <td>Local Access</td><td>{{ user.chLocal }}</td>
-</tr>
-<tr>
-  <td>Samba Access</td><td>{{ user.chSamba }}</td>
-</tr>
-<tr>
-  <td><a href='chhomech'><img src='/site_media/edit.gif' alt='Edit'/></a></td>
-  <td>Home Directory</td><td>{{ user.homeDirectoryCH }}</td>
-</tr>
 </table>
 
 <p>
