@@ -15,7 +15,6 @@ class User (LDAPConn):
 	    return
 
 	self.connectRoot()
-
 	res = self.l.search_s(self.dn, ldap.SCOPE_BASE)
 	(_, attrs) = res[0]
 	self.__attrs = cidict(attrs)
@@ -23,6 +22,7 @@ class User (LDAPConn):
     def _get_uid(self):
 	return self.__attrs["uid"][0]
     uid = property (_get_uid)
+
 
     def _get_uidNumber(self):
 	return int(self.__attrs["uidNumber"][0])
@@ -99,7 +99,19 @@ class User (LDAPConn):
     def get_chSamba(self):
 	return self.__attrs["allowSambaLogonCH"][0] == "TRUE"
     chSamba = property (get_chSamba)
-    
+
+    def _get_authorizedServices(self):
+	if 'authorizedservice' in self.__attrs:
+    	    return self.__attrs["authorizedService"]
+	return []
+    authorizedServices = property (_get_authorizedServices)
+
+    def addAuthorizedService(self, service):
+	self.addEntries({'authorizedService': service})
+
+    def removeAuthorizedService(self, service):
+	self.removeEntries({'authorizedService': service})
+        
     def get_homeDirCH(self):
 	return self.__attrs["homeDirectoryCH"][0]
     homeDirectoryCH = property(get_homeDirCH)

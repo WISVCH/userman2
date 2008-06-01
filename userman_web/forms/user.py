@@ -9,6 +9,10 @@ class ChfnForm(forms.Form):
 class ChdescForm(forms.Form):
     description = forms.CharField(required=False)
 
+class ChprivForm(forms.Form):
+    server = forms.ChoiceField(choices=(("frans", "frans"), ("ank", "ank"), ("ch", "ch")))
+    service = forms.ChoiceField(choices=(("ssh", "ssh"), ("samba", "samba")))
+
 class ChshForm(forms.Form):
     login_shell = forms.ChoiceField(choices=(('/bin/bash','/bin/bash'), ("/usr/bin/tcsh", "/usr/bin/tcsh"), ("/bin/false", "/bin/false")))
 

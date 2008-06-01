@@ -10,6 +10,8 @@ urlpatterns = patterns('',
     (r'^users/([a-zA-Z][a-zA-Z\d]+)/chfn/$', 'views.users.userChfn'),
     (r'^users/([a-zA-Z][a-zA-Z\d]+)/chdesc/$', 'views.users.userChdesc'),
     (r'^users/([a-zA-Z][a-zA-Z\d]+)/chsh/$', 'views.users.userChsh'),
+    (r'^users/([a-zA-Z][a-zA-Z\d]+)/chpriv/$', 'views.users.userChpriv'),
+    (r'^users/([a-zA-Z][a-zA-Z\d]+)/chpriv/rm/([a-zA-z]+)@([a-zA-z]+)/$', 'views.users.userRmpriv'),
     (r'^users/([a-zA-Z][a-zA-Z\d]+)/chgroup/$', 'views.users.userChgroup'),
 		
     (r'^groups/$', 'views.groups.displayGroups'),

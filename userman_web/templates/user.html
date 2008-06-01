@@ -54,14 +54,15 @@
   <td>{% for alias in user.indirectAliases %}<a href='/aliases/{{ alias }}'>{{ alias }}</a>{% endfor %}</td>
 </tr>
 <tr class='title'>
+  <td colspan='3'><h3>Authorized Services: <a href='chpriv'><img src='/site_media/edit.gif' alt='Edit'/></a></h3></td>
+</tr>
+{% for service in user.authorizedServices %}
+<tr>
+  <td></td><td>Service</td><td>{{ service }}</td>
+</tr>
+{%endfor%}
+<tr class='title'>
   <td colspan='3'><h3>Ank Account:</h3></td>
-</tr>
-<tr>
-  <td rowspan='2'><a href='chpriv'><img src='/site_media/edit.gif' alt='Edit'/></a></td>
-  <td>Local Access</td><td>{{ user.ankLocal }}</td>
-</tr>
-<tr>
-  <td>Samba Access</td><td>{{ user.ankSamba }}</td>
 </tr>
 <tr>
   <td><a href='chhomeank'><img src='/site_media/edit.gif' alt='Edit'/></a></td>
