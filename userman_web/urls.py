@@ -13,6 +13,7 @@ urlpatterns = patterns('',
     (r'^users/([a-zA-Z][a-zA-Z\d]+)/chpriv/$', 'userman.views.users.userChpriv'),
     (r'^users/([a-zA-Z][a-zA-Z\d]+)/chpriv/rm/([a-zA-z]+)@([a-zA-z]+)/$', 'userman.views.users.userRmpriv'),
     (r'^users/([a-zA-Z][a-zA-Z\d]+)/chgroup/$', 'userman.views.users.userChgroup'),
+    (r'^users/([a-zA-Z][a-zA-Z\d]+)/showldif/$', 'userman.views.users.userShowldif'),
 		
     (r'^groups/$', 'userman.views.groups.displayGroups'),
     (r'^groups/([a-zA-Z][a-zA-Z\d]+)/$', 'userman.views.groups.displayGroup'),

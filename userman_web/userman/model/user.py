@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-import ldap
+import ldap, ldif
+from StringIO import StringIO
 from ldapconn import LDAPConn
 from ldap.cidict import cidict
 from django.conf import settings
@@ -122,6 +123,12 @@ class User (LDAPConn):
 	return self.__attrs["homeDirectory"][0]
     homeDirectoryAnk = property(get_homeDir)
 
+    def get_ldif(self):
+        out = StringIO()
+        ldif_out = ldif.LDIFWriter(out)
+        ldif_out.unparse(self.dn, dict(self.__attrs))
+        return out.getvalue()
+    ldif = property(get_ldif)
 
 #    def getHomeDirectory(self, host):
 #	if host == 'ch.chnet':
@@ -166,7 +173,7 @@ class User (LDAPConn):
 #	    return sec
 #	else:
 #	    return sec + [pri]
-	
+
     def __str__(self):
 	return "User: [ dn:'" + self.dn + ", uid:'" + self.uid + "', cn:'" +self.cn + "' ]"
 
@@ -199,3 +206,9 @@ def getAllUsers(filter_data=False):
     res.sort()
     ret = [User(dn, attrs) for (dn, attrs) in res]
     return ret
+
+def getPrimaryMembersForGid(gid):
+    ld = LDAPConn()
+    ld.connectRoot()
+    res = ld.l.search_s(settings.LDAP_USERDN, ldap.SCOPE_ONELEVEL, 'gidNumber='+str(gid))
+    return [ attribs["uid"][0] for dn, attribs in res ]

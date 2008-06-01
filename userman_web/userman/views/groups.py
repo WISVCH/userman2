@@ -1,9 +1,9 @@
-from userman_web.model import group
+from userman.model import group
 from django.shortcuts import render_to_response
 from django.http import Http404, HttpResponseRedirect
 from django.views.decorators.cache import cache_control
 
-from userman_web.forms.group import *
+from userman.forms.group import *
 
 def displayGroups(request):
     if (request.GET):
