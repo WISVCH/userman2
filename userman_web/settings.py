@@ -71,7 +71,7 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     '/home/adriaan/userman/userman_web/templates',
-    
+    '/home/adriaan/workspace/userman_web/userman/templates',
 )
 
 INSTALLED_APPS = (
@@ -79,6 +79,7 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+    'userman_web.userman',
 )
 
 LDAP_HOST = 'ldaps://frans.chnet/'

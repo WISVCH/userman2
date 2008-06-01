@@ -5,6 +5,7 @@ from ldapconn import LDAPConn
 from ldap.cidict import cidict
 from django.conf import settings
 
+
 class Group (LDAPConn):
     def __init__ (self, dn, attrs = False):
 	LDAPConn.__init__(self)
@@ -41,7 +42,7 @@ def fromCN(cn):
 
 def getAllGroups(filter_data=False):
     ld = LDAPConn()
-    ld.connectRoot()
+    ld.connectAnon()
     res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_ONELEVEL)
     res.sort()
     ret = {"None": [Group(dn, attrs) for (dn, attrs) in res if "posixGroup" in attrs["objectClass"] ] }
@@ -51,4 +52,18 @@ def getAllGroups(filter_data=False):
 	res.sort()
 	ret[child[1]] = [Group(dn, attrs) for (dn, attrs) in res if "posixGroup" in attrs["objectClass"]]
     return ret
-    
+
+def groupname(value):
+    ld = LDAPConn()
+    ld.connectAnon()
+    res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_SUBTREE, "(gidNumber=" +value +")")
+    if len(res) > 0 and 'cn' in res[0][1]:
+	return res[0][1]['cn'][0]
+    else:
+	return 'unknown group'
+
+def getCnForUid(uid): 
+    ld = LDAPConn()
+    ld.connectAnon()
+    res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_SUBTREE, 'memberUid=' + uid)
+    return [ attribs["cn"][0] for dn, attribs in res ]
