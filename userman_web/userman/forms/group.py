@@ -22,5 +22,7 @@ class GroupsForm(forms.Form):
 
 class AddUserForm(forms.Form):
     possibleUsers = [ (username, username) for username in user.getAllUserNames() ]
-     
-    user = forms.ChoiceField(choices=possibleUsers)    
+    user = forms.ChoiceField(choices=possibleUsers)
+    
+class AddGroupForm(forms.Form):
+    common_name = forms.RegexField(regex="^[a-zA-Z\d\-_]+$", required=True)

@@ -113,6 +113,7 @@ def getAllAliases(filter_data=False):
                 ret[iAlias.parent] += [iAlias]
 
     return ret
+
 def GetParents():
     """Returns the possible parents of an alias"""
     ld = LDAPConn()

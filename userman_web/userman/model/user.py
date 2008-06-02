@@ -6,6 +6,12 @@ from ldap.cidict import cidict
 from django.conf import settings
 from userman.model import group
 from userman.model import alias
+import hashlib
+from base64 import urlsafe_b64encode
+import random
+import string
+import os
+import time
 
 class User (LDAPConn):
     """Represents a user in the ldap tree."""
@@ -159,7 +165,7 @@ class User (LDAPConn):
 #	return attrs["cn"][0];
 	
     def getSecondaryGroups(self):
-        return group.getCnForUid(self.uid)
+        return group.GetCnForUid(self.uid)
 
     def getDirectAliases(self):
         return alias.getCnForUid(self.uid, ld=self)
@@ -178,7 +184,7 @@ class User (LDAPConn):
     def __str__(self):
 	return "User: [ dn:'" + self.dn + ", uid:'" + self.uid + "', cn:'" +self.cn + "' ]"
 
-def fromUID(uid):
+def FromUID(uid):
     try:
         return User("uid=" + uid + "," + settings.LDAP_USERDN)
     except ldap.LDAPError, e:
@@ -227,4 +233,52 @@ def Exists(uid):
     ld.connectAnon()
     res = ld.l.search_s(settings.LDAP_USERDN, ldap.SCOPE_SUBTREE, "uid="+uid)
     return len(res) != 0 
+
+def GetFreeUIDNumber():
+    ld = LDAPConn()
+    ld.connectAnon()
+    for i in range(settings.MIN_USER_ID, settings.MAX_USER_ID):
+        res = ld.l.search_s(settings.LDAP_USERDN, ldap.SCOPE_SUBTREE, "uidNumber=" + str(i))
+        if len(res) == 0:
+            break;
+    
+    if i == settings.MAX_USER_ID:
+        raise Exception, "No more free user IDs"
+    return i
+    
+def EncodePassword(password):
+    salt = os.urandom(4)
+    h = hashlib.sha1(password)
+    h.update(salt)
+    return "{SSHA}" + urlsafe_b64encode(h.digest() + salt)
+
+def GeneratePassword(length = 8):
+    chars = string.letters + string.letters + string.digits + string.punctuation
+    return ''.join([random.choice(chars) for i in range(length)])
+
+def Add(uid, fullname):
+    ld = LDAPConn()
+    ld.connectRoot()
+
+    password = GeneratePassword()
+    dn = 'uid=' + uid + ',' + settings.LDAP_USERDN
+    entry = {'uid': uid}
+    entry['objectClass'] = ['account', 'chbakAccount']
+    entry['uidNumber'] = str(GetFreeUIDNumber())
+    entry['userPassword'] = EncodePassword(password)
+    entry['cn'] = fullname
+    entry['displayName'] = fullname
+    entry['gecos'] = fullname +",,,"
+    entry['gidNumber'] = str(settings.USER_GIDNUMBER)
+    entry['homeDirectory'] = settings.ANK_HOME_BASE + entry['uid']
+    entry['homeDirectoryCH'] = settings.CH_HOME_BASE + entry['uid']
+    entry['loginShell'] = settings.DEFAULT_SHELL
+    entry['shadowLastChange'] = str(int(time.time()/86400))
+    entry['shadowMax'] = str(99999)
+    entry['shadowWarning'] = str(7)
+
+    assert False, entry
+    ld.addObject(dn, entry)
+
+    return FromUID(entry['uid'])
   

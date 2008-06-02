@@ -8,7 +8,7 @@ register = template.Library()
 @register.filter
 @stringfilter
 def groupname(value):
-    return group.groupname(value)
+    return group.Groupname(value)
 
 @register.filter
 @stringfilter

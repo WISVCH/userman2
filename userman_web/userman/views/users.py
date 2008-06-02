@@ -22,7 +22,7 @@ def displayUsers(request):
 @cache_control(no_cache=True, must_revalidate=True)
 def displayUser(request, uid):
     try:
-	userObj = user.fromUID(uid)
+	userObj = user.FromUID(uid)
     except Exception, e:
 	raise Http404
     return render_to_response('user.html', {'user': userObj})
@@ -31,7 +31,7 @@ def displayUser(request, uid):
 @cache_control(no_cache=True, must_revalidate=True)
 def userChfn(request, uid):
     try:
-        userObj = user.fromUID(uid)
+        userObj = user.FromUID(uid)
     except Exception, e:
         raise Http404
     
@@ -48,7 +48,7 @@ def userChfn(request, uid):
 @cache_control(no_cache=True, must_revalidate=True)
 def userChdesc(request, uid):
     try:
-        userObj = user.fromUID(uid)
+        userObj = user.FromUID(uid)
     except Exception, e:
         raise Http404
     
@@ -65,7 +65,7 @@ def userChdesc(request, uid):
 @cache_control(no_cache=True, must_revalidate=True)
 def userChsh(request, uid):
     try:
-        userObj = user.fromUID(uid)
+        userObj = user.FromUID(uid)
     except Exception, e:
         raise Http404
     
@@ -83,7 +83,7 @@ def userChsh(request, uid):
 @cache_control(no_cache=True, must_revalidate=True)
 def userChgroup(request, uid):
     try:
-        userObj = user.fromUID(uid)
+        userObj = user.FromUID(uid)
     except Exception, e:
         raise Http404
     
@@ -100,7 +100,7 @@ def userChgroup(request, uid):
 @cache_control(no_cache=True, must_revalidate=True)
 def userChpriv(request, uid):
     try:
-        userObj = user.fromUID(uid)
+        userObj = user.FromUID(uid)
     except Exception, e:
         raise Http404
     
@@ -118,7 +118,7 @@ def userChpriv(request, uid):
 
 def userRmpriv(request, uid, service, server):
     try:
-        userObj = user.fromUID(uid)
+        userObj = user.FromUID(uid)
     except Exception, e:
         raise Http404
     serviceStr = service + "@" + server
@@ -130,10 +130,28 @@ def userRmpriv(request, uid, service, server):
 @cache_control(no_cache=True, must_revalidate=True)
 def userShowldif(request, uid):
     try:
-        userObj = user.fromUID(uid)
+        userObj = user.FromUID(uid)
     except Exception, e:
         raise Http404
 
     print userObj.ldif
 
     return render_to_response('usershowldif.html', {'user': userObj})
+
+def addUser(request):
+    if request.method == 'POST':
+        form = AddUserForm(request.POST)
+        if form.is_valid():
+            if user.Exists(form.clean_data['uid']):
+                raise Http404
+            newUser = user.Add(str(form.clean_data['uid']), str(form.clean_data['full_name']))
+#            newUser.createGroupDir('ank.chnet')
+#            newUser.createGroupDir('ch.chnet')
+#            newUser.createMailbox('ch.chnet')
+#            newUser.generateLogonScript()
+            
+            return HttpResponseRedirect('/users/' + form.clean_data['uid'] + '/')
+    else:
+        form = AddUserForm()
+    
+    return render_to_response('form.html', {'form': form, 'uid': "users"})
