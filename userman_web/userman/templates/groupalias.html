@@ -11,11 +11,13 @@
 		<td>CN:</td>
 		<td>{{group.cn}}</td>
 	</tr>
+	{% if group.gidNumber %}
 	<tr>
 		<td>&nbsp;</td>
 		<td>GIDNumber:</td>
 		<td>{{group.gidNumber}}</td>
 	</tr>
+	{% endif %}
 	<tr>
 		<td>&nbsp;</td>
 		<td>Type:</td>
@@ -34,6 +36,7 @@
 		<td colspan='2'><a href='/users/{{member}}/'>{{member}}</a></td>
 	</tr>
 	{%endfor%}
+	{% if group.gidNumber %}
 	<tr class='title'>
 		<td colspan='3'>
 		<h3>Primary Members</h3>
@@ -45,6 +48,7 @@
 		<td colspan='2'><a href='/users/{{member}}/'>{{member}}</a></td>
 	</tr>
 	{%endfor%}
+	{% endif %}
 </table>
 <p><a href='rmgroup/' onclick="return confirm('Really remove group {{group.cn}}?')">Remove Group</a></p>
 {% endblock %}

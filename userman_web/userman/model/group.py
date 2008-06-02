@@ -11,7 +11,7 @@ class Group (LDAPConn):
         self.dn = dn
 
         if attrs:
-            self.__attrs = attrs
+            self.__attrs = cidict(attrs)
             return
 
         self.connectRoot()
@@ -36,10 +36,16 @@ class Group (LDAPConn):
     gidNumber = property(_get_gidNumber)
 
     def _get_members(self):
-        if 'memberUid' in self.__attrs:
+        if 'memberuid' in self.__attrs:
     	    return self.__attrs["memberUid"]
         return []
     members = property(_get_members)
+
+    def removeMember(self, member):
+        self.removeEntries({'memberUid': member})
+
+    def addMember(self, member):
+        self.addEntries({'memberUid': member})
 
     def getPrimaryMembers(self):
         from userman.model import user
@@ -67,10 +73,9 @@ def getAllGroups(filter_data=False):
         filter_string = "(&"
         if filter_data['uid']: filter_string += "(memberUid=*" + filter_data['uid'] + "*)"
         if filter_data['cn']: filter_string += "(cn=*" + filter_data['cn'] + "*)"
-        if filter_data['gidnumber']: filter_string += "(gidNumber=" + str(filter_data['gidnumber']) + ")"
         filter_string += "(objectClass=posixGroup))"
     else:
-        filter_string += "(objectClass=posixGroup)"
+        filter_string = "(objectClass=posixGroup)"
         
     res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_SUBTREE, filter_string)
 

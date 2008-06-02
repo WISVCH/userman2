@@ -14,7 +14,7 @@ class User (LDAPConn):
         self.dn = dn
 
         if attrs:
-            self.__attrs = attrs
+            self.__attrs = cidict(attrs)
             return
 
         self.connectRoot()
@@ -88,19 +88,20 @@ class User (LDAPConn):
 
     # login permissions
     def get_chLocal(self):
-        return self.__attrs["allowLocalLogonCH"][0] == "TRUE"
+        return "ssh@ch" in self.authorizedServices
     chLocal = property (get_chLocal)
 
     def get_ankLocal(self):
-        return self.__attrs["allowLocalLogonAnk"][0] == "TRUE"
+        return "ssh@ank" in self.authorizedServices
     ankLocal = property (get_ankLocal)
 
     def get_ankSamba(self):
-        return self.__attrs["allowSambaLogonAnk"][0] == "TRUE"
+        return "samba@ank" in self.authorizedServices
     ankSamba = property (get_ankSamba)
 
     def get_chSamba(self):
-        return self.__attrs["allowSambaLogonCH"][0] == "TRUE"
+#        assert False, self.authorizedServices
+        return "samba@ch" in self.authorizedServices
     chSamba = property (get_chSamba)
 
     def _get_authorizedServices(self):
@@ -183,6 +184,14 @@ def fromUID(uid):
     except ldap.LDAPError, e:
         raise Exception, "Error finding user " + uid
 
+def getAllUserNames():
+    ld = LDAPConn()
+    ld.connectAnon()
+    res = ld.l.search_s(settings.LDAP_USERDN, ldap.SCOPE_ONELEVEL)
+    res.sort()
+    return [attrs['uid'][0] for (dn, attrs) in res]
+    
+    
 def getAllUsers(filter_data=False):
     ld = LDAPConn()
     ld.connectRoot()
