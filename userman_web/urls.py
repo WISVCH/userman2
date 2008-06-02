@@ -21,6 +21,11 @@ urlpatterns = patterns('',
     (r'^groups/([a-zA-Z][a-zA-Z\d]+)/rmuser/([a-zA-Z][a-zA-Z\d]+)/$', 'userman.views.groups.rmuser'),
     (r'^groups/([a-zA-Z][a-zA-Z\d]+)/adduser/$', 'userman.views.groups.adduser'),
 
+    (r'^aliases/$', 'userman.views.aliases.displayAliases'),
+    (r'^aliases/([a-zA-Z][a-zA-Z_\d]+)/$', 'userman.views.aliases.displayAlias'),
+    (r'^aliases/([a-zA-Z][a-zA-Z_\d]+)/rmalias/$', 'userman.views.aliases.rmalias'),
+    (r'^aliases/([a-zA-Z][a-zA-Z_\d]+)/rmuser/([a-zA-Z][a-zA-Z\d]+)/$', 'userman.views.aliases.rmuser'),
+    (r'^aliases/([a-zA-Z][a-zA-Z_\d]+)/adduser/$', 'userman.views.aliases.adduser'),
 
     # Uncomment this for admin:
 #     (r'^admin/', include('django.contrib.admin.urls')),

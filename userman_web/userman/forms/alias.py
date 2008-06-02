@@ -16,7 +16,7 @@ from userman.model import user
 #class ChgroupForm(forms.Form):
 #    gid_number = forms.ChoiceField(choices=((100,'users'), (50,'staff')))
 
-class GroupsForm(forms.Form):
+class AliasForm(forms.Form):
     uid = forms.RegexField(regex="^[a-zA-Z\d \-\$]+$", required=False)
     cn = forms.RegexField(regex="^[^:^,]+$", required=False)
 
