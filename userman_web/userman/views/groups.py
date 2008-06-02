@@ -27,7 +27,6 @@ def displayGroup(request, cn):
 	raise Http404
     return render_to_response('group.html', {'group': groupObj})
 	 
-
 #@cache_control(no_cache=True, must_revalidate=True)
 #def groupChfn(request, uid):
 #    try:

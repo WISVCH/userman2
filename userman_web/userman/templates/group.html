@@ -1,0 +1,50 @@
+{% extends "base.html" %} {% block title %}CH User Manager - Editing {{group.cn }}{% endblock %}
+{% block content %}
+<table>
+	<tr class='title'>
+		<td colspan='3'>
+		<h3>Group</h3>
+		</td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td>CN:</td>
+		<td>{{group.cn}}</td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td>GIDNumber:</td>
+		<td>{{group.gidNumber}}</td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td>Type:</td>
+		<td>{{group.parent}}</td>
+	</tr>
+	<tr class='title'>
+		<td colspan='3'>
+		<h3>Members (<a href='adduser/'>+</a>)</h3>
+		</td>
+	</tr>
+	{% for member in group.members %}
+	<tr>
+		<td><a href='rmuser/{{member}}/'
+			onclick="return confirmpopup('Really remove user {{member}} from group {{group.cn}}?')"><img
+			src='/site_media/delete.gif' alt='Remove' /></a></td>
+		<td colspan='2'><a href='/users/{{member}}/'>{{member}}</a></td>
+	</tr>
+	{%endfor%}
+	<tr class='title'>
+		<td colspan='3'>
+		<h3>Primary Members</h3>
+		</td>
+	</tr>
+	{% for member in group.getPrimaryMembers %}
+	<tr>
+		<td></td>
+		<td colspan='2'><a href='/users/{{member}}/'>{{member}}</a></td>
+	</tr>
+	{%endfor%}
+</table>
+<p><a href='rmgroup/' onclick="return confirmpopup('Really remove group {{group.cn}}?')">Remove Group</a></p>
+{% endblock %}
