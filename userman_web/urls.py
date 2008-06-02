@@ -17,6 +17,9 @@ urlpatterns = patterns('',
 		
     (r'^groups/$', 'userman.views.groups.displayGroups'),
     (r'^groups/([a-zA-Z][a-zA-Z\d]+)/$', 'userman.views.groups.displayGroup'),
+    (r'^groups/([a-zA-Z][a-zA-Z\d]+)/rmgroup/$', 'userman.views.groups.rmgroup'),
+    (r'^groups/([a-zA-Z][a-zA-Z\d]+)/rmuser/([a-zA-Z][a-zA-Z\d]+)/$', 'userman.views.groups.rmuser'),
+    (r'^groups/([a-zA-Z][a-zA-Z\d]+)/adduser/$', 'userman.views.groups.adduser'),
 
 
     # Uncomment this for admin:
