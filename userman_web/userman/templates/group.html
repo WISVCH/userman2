@@ -29,7 +29,7 @@
 	{% for member in group.members %}
 	<tr>
 		<td><a href='rmuser/{{member}}/'
-			onclick="return confirmpopup('Really remove user {{member}} from group {{group.cn}}?')"><img
+			onclick="return confirm('Really remove user {{member}} from group {{group.cn}}?')"><img
 			src='/site_media/delete.gif' alt='Remove' /></a></td>
 		<td colspan='2'><a href='/users/{{member}}/'>{{member}}</a></td>
 	</tr>
@@ -46,5 +46,5 @@
 	</tr>
 	{%endfor%}
 </table>
-<p><a href='rmgroup/' onclick="return confirmpopup('Really remove group {{group.cn}}?')">Remove Group</a></p>
+<p><a href='rmgroup/' onclick="return confirm('Really remove group {{group.cn}}?')">Remove Group</a></p>
 {% endblock %}
