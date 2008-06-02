@@ -49,17 +49,17 @@
 </tr>
 <tr>
   <td>&nbsp;</td>
-  <td><a href='/groups?memberuid={{ user.uid }}'>Groups</a></td>
+  <td><a href='/groups?uid={{ user.uid }}'>Groups</a></td>
   <td>{% for group in user.getSecondaryGroups %}<a href='/groups/{{ group }}'>{{ group }}</a> {% endfor %}</td>
 </tr>
 <tr>
   <td>&nbsp;</td>
-  <td><a href='/aliases?memberuid={{ user.uid }}'>Aliases</a></td>
+  <td><a href='/aliases?uid={{ user.uid }}'>Aliases</a></td>
   <td>{% for alias in user.getDirectAliases %}<a href='/aliases/{{ alias }}'>{{ alias }}</a> {% endfor %}</td>
 </tr>
 <tr>
   <td>&nbsp;</td>
-  <td><a href='aliases.php?memberuid={{ user.uid }}'>Indirect Aliases</a></td>
+  <td><a href='aliases.php?uid={{ user.uid }}'>Indirect Aliases</a></td>
   <td>{% for alias in user.getIndirectAliases %}<a href='/aliases/{{ alias }}'>{{ alias }}</a> {% endfor %}</td>
 </tr>
 <tr class='title'>
