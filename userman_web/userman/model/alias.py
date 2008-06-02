@@ -40,6 +40,9 @@ class Alias (LDAPConn):
     def addMember(self, member):
         self.addEntries({'rfc822MailMember': member})
 
+    def remove(self):
+        self.delObject()
+        
     def __str__(self):
         return "Alias: [ dn:'" + self.dn + ", cn:'" + self.cn + "' ]"
 
@@ -73,6 +76,13 @@ def getIndirectCnForUid(uid, recurse=False, ld=None):
 	retval += getIndirectCnForUid(alias, True, ld)
     return retval
 
+def getAllAliasNames():
+    ld = LDAPConn()
+    ld.connectAnon()
+    res = ld.l.search_s(settings.LDAP_ALIASDN, ldap.SCOPE_SUBTREE, "objectClass=nisMailAlias")
+    res.sort()
+    return [attrs['cn'][0] for (dn, attrs) in res]
+    
 def getAllAliases(filter_data=False):
     """Returns all aliases under LDAP_ALIASDN, in a dictionary sorted by their ou"""
     ld = LDAPConn()
@@ -95,10 +105,32 @@ def getAllAliases(filter_data=False):
             ret[alias.parent] = []
         ret[alias.parent] += [alias]
         # Find indirect aliases
-        for iCN in getIndirectCnForUid(alias.cn, True, ld):
-            iAlias = fromCN(iCN,ld)
-            if not iAlias.parent in ret:
-                ret[iAlias.parent] = []
-            ret[iAlias.parent] += [iAlias]
+        if filter_data and filter_data['uid']:
+            for iCN in getIndirectCnForUid(alias.cn, True, ld):
+                iAlias = fromCN(iCN,ld)
+                if not iAlias.parent in ret:
+                    ret[iAlias.parent] = []
+                ret[iAlias.parent] += [iAlias]
 
     return ret
+def GetParents():
+    """Returns the possible parents of an alias"""
+    ld = LDAPConn()
+    ld.connectAnon()
+
+    filter_string = "(objectClass=organizationalUnit)"
+    res = ld.l.search_s(settings.LDAP_ALIASDN, ldap.SCOPE_ONELEVEL, filter_string)
+    res.sort()
+    return [ attribs['ou'][0] for (_, attribs) in res]
+
+def Exists(cn):
+    ld = LDAPConn()
+    ld.connectAnon()
+    res = ld.l.search_s(settings.LDAP_ALIASDN, ldap.SCOPE_SUBTREE, "cn="+cn)
+    return len(res) != 0 
+    
+def Add(parent, cn):
+    dn = 'cn=' +cn +',ou=' + parent + ',' + settings.LDAP_ALIASDN
+    ld = LDAPConn()
+    ld.connectRoot()
+    ld.addObject(dn, {'objectClass': 'nisMailAlias', 'cn': cn})

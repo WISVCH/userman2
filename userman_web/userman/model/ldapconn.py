@@ -37,9 +37,18 @@ class LDAPConn (object):
         mod_attrs = [ (ldap.MOD_ADD, k, v) for (k, v) in changes.items() ]
         self.l.modify_s(self.dn, mod_attrs)
 
+    def addObject(self, dn, changes):
+        mod_attrs = [ (k, v) for (k, v) in changes.items() ]
+#        assert False, mod_attrs
+        self.l.add_s(dn, mod_attrs)
+
+    def delObject(self):
+        if not self.dn:
+            raise Exception, "The object you are removing has no dn"
+        self.l.delete_s(self.dn)
+
     def removeEntries(self, changes):
         if not self.dn:
             raise Exception, "The object you are modifying has no dn"
         mod_attrs = [ (ldap.MOD_DELETE, k, v) for (k, v) in changes.items() ]
         self.l.modify_s(self.dn, mod_attrs)
-							    

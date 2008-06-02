@@ -17,7 +17,7 @@ def displayAliases(request):
         form = AliasForm()
         aliases = alias.getAllAliases()
     
-    return render_to_response('groupsaliases.html', {'groups': aliases, 'form': form})
+    return render_to_response('groupsaliases.html', {'alias': True, 'groups': aliases, 'form': form})
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -53,9 +53,38 @@ def adduser(request, cn):
         form = AddUserForm(request.POST)
         if form.is_valid():
             aliasObj.connectRoot()
-            aliasObj.addMember(str(form.clean_data["user"]))
+            if form.clean_data['uid']: aliasObj.addMember(str(form.clean_data['uid']))
+            elif form.clean_data['alias']: aliasObj.addMember(str(form.clean_data['alias']))
+            elif form.clean_data['email']: aliasObj.addMember(str(form.clean_data['email']))
             return HttpResponseRedirect('/aliases/' + aliasObj.cn + '/')
     else:
         form = AddUserForm()
 
     return render_to_response('form.html', {'form': form, 'uid': aliasObj.cn})
+
+def addAlias(request, parent):
+    if not parent in alias.GetParents():
+        raise Http404
+    
+    if request.method == 'POST':
+        form = AddAliasForm(request.POST)
+        if form.is_valid():
+            if alias.Exists(form.clean_data['common_name']):
+                raise Http404
+            alias.Add(parent, str(form.clean_data['common_name']))
+            return HttpResponseRedirect('/aliases/' + form.clean_data['common_name'] + '/')
+    else:
+        form = AddAliasForm()
+
+    return render_to_response('form.html', {'form': form, 'uid': "aliases"})
+
+def rmAlias(request, cn):
+    try:
+        aliasObj = alias.fromCN(cn)
+    except Exception, e:
+        raise Http404
+    
+    aliasObj.connectRoot()
+    aliasObj.remove()
+    return HttpResponseRedirect('/aliases/')
+    

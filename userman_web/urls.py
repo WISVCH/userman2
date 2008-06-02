@@ -17,14 +17,15 @@ urlpatterns = patterns('',
 		
     (r'^groups/$', 'userman.views.groups.displayGroups'),
     (r'^groups/([a-zA-Z][a-zA-Z\d]+)/$', 'userman.views.groups.displayGroup'),
-    (r'^groups/([a-zA-Z][a-zA-Z\d]+)/rmgroup/$', 'userman.views.groups.rmgroup'),
+    (r'^groups/([a-zA-Z][a-zA-Z\d]+)/rm/$', 'userman.views.groups.rmgroup'),
     (r'^groups/([a-zA-Z][a-zA-Z\d]+)/rmuser/([a-zA-Z][a-zA-Z\d]+)/$', 'userman.views.groups.rmuser'),
     (r'^groups/([a-zA-Z][a-zA-Z\d]+)/adduser/$', 'userman.views.groups.adduser'),
 
+    (r'^addalias/([a-zA-Z\d]+)/$', 'userman.views.aliases.addAlias'),
     (r'^aliases/$', 'userman.views.aliases.displayAliases'),
     (r'^aliases/([a-zA-Z][a-zA-Z_\d]+)/$', 'userman.views.aliases.displayAlias'),
-    (r'^aliases/([a-zA-Z][a-zA-Z_\d]+)/rmalias/$', 'userman.views.aliases.rmalias'),
-    (r'^aliases/([a-zA-Z][a-zA-Z_\d]+)/rmuser/([a-zA-Z][a-zA-Z\d]+)/$', 'userman.views.aliases.rmuser'),
+    (r'^aliases/([a-zA-Z][a-zA-Z_\d]+)/rm/$', 'userman.views.aliases.rmAlias'),
+    (r'^aliases/([a-zA-Z][a-zA-Z_\d]+)/rmuser/([a-zA-Z][\@\.a-zA-Z\d]+)/$', 'userman.views.aliases.rmuser'),
     (r'^aliases/([a-zA-Z][a-zA-Z_\d]+)/adduser/$', 'userman.views.aliases.adduser'),
 
     # Uncomment this for admin:
