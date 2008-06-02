@@ -7,41 +7,38 @@ from django.conf import settings
 
 class Group (LDAPConn):
     def __init__ (self, dn, attrs = False):
-	LDAPConn.__init__(self)
-	self.dn = dn
+        LDAPConn.__init__(self)
+        self.dn = dn
 
-	if attrs:
-	    self.__attrs = attrs
-	    return
+        if attrs:
+            self.__attrs = attrs
+            return
 
-	self.connectRoot()
+        self.connectRoot()
 
-	res = self.l.search_s(self.dn, ldap.SCOPE_BASE)
-	(_, attrs) = res[0]
-	self.__attrs = cidict(attrs)
+        res = self.l.search_s(self.dn, ldap.SCOPE_BASE)
+        (_, attrs) = res[0]
+        self.__attrs = cidict(attrs)
 
     def _get_cn(self):
-	return self.__attrs["cn"][0]
+        return self.__attrs["cn"][0]
     cn = property (_get_cn)
 
     def _get_parent(self):
-	return self.dn.split(',')[1].split('=')[1]
-
-    def _get_type(self):
-        parent = self._get_parent()
+        parent = self.dn.split(',')[1].split('=')[1]
         if parent == "Group":
             return "None"
         return parent
-    type = property(_get_type)
+    parent = property (_get_parent)
 
     def _get_gidNumber(self):
-	return int(self.__attrs["gidNumber"][0])
+        return int(self.__attrs["gidNumber"][0])
     gidNumber = property(_get_gidNumber)
 
     def _get_members(self):
-	if 'memberUid' in self.__attrs:
+        if 'memberUid' in self.__attrs:
     	    return self.__attrs["memberUid"]
-	return []
+        return []
     members = property(_get_members)
 
     def getPrimaryMembers(self):
@@ -49,7 +46,7 @@ class Group (LDAPConn):
         return user.getPrimaryMembersForGid(self.gidNumber)
 
     def __str__(self):
-	return "Group: [ dn:'" + self.dn + ", cn:'" + self.cn + "' ]"
+        return "Group: [ dn:'" + self.dn + ", cn:'" + self.cn + "' ]"
 
 def fromCN(cn):
     ld = LDAPConn()
@@ -62,16 +59,28 @@ def fromCN(cn):
     return Group(dn, attrs)
 
 def getAllGroups(filter_data=False):
+    """Returns all groups under LDAP_GROUPDN, in a dictionary sorted by their ou"""
     ld = LDAPConn()
     ld.connectAnon()
-    res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_ONELEVEL)
+
+    if filter_data:
+        filter_string = "(&"
+        if filter_data['uid']: filter_string += "(memberUid=*" + filter_data['uid'] + "*)"
+        if filter_data['cn']: filter_string += "(cn=*" + filter_data['cn'] + "*)"
+        if filter_data['gidnumber']: filter_string += "(gidNumber=" + str(filter_data['gidnumber']) + ")"
+        filter_string += "(objectClass=posixGroup))"
+    else:
+        filter_string += "(objectClass=posixGroup)"
+        
+    res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_SUBTREE, filter_string)
+
     res.sort()
-    ret = {"None": [Group(dn, attrs) for (dn, attrs) in res if "posixGroup" in attrs["objectClass"] ] }
-    children = [(dn, attrs["ou"][0]) for (dn, attrs) in res if "organizationalUnit" in attrs["objectClass"] ]
-    for child in children:
-	res = ld.l.search_s(child[0], ldap.SCOPE_ONELEVEL)
-	res.sort()
-	ret[child[1]] = [Group(dn, attrs) for (dn, attrs) in res if "posixGroup" in attrs["objectClass"]]
+    ret = {}
+    for dn, attrs in res:
+        group = Group(dn, attrs)
+        if not group.parent in ret:
+            ret[group.parent] = []
+        ret[group.parent] += [group]
     return ret
 
 def groupname(value):
@@ -79,12 +88,13 @@ def groupname(value):
     ld.connectAnon()
     res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_SUBTREE, "(gidNumber=" +value +")")
     if len(res) > 0 and 'cn' in res[0][1]:
-	return res[0][1]['cn'][0]
+        return res[0][1]['cn'][0]
     else:
-	return 'unknown group'
+        return 'unknown group'
 
 def getCnForUid(uid): 
     ld = LDAPConn()
     ld.connectAnon()
+    
     res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_SUBTREE, 'memberUid=' + uid)
     return [ attribs["cn"][0] for dn, attribs in res ]
