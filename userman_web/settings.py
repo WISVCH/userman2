@@ -86,7 +86,20 @@ LDAP_HOST = 'ldaps://frans.chnet/'
 LDAP_USER = 'cn=admin,dc=ank,dc=chnet'
 LDAP_PASS = '***REMOVED***'
 LDAP_BASE = 'dc=ank,dc=chnet'
+LDAP_ACTIONDN = 'ou=Actions,' + LDAP_BASE
 LDAP_USERDN = 'ou=People,' + LDAP_BASE
 LDAP_GROUPDN = 'ou=Group,' + LDAP_BASE
 LDAP_COMPUTERDN = 'ou=Machines,' + LDAP_BASE
 LDAP_ALIASDN = 'ou=Aliases,' + LDAP_BASE
+MIN_GROUP_ID = 1000
+MAX_GROUP_ID = 1500
+MIN_MACHINE_ID = 5000
+MAX_MACHINE_ID = 5500
+MIN_USER_ID = 1500
+MAX_USER_ID = 2500
+MACHINE_GIDNUMBER = 1102
+USER_GIDNUMBER = 100
+import time
+ANK_HOME_BASE = '/export/gebruikers/' + time.strftime('%Y') + '/'
+CH_HOME_BASE = '/home/' + time.strftime('%Y') + '/'
+DEFAULT_SHELL = '/bin/bash' 

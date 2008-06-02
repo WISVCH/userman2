@@ -4,6 +4,7 @@ import re
 from ldapconn import LDAPConn
 from ldap.cidict import cidict
 from django.conf import settings
+from userman.model import action
 
 class Group (LDAPConn):
     def __init__ (self, dn, attrs = False):
@@ -47,14 +48,34 @@ class Group (LDAPConn):
     def addMember(self, member):
         self.addEntries({'memberUid': member})
 
+    def remove(self):
+        removeAction = action.Add('removeGroup', 'frans.chnet')
+        removeAction.affectedDN = self.dn
+        removeAction.description = 'Remove group entry in LDAP for ' + self.dn
+        if not self.parent == "None" and not self.parent == "Besturen":
+            removeAnkGroupDirAction = action.Add('removeGroupDir', 'ank.chnet', removeAction.dn)
+            removeAnkGroupDirAction.affectedDN = self.dn
+            removeAnkGroupDirAction.description = 'Remove group directory on ank.chnet for ' + self.cn
+            removeAnkGroupDirAction.locked = False
+        removeAction.locked = False
+
     def getPrimaryMembers(self):
         from userman.model import user
         return user.getPrimaryMembersForGid(self.gidNumber)
 
+    def createGroupDir(self, host):
+        dirAction = action.Add('createGroupDir', host)
+        dirAction.affectedDN = self.dn
+        dirAction.description = "Create group directory on host " + host + " for " + self.cn  
+        dirAction.locked = False
+
+    def addGroupMapping(self):
+        raise Exception, "Should create samba group mapping"
+
     def __str__(self):
         return "Group: [ dn:'" + self.dn + ", cn:'" + self.cn + "' ]"
 
-def fromCN(cn):
+def FromCN(cn):
     ld = LDAPConn()
     ld.connectAnon()
     res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_SUBTREE, "cn="+cn)
@@ -64,7 +85,7 @@ def fromCN(cn):
     (dn, attrs) = res[0]
     return Group(dn, attrs)
 
-def getAllGroups(filter_data=False):
+def GetAllGroups(filter_data=False):
     """Returns all groups under LDAP_GROUPDN, in a dictionary sorted by their ou"""
     ld = LDAPConn()
     ld.connectAnon()
@@ -88,7 +109,7 @@ def getAllGroups(filter_data=False):
         ret[group.parent] += [group]
     return ret
 
-def groupname(value):
+def Groupname(value):
     ld = LDAPConn()
     ld.connectAnon()
     res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_SUBTREE, "(gidNumber=" +value +")")
@@ -97,9 +118,47 @@ def groupname(value):
     else:
         return 'unknown group'
 
-def getCnForUid(uid): 
+def GetCnForUid(uid): 
     ld = LDAPConn()
     ld.connectAnon()
     
     res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_SUBTREE, 'memberUid=' + uid)
     return [ attribs["cn"][0] for dn, attribs in res ]
+
+def GetParents():
+    """Returns the possible parents of a group"""
+    ld = LDAPConn()
+    ld.connectAnon()
+
+    filter_string = "(objectClass=organizationalUnit)"
+    res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_ONELEVEL, filter_string)
+    res.sort()
+    return [ attribs['ou'][0] for (_, attribs) in res]
+
+def Exists(cn):
+    ld = LDAPConn()
+    ld.connectAnon()
+    res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_SUBTREE, "cn="+cn)
+    return len(res) != 0 
+
+def GetFreeGIDNumber():
+    ld = LDAPConn()
+    ld.connectAnon()
+    for i in range(settings.MIN_GROUP_ID, settings.MAX_GROUP_ID):
+        res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_SUBTREE, "gidNumber=" + str(i))
+        if len(res) == 0:
+            break;
+    
+    if i == settings.MAX_GROUP_ID:
+        raise Exception, "No more free group IDs"
+    return i
+    
+def Add(parent, cn):
+    ld = LDAPConn()
+    ld.connectRoot()
+
+    dn = 'cn=' +cn +',ou=' + parent + ',' + settings.LDAP_GROUPDN
+    gidNumber = GetFreeGIDNumber()
+    ld.addObject(dn, {'objectClass': 'posixGroup', 'cn': cn, 'gidNumber': str(gidNumber)})
+
+    return FromCN(cn)
