@@ -1,4 +1,5 @@
 {% extends "base.html" %} {% block title %}CH User Manager - Editing {{group.cn }}{% endblock %}
+{% load userman_tags %}
 {% block content %}
 <table>
 	<tr class='title'>
@@ -33,10 +34,13 @@
 		<td><a href='rmuser/{{member}}/'
 			onclick="return confirm('Really remove user {{member}} from group {{group.cn}}?')"><img
 			src='/site_media/delete.gif' alt='Remove' /></a></td>
+{%if group.gidNumber %}
 		<td colspan='2'><a href='/users/{{member}}/'>{{member}}</a></td>
+{% else %}
+		<td colspan='2'>{{member|aliaslink}}</td>
+{%endif%}
 	</tr>
-	{%endfor%}
-	{% if group.gidNumber %}
+	{%endfor%} {% if group.gidNumber %}
 	<tr class='title'>
 		<td colspan='3'>
 		<h3>Primary Members</h3>
@@ -47,8 +51,8 @@
 		<td></td>
 		<td colspan='2'><a href='/users/{{member}}/'>{{member}}</a></td>
 	</tr>
-	{%endfor%}
-	{% endif %}
+	{%endfor%} {% endif %}
 </table>
-<p><a href='rmgroup/' onclick="return confirm('Really remove group {{group.cn}}?')">Remove Group</a></p>
+<p><a href='rm/'
+	onclick="return confirm('Really remove {{group.cn}}?')">Remove</a></p>
 {% endblock %}

@@ -221,3 +221,10 @@ def getPrimaryMembersForGid(gid):
     ld.connectRoot()
     res = ld.l.search_s(settings.LDAP_USERDN, ldap.SCOPE_ONELEVEL, 'gidNumber='+str(gid))
     return [ attribs["uid"][0] for dn, attribs in res ]
+
+def Exists(uid):
+    ld = LDAPConn()
+    ld.connectAnon()
+    res = ld.l.search_s(settings.LDAP_USERDN, ldap.SCOPE_SUBTREE, "uid="+uid)
+    return len(res) != 0 
+  
