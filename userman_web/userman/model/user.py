@@ -6,6 +6,7 @@ from ldap.cidict import cidict
 from django.conf import settings
 from userman.model import group
 from userman.model import alias
+from userman.model import action
 import hashlib
 from base64 import urlsafe_b64encode
 import random
@@ -122,13 +123,44 @@ class User (LDAPConn):
     def removeAuthorizedService(self, service):
         self.removeEntries({'authorizedService': service})
         
-    def get_homeDirCH(self):
+    def _get_homeDirCH(self):
         return self.__attrs["homeDirectoryCH"][0]
-    homeDirectoryCH = property(get_homeDirCH)
+    def _set_homeDirCH(self, newHomeDir):
+        newAction = action.Add('moveHomeDir', 'ch.chnet', self.dn, 
+                               'Move ch home directory from ' + self.homeDirectoryCH + ' to ' + newHomeDir + ' for user ' + self.uid)
+        newAction.arguments = self.homeDirectoryCH
+        self.modifyEntries({'homeDirectoryCH': newHomeDir})
+        newAction.locked = False
+    homeDirectoryCH = property(_get_homeDirCH, _set_homeDirCH)
 
-    def get_homeDir(self):
+    def _get_homeDir(self):
         return self.__attrs["homeDirectory"][0]
-    homeDirectoryAnk = property(get_homeDir)
+    def _set_homeDir(self, newHomeDir):
+        newAction = action.Add('moveHomeDir', 'ank.chnet', self.dn, 
+                               'Move ank home directory from ' + self.homeDirectoryAnk + ' to ' + newHomeDir + ' for user ' + self.uid)
+        newAction.arguments = self.homeDirectoryAnk
+        self.modifyEntries({'homeDirectory': newHomeDir})
+        newAction.locked = False
+        
+    homeDirectoryAnk = property(_get_homeDir, _set_homeDir)
+
+    def createHomeDir(self, host):
+        return action.Add('createHomeDir', host, self.dn, 'Create home directory on ' + host + ' for ' + self.uid)
+
+    def createMailbox(self, host):
+        return action.Add('createMailbox', host, self.dn, 'Create mailbox on ' + host + ' for ' + self.uid)
+
+    def removeMailbox(self, host, parent):
+        return action.Add('removeMailbox', host, self.dn, 'Remove mailbox on ' + host + ' for ' + self.uid, parent)
+
+    def removeHomedir(self, host, parent):
+        return action.Add('removeHomeDir', host, self.dn, 'Remove home directory on ' + host + ' for ' + self.uid, parent)
+     
+    def removeProfile(self, host, parent=False):
+        return action.Add('removeProfile', host, self.dn, 'Remove profile on ' + host + ' for ' + self.uid, parent)
+
+    def generateLogonScript(self, host):
+        return action.Add('generateLogonScript', host, self.dn, 'Generate logonscript on ' + host + ' for ' + self.uid)
 
     def get_ldif(self):
         out = StringIO()
@@ -137,25 +169,31 @@ class User (LDAPConn):
         return out.getvalue()
     ldif = property(get_ldif)
 
-#    def getHomeDirectory(self, host):
-#	if host == 'ch.chnet':
-#	    return self.attrs["homeDirectoryCH"][0]
-#	else:
-#	    return self.attrs["homeDirectory"][0]
-#
-#    def _set_homeDirectory(self, host, homeDir):
-#	if host == 'ch.chnet':
-#	    self.l.modify_s (self.dn, [(ldap.MOD_REPLACE, 'homeDirectoryCH', homeDir)])	
-#	    res = self.l.search_s(self.dn, ldap.SCOPE_BASE)
-#	    (_, attrs) = res[0]
-#	    self.attrs = cidict(attrs)
-#	    return self.attrs["homeDirectoryCH"][0]
-#	else:
-#	    self.l.modify_s (self.dn, [(ldap.MOD_REPLACE, 'homeDirectory', homeDir)])	
-#	    res = self.l.search_s(self.dn, ldap.SCOPE_BASE)
-#	    (_, attrs) = res[0]
-#	    self.attrs = cidict(attrs)
-#	    return self.attrs["homeDirectory"][0]
+    def remove(self):
+        file = open(settings.GRAVEYARD_DIR + '/' + self.uid + '_' + str(time.time()) + '.ldif', 'w')
+        file.write(self.ldif)
+        
+        # Remove self from aliases/groups
+        for secGroupCN in self.getSecondaryGroups():
+            curGroup = group.FromCN(secGroupCN)
+            curGroup.removeMember(self.uid)
+        for aliasCN in self.getDirectAliases():
+            curAlias = alias.fromCN(aliasCN, ld=self)
+            curAlias.removeMember(self.uid)
+
+        # Create removal tree
+        removeAction = action.Add('removeUser', 'frans.chnet', self.dn, 'Remove user ' + self.uid)
+        removeHomedirAnk = self.removeHomedir('ank.chnet', removeAction)
+        removeProfileAnk = self.removeProfile('ank.chnet', removeHomedirAnk)
+        removeHomedirCh = self.removeHomedir('ch.chnet', removeAction)
+        removeMailboxCh = self.removeMailbox('ch.chnet', removeHomedirCh)
+
+        # Unlock removal tree
+        removeProfileAnk.locked = False
+        removeHomedirAnk.locked = False
+        removeMailboxCh.locked = False
+        removeHomedirCh.locked = False
+        removeAction.locked = False
 
     def getSecondaryGroups(self):
         return group.GetCnForUid(self.uid)
@@ -165,6 +203,15 @@ class User (LDAPConn):
 
     def getIndirectAliases(self):
         return alias.getIndirectCnForUid(self.uid, ld=self)
+
+    def resetPassword(self):
+        password = GeneratePassword()
+        self.modifyEntries({'userPassword': EncodePassword(password)})
+        self.mailAdmin('Password reset for ' + self.uid, 'Dear Pc.com,\n\n a new password was created for ' + self.uid + ' with password ' + password + '\n\nRegards,\n\nThe CH user manager spam-bot\n\n\nOpt-out? there is no opt-out!')
+
+    def changePassword(self, password):
+        self.modifyEntries({'userPassword': EncodePassword(password)})
+        
 
     def __str__(self):
 	return "User: [ dn:'" + self.dn + ", uid:'" + self.uid + "', cn:'" +self.cn + "' ]"
@@ -181,7 +228,6 @@ def GetAllUserNames():
     res = ld.l.search_s(settings.LDAP_USERDN, ldap.SCOPE_ONELEVEL)
     res.sort()
     return [attrs['uid'][0] for (dn, attrs) in res]
-    
     
 def GetAllUsers(filter_data=False):
     ld = LDAPConn()
@@ -246,6 +292,7 @@ def Add(uid, fullname):
     ld.connectRoot()
 
     password = GeneratePassword()
+    
     dn = 'uid=' + uid + ',' + settings.LDAP_USERDN
     entry = {'uid': uid}
     entry['objectClass'] = ['account', 'chbakAccount']
@@ -262,8 +309,11 @@ def Add(uid, fullname):
     entry['shadowMax'] = str(99999)
     entry['shadowWarning'] = str(7)
 
-    assert False, entry
     ld.addObject(dn, entry)
+    ld.mailAdmin('Account aangemaakt voor ' + uid, 'Dear Pc.com,\n\n a new account was created for ' + uid + ' with password ' + password + '\n\nRegards,\n\nThe CH user manager spam-bot\n\n\nOpt-out? there is no opt-out!')
 
     return FromUID(entry['uid'])
-  
+
+def GenerateAllLogonscripts(host):
+    return action.Add('generateAllLogonScripts', host, '', 'Regenerate all logon scripts')
+    

@@ -102,4 +102,6 @@ USER_GIDNUMBER = 100
 import time
 ANK_HOME_BASE = '/export/gebruikers/' + time.strftime('%Y') + '/'
 CH_HOME_BASE = '/home/' + time.strftime('%Y') + '/'
-DEFAULT_SHELL = '/bin/bash' 
+DEFAULT_SHELL = '/bin/bash'
+GRAVEYARD_DIR = '/var/local/graveyard/'
+ADMIN_MAIL = 'adriaan@ch.tudelft.nl'

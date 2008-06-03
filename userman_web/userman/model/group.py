@@ -49,13 +49,9 @@ class Group (LDAPConn):
         self.addEntries({'memberUid': member})
 
     def remove(self):
-        removeAction = action.Add('removeGroup', 'frans.chnet')
-        removeAction.affectedDN = self.dn
-        removeAction.description = 'Remove group entry in LDAP for ' + self.dn
+        removeAction = action.Add('removeGroup', 'frans.chnet', self.dn, 'Remove group entry in LDAP for ' + self.dn)
         if not self.parent == "None" and not self.parent == "Besturen":
-            removeAnkGroupDirAction = action.Add('removeGroupDir', 'ank.chnet', removeAction.dn)
-            removeAnkGroupDirAction.affectedDN = self.dn
-            removeAnkGroupDirAction.description = 'Remove group directory on ank.chnet for ' + self.cn
+            removeAnkGroupDirAction = removeGroupDir('ank.chnet', removeAction)
             removeAnkGroupDirAction.locked = False
         removeAction.locked = False
 
@@ -63,11 +59,11 @@ class Group (LDAPConn):
         from userman.model import user
         return user.GetPrimaryMembersForGid(self.gidNumber)
 
+    def removeGroupDir(self, host, parent):
+        return action.Add('removeGroupDir', host, self.dn, 'Remove group directory on ank.chnet for ' + self.cn, parent)
+        
     def createGroupDir(self, host):
-        dirAction = action.Add('createGroupDir', host)
-        dirAction.affectedDN = self.dn
-        dirAction.description = "Create group directory on host " + host + " for " + self.cn  
-        dirAction.locked = False
+        return action.Add('createGroupDir', host, self.dn, "Create group directory on host " + host + " for " + self.cn)  
 
     def addGroupMapping(self):
         raise Exception, "Should create samba group mapping"

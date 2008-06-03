@@ -18,6 +18,5 @@ class AddUserForm(forms.Form):
     email = forms.EmailField (required=False)
 
 class AddAliasForm(forms.Form):
-#    possibleUsers = [ (username, username) for username in user.getAllUserNames() ]
     common_name = forms.RegexField(regex="^[a-zA-Z\d\-_\$]+$", required=True)
         

@@ -73,8 +73,10 @@ def addGroup(request, parent):
                 raise Http404
             newGroup = group.Add(parent, str(form.clean_data['common_name']))
             if not newGroup.parent == "None" and not newGroup.parent == "Besturen":
-                newGroup.createGroupDir('ank.chnet')
-            newGroup.addGroupMapping()
+                newAction = newGroup.createGroupDir('ank.chnet')
+                newAction.locked = False
+
+# TODO            newGroup.addGroupMapping()
             return HttpResponseRedirect('/groups/' + form.clean_data['common_name'] + '/')
     else:
         form = AddGroupForm()

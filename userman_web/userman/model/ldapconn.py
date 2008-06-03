@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 from django.conf import settings
 import ldap
+import smtplib
+from email.MIMEText import MIMEText
 
 class LDAPConn (object):
     def __init__(self):
@@ -62,3 +64,15 @@ class LDAPConn (object):
             self.connectRoot()
         mod_attrs = [ (ldap.MOD_DELETE, k, v) for (k, v) in changes.items() ]
         self.l.modify_s(self.dn, mod_attrs)
+
+    def mailAdmin (self, subject, message):                                                                                                                                                                    
+        msg = MIMEText(message)                                                                                                                                                                                
+        msg['Subject'] = subject;                                                                                                                                                                              
+        msg['From'] = settings.ADMIN_MAIL                                                                                                                                                                         
+        msg['To'] = settings.ADMIN_MAIL                                                                                                                                                                           
+                                                                                                                                                                                                               
+        s = smtplib.SMTP()                                                                                                                                                                                     
+        s.connect()                                                                                                                                                                                            
+        s.sendmail(settings.ADMIN_MAIL, [settings.ADMIN_MAIL], msg.as_string())                                                                                                                                      
+        s.close()
+  
