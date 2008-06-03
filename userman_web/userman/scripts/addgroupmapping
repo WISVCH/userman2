@@ -1,0 +1,26 @@
+#!/bin/bash
+# Usage: $0 <group> <wingroup>
+
+# Check paramaters
+if [ "$1" == "" ] ; then
+    echo "Usage: $0 <group> <wingroup>"
+    exit 1
+fi
+if [ "$2" == "" ] ; then
+    echo "Usage: $0 <group> <wingroup>"
+    exit 1
+fi
+if [ "$3" != "" ] ; then
+    echo "Too many parameters!"
+    echo "Usage: $0 <group> <wingroup>"
+    exit 1
+fi
+
+echo "Mapping group $2 [windows] to $1 [unix]:"
+
+# Map group
+net groupmap add unixgroup="$1" type=domain ntgroup="$2"
+
+echo "Map Create groupmapping: Success!"
+
+exit 0

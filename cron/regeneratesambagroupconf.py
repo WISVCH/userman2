@@ -24,4 +24,3 @@ def regenSambaGroupConf():
     f = open(outFile, "w")
     f.write(output)
     f.close()
-regenSambaGroupConf()

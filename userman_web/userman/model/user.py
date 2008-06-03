@@ -7,8 +7,6 @@ from django.conf import settings
 from userman.model import group
 from userman.model import alias
 from userman.model import action
-import hashlib
-from base64 import urlsafe_b64encode
 import random
 import string
 import os
@@ -206,11 +204,13 @@ class User (LDAPConn):
 
     def resetPassword(self):
         password = GeneratePassword()
-        self.modifyEntries({'userPassword': EncodePassword(password)})
+	os.system('sudo ' + os.path.join(os.getcwd(),'userman/scripts/changesambapasswd') + ' ' + self.uid + ' ' + password)
+	assert False, password
         self.mailAdmin('Password reset for ' + self.uid, 'Dear Pc.com,\n\n a new password was created for ' + self.uid + ' with password ' + password + '\n\nRegards,\n\nThe CH user manager spam-bot\n\n\nOpt-out? there is no opt-out!')
 
+
     def changePassword(self, password):
-        self.modifyEntries({'userPassword': EncodePassword(password)})
+	os.system('sudo ' + os.path.join(os.getcwd(),'userman/scripts/changesambapasswd') + ' ' + self.uid + ' ' + password)
         
 
     def __str__(self):
@@ -277,12 +277,6 @@ def GetFreeUIDNumber():
         raise Exception, "No more free user IDs"
     return i
     
-def EncodePassword(password):
-    salt = os.urandom(4)
-    h = hashlib.sha1(password)
-    h.update(salt)
-    return "{SSHA}" + urlsafe_b64encode(h.digest() + salt)
-
 def GeneratePassword(length = 8):
     chars = string.letters + string.letters + string.digits + string.punctuation
     return ''.join([random.choice(chars) for i in range(length)])
@@ -297,7 +291,7 @@ def Add(uid, fullname):
     entry = {'uid': uid}
     entry['objectClass'] = ['account', 'chbakAccount']
     entry['uidNumber'] = str(GetFreeUIDNumber())
-    entry['userPassword'] = EncodePassword(password)
+    entry['userPassword'] = '!disabled'
     entry['cn'] = fullname
     entry['displayName'] = fullname
     entry['gecos'] = fullname +",,,"
@@ -310,6 +304,8 @@ def Add(uid, fullname):
     entry['shadowWarning'] = str(7)
 
     ld.addObject(dn, entry)
+    os.system('sudo ' + os.path.join(os.getcwd(),'userman/scripts/createsambauser') + ' ' + uid + ' ' + password)
+
     ld.mailAdmin('Account aangemaakt voor ' + uid, 'Dear Pc.com,\n\n a new account was created for ' + uid + ' with password ' + password + '\n\nRegards,\n\nThe CH user manager spam-bot\n\n\nOpt-out? there is no opt-out!')
 
     return FromUID(entry['uid'])
