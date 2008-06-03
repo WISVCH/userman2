@@ -2,6 +2,7 @@ from userman.model import alias
 from django.shortcuts import render_to_response
 from django.http import Http404, HttpResponseRedirect
 from django.views.decorators.cache import cache_control
+from django.conf import settings
 
 from userman.forms.alias import *
 
@@ -40,7 +41,7 @@ def rmuser(request, cn, user):
 
     aliasObj.connectRoot()
     aliasObj.removeMember(user)
-    return HttpResponseRedirect('/aliases/' + aliasObj.cn + '/')
+    return HttpResponseRedirect(settings.USERMAN_PREFIX + '/aliases/' + aliasObj.cn + '/')
 
 @cache_control(no_cache=True, must_revalidate=True)
 def adduser(request, cn):
@@ -56,7 +57,7 @@ def adduser(request, cn):
             if form.clean_data['uid']: aliasObj.addMember(str(form.clean_data['uid']))
             elif form.clean_data['alias']: aliasObj.addMember(str(form.clean_data['alias']))
             elif form.clean_data['email']: aliasObj.addMember(str(form.clean_data['email']))
-            return HttpResponseRedirect('/aliases/' + aliasObj.cn + '/')
+            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/aliases/' + aliasObj.cn + '/')
     else:
         form = AddUserForm()
 
@@ -72,7 +73,7 @@ def addAlias(request, parent):
             if alias.Exists(form.clean_data['common_name']):
                 raise Http404
             alias.Add(parent, str(form.clean_data['common_name']))
-            return HttpResponseRedirect('/aliases/' + form.clean_data['common_name'] + '/')
+            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/aliases/' + form.clean_data['common_name'] + '/')
     else:
         form = AddAliasForm()
 
@@ -86,5 +87,5 @@ def rmAlias(request, cn):
     
     aliasObj.connectRoot()
     aliasObj.remove()
-    return HttpResponseRedirect('/aliases/')
+    return HttpResponseRedirect(settings.USERMAN_PREFIX + '/aliases/')
     
