@@ -15,7 +15,13 @@ urlpatterns = patterns('',
     (r'^users/([a-zA-Z][a-zA-Z\d]+)/chpriv/rm/([a-zA-z]+)@([a-zA-z]+)/$', 'userman.views.users.userRmpriv'),
     (r'^users/([a-zA-Z][a-zA-Z\d]+)/chgroup/$', 'userman.views.users.userChgroup'),
     (r'^users/([a-zA-Z][a-zA-Z\d]+)/showldif/$', 'userman.views.users.userShowldif'),
-    (r'^users/([a-zA-Z][a-zA-Z\d]+)/rm/$', 'userman.views.users.rmuser'),
+    (r'^users/([a-zA-Z][a-zA-Z\d]+)/chhomeank/$', 'userman.views.users.chHomeAnk'),
+    (r'^users/([a-zA-Z][a-zA-Z\d]+)/chhomech/$', 'userman.views.users.chHomeCH'),
+    (r'^users/([a-zA-Z][a-zA-Z\d]+)/resetpasswd/$', 'userman.views.users.resetPassword'),
+    (r'^users/([a-zA-Z][a-zA-Z\d]+)/chpasswd/$', 'userman.views.users.chPassword'),
+    (r'^users/([a-zA-Z][a-zA-Z\d]+)/genloginscript/$', 'userman.views.users.genLoginScript'),
+    (r'^users/([a-zA-Z][a-zA-Z\d]+)/removeprofile/$', 'userman.views.users.removeProfile'),
+    (r'^users/([a-zA-Z][a-zA-Z\d]+)/rm/$', 'userman.views.users.rmUser'),
 		
     (r'^addgroup/([a-zA-Z\d]+)/$', 'userman.views.groups.addGroup'),
     (r'^groups/$', 'userman.views.groups.displayGroups'),
@@ -37,5 +43,4 @@ urlpatterns = patterns('',
 
 if settings.DEBUG:
     urlpatterns += patterns('',
-	(r'^site_media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'media'}),
-    )
+	(r'^site_media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': 'media'}), )

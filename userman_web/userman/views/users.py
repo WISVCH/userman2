@@ -55,7 +55,7 @@ def userChdesc(request, uid):
     if request.method == 'POST':
 	form = ChdescForm(request.POST)
 	if form.is_valid():
-	    userObj.description = form.clean_data["description"]
+	    userObj.description = str(form.clean_data["description"])
 	    return HttpResponseRedirect('/users/' + userObj.uid +'/')
     else:
 	    form = ChdescForm( initial={"description": userObj.description})
@@ -95,6 +95,40 @@ def userChgroup(request, uid):
     else:
 	    form = ChgroupForm( initial={"gid_number": userObj.gidNumber})
 
+    return render_to_response('form.html', {'form': form, 'uid': userObj.uid})
+
+@cache_control(no_cache=True, must_revalidate=True)
+def chHomeCH(request, uid):
+    try:
+        userObj = user.FromUID(uid)
+    except Exception, e:
+        raise Http404
+    
+    if request.method == 'POST':
+        form = ChHomeForm(request.POST)
+        if form.is_valid():
+            userObj.homeDirectoryCH = str(form.clean_data["new_directory"])
+            return HttpResponseRedirect('/users/' + userObj.uid +'/')
+    else:
+        form = ChHomeForm( initial={"new_directory": userObj.description})
+                        
+    return render_to_response('form.html', {'form': form, 'uid': userObj.uid})
+
+@cache_control(no_cache=True, must_revalidate=True)
+def chHomeAnk(request, uid):
+    try:
+        userObj = user.FromUID(uid)
+    except Exception, e:
+        raise Http404
+    
+    if request.method == 'POST':
+        form = ChHomeForm(request.POST)
+        if form.is_valid():
+            userObj.homeDirectoryAnk = str(form.clean_data["new_directory"])
+            return HttpResponseRedirect('/users/' + userObj.uid +'/')
+    else:
+        form = ChHomeForm( initial={"new_directory": userObj.description})
+                        
     return render_to_response('form.html', {'form': form, 'uid': userObj.uid})
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -145,13 +179,71 @@ def addUser(request):
             if user.Exists(form.clean_data['uid']):
                 raise Http404
             newUser = user.Add(str(form.clean_data['uid']), str(form.clean_data['full_name']))
-#            newUser.createGroupDir('ank.chnet')
-#            newUser.createGroupDir('ch.chnet')
-#            newUser.createMailbox('ch.chnet')
-#            newUser.generateLogonScript()
+            newUser.createHomeDir('ank.chnet').locked = False
+            newUser.createHomeDir('ch.chnet').locked = False
+            newUser.createMailbox('ch.chnet').locked = False
+            newUser.generateLogonScript('ank.chnet').locked = False
+            for access in form.clean_data['access']:
+                newUser.addAuthorizedService(str(access))
+#            newUser.createSambaEntry()
             
             return HttpResponseRedirect('/users/' + form.clean_data['uid'] + '/')
     else:
         form = AddUserForm()
     
     return render_to_response('form.html', {'form': form, 'uid': "users"})
+
+def rmUser(request, uid):
+    try:
+        userObj = user.FromUID(uid)    
+    except Exception, e:
+        raise Http404
+    
+    userObj.remove()
+    return HttpResponseRedirect('/users/')
+
+def removeProfile(request, uid):
+    try:
+        userObj = user.FromUID(uid)    
+    except Exception, e:
+        raise Http404
+    
+    newAction = userObj.removeProfile('ank.chnet')
+    newAction.locked = False
+    return HttpResponseRedirect('/users/' + userObj.uid + '/')
+
+def genLoginScript(request, uid):
+    try:
+        userObj = user.FromUID(uid)    
+    except Exception, e:
+        raise Http404
+    
+    newAction = userObj.generateLogonScript('ank.chnet')
+    newAction.locked = False
+    return HttpResponseRedirect('/users/' + userObj.uid + '/')
+
+def resetPassword(request, uid):
+    try:
+        userObj = user.FromUID(uid)    
+    except Exception, e:
+        raise Http404
+    
+    userObj.resetPassword()
+    return HttpResponseRedirect('/users/' + userObj.uid + '/')
+
+@cache_control(no_cache=True, must_revalidate=True)
+def chPassword(request, uid):
+    try:
+        userObj = user.FromUID(uid)
+    except Exception, e:
+        raise Http404
+    
+    if request.method == 'POST':
+        form = ChpassForm(request.POST)
+        if form.is_valid():
+            userObj.changePassword(form.clean_data['password'])
+            return HttpResponseRedirect('/users/' + userObj.uid +'/')
+    else:
+        form = ChpassForm()
+
+    return render_to_response('form.html', {'form': form, 'user': userObj})

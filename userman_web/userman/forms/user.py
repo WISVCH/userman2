@@ -19,6 +19,9 @@ class ChshForm(forms.Form):
 class ChgroupForm(forms.Form):
     gid_number = forms.ChoiceField(choices=((100,'users'), (50,'staff')))
 
+class ChHomeForm(forms.Form):
+    new_directory = forms.RegexField(regex="^[a-zA-Z\d\/\-\_]+$")
+
 class UsersForm(forms.Form):
     uid = forms.RegexField(regex="^[a-zA-Z\d \-\$]+$", required=False)
     cn = forms.RegexField(regex="^[^:^,]+$", required=False)
@@ -37,4 +40,6 @@ class AddUserForm(forms.Form):
     uid = forms.RegexField(regex="^[a-zA-Z][a-zA-Z\d\-$_]+$", error_message="UID entry must consist of alphanumeric characters")
     full_name = forms.RegexField(regex="^[^:^,]+$", error_message="Full name entry may not contain : or ,")
     access = forms.MultipleChoiceField(initial=('ssh@ch','samba@ank','samba@ch'), choices=(('ssh@ch', 'ssh@ch'),('samba@ank','samba@ank'), ('samba@ch', 'samba@ch'), ('ssh@ank', 'ssh@ank'), ('ssh@frans', 'ssh@frans')))
-    
+
+class ChpassForm(forms.Form):
+    password = forms.CharField(widget=forms.PasswordInput, min_length = 8)    

@@ -21,7 +21,7 @@ class GroupsForm(forms.Form):
     cn = forms.RegexField(regex="^[^:^,]+$", required=False)
 
 class AddUserForm(forms.Form):
-    possibleUsers = [ (username, username) for username in user.getAllUserNames() ]
+    possibleUsers = [ (username, username) for username in user.GetAllUserNames() ]
     user = forms.ChoiceField(choices=possibleUsers)
     
 class AddGroupForm(forms.Form):

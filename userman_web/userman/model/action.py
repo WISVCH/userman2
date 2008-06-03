@@ -89,7 +89,7 @@ def Exists(cn, ld=None):
     res = ld.l.search_s(settings.LDAP_ACTIONDN, ldap.SCOPE_SUBTREE, "cn="+cn)
     return len(res) != 0 
 
-def Add(actionName, host, parentDN=False):
+def Add(actionName, host, affectedDN, description, parent=False):
     ld = LDAPConn()
     ld.connectRoot()
 
@@ -98,12 +98,13 @@ def Add(actionName, host, parentDN=False):
         if not Exists(cn, ld):
             break;
 
-    if parentDN:
-        dn = 'cn=' + cn + ',' + parentDN
+    if parent:
+        dn = 'cn=' + cn + ',' + parent.dn
     else: 
         dn = 'cn=' + cn + ',' + settings.LDAP_ACTIONDN
     
-    ld.addObject(dn, {'objectClass': 'chAction', 'cn': cn, 'actionName': actionName, 'host': host, 'actionLocked': 'TRUE'})
+    ld.addObject(dn, {'objectClass': 'chAction', 'cn': cn, 'actionName': actionName, 'host': host, 'actionLocked': 'TRUE',
+                      'affectedDN': affectedDN, 'description': description})
 
     return FromCN(cn, ld)
     
