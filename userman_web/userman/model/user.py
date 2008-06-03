@@ -11,6 +11,8 @@ import random
 import string
 import os
 import time
+import re
+import subprocess
 
 class User (LDAPConn):
     """Represents a user in the ldap tree."""
@@ -204,13 +206,15 @@ class User (LDAPConn):
 
     def resetPassword(self):
         password = GeneratePassword()
-	os.system('sudo ' + os.path.join(os.getcwd(),'userman/scripts/changesambapasswd') + ' ' + self.uid + ' ' + password)
-	assert False, password
+    	retcode = subprocess.call('sudo ' + '/var/www_python/userman/scripts/changesambapasswd' + ' ' + re.escape(self.uid) + ' ' + re.escape(password), shell=True)
+    	if retcode != 0:
+	    raise Exception, "Child failed"
         self.mailAdmin('Password reset for ' + self.uid, 'Dear Pc.com,\n\n a new password was created for ' + self.uid + ' with password ' + password + '\n\nRegards,\n\nThe CH user manager spam-bot\n\n\nOpt-out? there is no opt-out!')
 
-
     def changePassword(self, password):
-	os.system('sudo ' + os.path.join(os.getcwd(),'userman/scripts/changesambapasswd') + ' ' + self.uid + ' ' + password)
+    	retcode = subprocess.call('sudo ' + '/var/www_python/userman/scripts/changesambapasswd' + ' ' + re.escape(self.uid) + ' ' + re.escape(password), shell=True)
+    	if retcode != 0:
+	    raise Exception, "Child failed"
         
 
     def __str__(self):
@@ -304,7 +308,9 @@ def Add(uid, fullname):
     entry['shadowWarning'] = str(7)
 
     ld.addObject(dn, entry)
-    os.system('sudo ' + os.path.join(os.getcwd(),'userman/scripts/createsambauser') + ' ' + uid + ' ' + password)
+    retcode = subprocess.call('sudo ' + '/var/www_python/userman/scripts/createsambauser ' + re.escape(uid) + ' ' + re.escape(password), shell=True)
+    if retcode != 0:
+        raise Exception, "Child failed"
 
     ld.mailAdmin('Account aangemaakt voor ' + uid, 'Dear Pc.com,\n\n a new account was created for ' + uid + ' with password ' + password + '\n\nRegards,\n\nThe CH user manager spam-bot\n\n\nOpt-out? there is no opt-out!')
 
