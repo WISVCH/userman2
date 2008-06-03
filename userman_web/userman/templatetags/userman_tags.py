@@ -14,7 +14,7 @@ def groupname(value):
 @stringfilter
 def aliaslink(value):
     if alias.Exists(value):
-        return "<a href='/aliases/" +value + "/'>" + value + "</a>"
+        return "<a href='/userman2/aliases/" +value + "/'>" + value + "</a>"
     if user.Exists(value):
-        return "<a href='/users/" +value + "/'>" + value + "</a>"
+        return "<a href='/userman2/users/" +value + "/'>" + value + "</a>"
     return value

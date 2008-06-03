@@ -71,7 +71,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    os.path.join(os.getcwd(),'userman/templates')
+    '/var/www_python/userman/templates'
 )
 
 INSTALLED_APPS = (
@@ -79,7 +79,7 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
-    'userman_web.userman',
+    'userman',
 )
 
 LDAP_HOST = 'ldaps://frans.chnet/'
@@ -105,3 +105,4 @@ CH_HOME_BASE = '/home/' + time.strftime('%Y') + '/'
 DEFAULT_SHELL = '/bin/bash'
 GRAVEYARD_DIR = '/var/local/graveyard/'
 ADMIN_MAIL = 'adriaan@ch.tudelft.nl'
+USERMAN_PREFIX='/userman2'

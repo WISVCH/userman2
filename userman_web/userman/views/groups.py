@@ -4,6 +4,7 @@ from userman.model import action
 from django.shortcuts import render_to_response
 from django.http import Http404, HttpResponseRedirect
 from django.views.decorators.cache import cache_control
+from django.conf import settings
 
 from userman.forms.group import *
 
@@ -42,7 +43,7 @@ def rmuser(request, cn, user):
 
     groupObj.connectRoot()
     groupObj.removeMember(user)
-    return HttpResponseRedirect('/groups/' + groupObj.cn + '/')
+    return HttpResponseRedirect(settings.USERMAN_PREFIX + '/groups/' + groupObj.cn + '/')
 
 @cache_control(no_cache=True, must_revalidate=True)
 def adduser(request, cn):
@@ -56,7 +57,7 @@ def adduser(request, cn):
         if form.is_valid():
             groupObj.connectRoot()
             groupObj.addMember(str(form.clean_data["user"]))
-            return HttpResponseRedirect('/groups/' + groupObj.cn + '/')
+            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/groups/' + groupObj.cn + '/')
     else:
         form = AddUserForm()
 
@@ -77,7 +78,7 @@ def addGroup(request, parent):
                 newAction.locked = False
 
 # TODO            newGroup.addGroupMapping()
-            return HttpResponseRedirect('/groups/' + form.clean_data['common_name'] + '/')
+            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/groups/' + form.clean_data['common_name'] + '/')
     else:
         form = AddGroupForm()
     
@@ -91,5 +92,5 @@ def rmGroup(request, cn):
     
     groupObj.remove()
     
-    return HttpResponseRedirect('/groups/')
+    return HttpResponseRedirect(settings.USERMAN_PREFIX + '/groups/')
  
