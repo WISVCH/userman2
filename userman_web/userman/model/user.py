@@ -157,13 +157,6 @@ class User (LDAPConn):
 #	    self.attrs = cidict(attrs)
 #	    return self.attrs["homeDirectory"][0]
 
-#    def getPrimaryGroup (self):
-#	res = self.l.search_s(config.ldapGroupOU, ldap.SCOPE_SUBTREE, 'gidNumber=' + self.attrs["gidNumber"][0])
-#	if len (res) != 1:
-#	    return "none"
-#	(_, attrs) = res[0]
-#	return attrs["cn"][0];
-	
     def getSecondaryGroups(self):
         return group.GetCnForUid(self.uid)
 
@@ -172,14 +165,6 @@ class User (LDAPConn):
 
     def getIndirectAliases(self):
         return alias.getIndirectCnForUid(self.uid, ld=self)
-
-#    def getGroups(self):
-#	sec = self.getSecondaryGroups();
-#	pri = self.getPrimaryGroup()
-#	if pri in sec:
-#	    return sec
-#	else:
-#	    return sec + [pri]
 
     def __str__(self):
 	return "User: [ dn:'" + self.dn + ", uid:'" + self.uid + "', cn:'" +self.cn + "' ]"
@@ -190,7 +175,7 @@ def FromUID(uid):
     except ldap.LDAPError, e:
         raise Exception, "Error finding user " + uid
 
-def getAllUserNames():
+def GetAllUserNames():
     ld = LDAPConn()
     ld.connectAnon()
     res = ld.l.search_s(settings.LDAP_USERDN, ldap.SCOPE_ONELEVEL)
@@ -198,7 +183,7 @@ def getAllUserNames():
     return [attrs['uid'][0] for (dn, attrs) in res]
     
     
-def getAllUsers(filter_data=False):
+def GetAllUsers(filter_data=False):
     ld = LDAPConn()
     ld.connectRoot()
     if filter_data:
@@ -222,7 +207,7 @@ def getAllUsers(filter_data=False):
     ret = [User(dn, attrs) for (dn, attrs) in res]
     return ret
 
-def getPrimaryMembersForGid(gid):
+def GetPrimaryMembersForGid(gid):
     ld = LDAPConn()
     ld.connectRoot()
     res = ld.l.search_s(settings.LDAP_USERDN, ldap.SCOPE_ONELEVEL, 'gidNumber='+str(gid))

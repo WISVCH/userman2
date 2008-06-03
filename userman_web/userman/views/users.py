@@ -9,12 +9,12 @@ def displayUsers(request):
     if (request.GET):
 	form = UsersForm(request.GET)
 	if form.is_valid():
-	    users = user.getAllUsers(form.clean_data)
+	    users = user.GetAllUsers(form.clean_data)
 	else:
-    	    users = user.getAllUsers()
+    	    users = user.GetAllUsers()
     else:
 	form = UsersForm()
-	users = user.getAllUsers()
+	users = user.GetAllUsers()
     
     return render_to_response('users.html', {'users': users, 'form': form})
 
