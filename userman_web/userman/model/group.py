@@ -61,7 +61,7 @@ class Group (LDAPConn):
 
     def getPrimaryMembers(self):
         from userman.model import user
-        return user.getPrimaryMembersForGid(self.gidNumber)
+        return user.GetPrimaryMembersForGid(self.gidNumber)
 
     def createGroupDir(self, host):
         dirAction = action.Add('createGroupDir', host)

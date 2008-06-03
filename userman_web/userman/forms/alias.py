@@ -8,7 +8,7 @@ class AliasForm(forms.Form):
 
 class AddUserForm(forms.Form):
     possibleUsers = [("","")]
-    possibleUsers += [ (username, username) for username in user.getAllUserNames() ]
+    possibleUsers += [ (username, username) for username in user.GetAllUserNames() ]
     uid = forms.ChoiceField(choices=possibleUsers, required=False)
     
     possibleAliases = [("","")]
