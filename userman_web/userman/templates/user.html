@@ -78,7 +78,7 @@
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><a href='aliases.php?uid={{ user.uid }}'>Indirect Aliases</a></td>
+		<td><a href='/userman2/aliases?uid={{ user.uid }}'>Indirect Aliases</a></td>
 		<td>{% for alias in user.getIndirectAliases %}<a href='/userman2/aliases/{{ alias }}'>{{ alias }}</a> {% endfor %}</td>
 	</tr>
 	<tr class='title'>

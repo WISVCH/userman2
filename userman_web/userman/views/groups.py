@@ -76,8 +76,6 @@ def addGroup(request, parent):
             if not newGroup.parent == "None" and not newGroup.parent == "Besturen":
                 newAction = newGroup.createGroupDir('ank.chnet')
                 newAction.locked = False
-
-# TODO            newGroup.addGroupMapping()
             return HttpResponseRedirect(settings.USERMAN_PREFIX + '/groups/' + form.clean_data['common_name'] + '/')
     else:
         form = AddGroupForm()
