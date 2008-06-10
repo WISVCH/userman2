@@ -17,4 +17,6 @@ def aliaslink(value):
         return "<a href='/userman2/aliases/" +value + "/'>" + value + "</a>"
     if user.Exists(value):
         return "<a href='/userman2/users/" +value + "/'>" + value + "</a>"
-    return value
+    return "<a href='/userman2/aliases?uid=" +value + "'>" + value + "</a>"
+#    return value
+    
