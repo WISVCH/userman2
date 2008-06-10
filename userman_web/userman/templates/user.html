@@ -8,18 +8,18 @@
 		<h3>General Information:</h3>
 		</td>
 	</tr>
-	<tr>
+	<tr class='{% cycle odd,even as rowcolor %}'>
 		<td><a href='chuid'><img src='/site_media/edit.gif'
 			alt='Edit' /></a></td>
 		<td>UID</td>
 		<td>{{ user.uid }}</td>
 	</tr>
-	<tr>
+	<tr class='{% cycle rowcolor %}'>
 		<td>&nbsp;</td>
 		<td>UID Number</td>
 		<td>{{ user.uidNumber }}</td>
 	</tr>
-	<tr>
+	<tr class='{% cycle rowcolor %}'>
 		<td rowspan='4'><a href='chfn'><img
 			src='/site_media/edit.gif' alt='Edit' /></a></td>
 		<td>Full Name</td>
@@ -37,46 +37,46 @@
 		<td>Home Phone</td>
 		<td>{{ user.gecos.home_phone }}</td>
 	</tr>
-	<tr>
+	<tr class='{% cycle rowcolor %}'>
 		<td><a href='chdesc'><img src='/site_media/edit.gif'
 			alt='Edit' /></a></td>
 		<td>Description</td>
 		<td>{{ user.description }}</td>
 	</tr>
-	<tr>
+	<tr class='{% cycle rowcolor %}'>
 		<td><a href='chsh'><img src='/site_media/edit.gif' alt='Edit' /></a></td>
 		<td>Login Shell</td>
 		<td>{{ user.loginShell }}</td>
 	</tr>
-	<tr>
+	<tr class='{% cycle rowcolor %}'>
 		<td><a href='chhomeank'><img src='/site_media/edit.gif'
 			alt='Edit' /></a></td>
 		<td>Home Directory</td>
 		<td>{{ user.homeDirectoryAnk }}</td>
 	</tr>
-	<tr>
+	<tr class='{% cycle rowcolor %}'>
 		<td><a href='chhomech'><img src='/site_media/edit.gif'
 			alt='Edit' /></a></td>
 		<td>Home Directory (CH)</td>
 		<td>{{ user.homeDirectoryCH }}</td>
 	</tr>
-	<tr>
+	<tr class='{% cycle rowcolor %}'>
 		<td><a href='chgroup'><img src='/site_media/edit.gif'
 			alt='Edit' /></a></td>
 		<td>Primary Group ID</td>
 		<td>{{ user.gidNumber }} (<a href='/userman2/groups/{{user.gidNumber|groupname}}'>{{user.gidNumber|groupname}}</a>)</td>
 	</tr>
-	<tr>
+	<tr class='{% cycle rowcolor %}'>
 		<td>&nbsp;</td>
 		<td><a href='/userman2/groups?uid={{ user.uid }}'>Groups</a></td>
 		<td>{% for group in user.getSecondaryGroups %}<a href='/userman2/groups/{{ group }}'>{{ group }}</a> {% endfor %}</td>
 	</tr>
-	<tr>
+	<tr class='{% cycle rowcolor %}'>
 		<td>&nbsp;</td>
 		<td><a href='/userman2/aliases?uid={{ user.uid }}'>Aliases</a></td>
 		<td>{% for alias in user.getDirectAliases %}<a href='/userman2/aliases/{{ alias }}'>{{ alias }}</a> {% endfor %}</td>
 	</tr>
-	<tr>
+	<tr class='{% cycle rowcolor %}'>
 		<td>&nbsp;</td>
 		<td><a href='/userman2/aliases?uid={{ user.uid }}'>Indirect Aliases</a></td>
 		<td>{% for alias in user.getIndirectAliases %}<a href='/userman2/aliases/{{ alias }}'>{{ alias }}</a> {% endfor %}</td>
@@ -88,7 +88,7 @@
 		</td>
 	</tr>
 	{% for service in user.authorizedServices %}
-	<tr>
+	<tr class='{% cycle rowcolor %}'>
 		<td></td>
 		<td>Service</td>
 		<td>{{ service }}</td>

@@ -3,7 +3,7 @@ from userman.model import user
 from userman.model import alias
 
 class AliasForm(forms.Form):
-    uid = forms.RegexField(regex="^[a-zA-Z\d \-\$]+$", required=False)
+    uid = forms.RegexField(regex="^[@.a-zA-Z\d \-\$]+$", required=False)
     cn = forms.RegexField(regex="^[^:^,]+$", required=False)
 
 class AddUserForm(forms.Form):

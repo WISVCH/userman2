@@ -7,19 +7,19 @@
 		<h3>Group</h3>
 		</td>
 	</tr>
-	<tr>
+	<tr class={% cycle odd,even as rowcycle %}>
 		<td>&nbsp;</td>
 		<td>CN:</td>
 		<td>{{group.cn}}</td>
 	</tr>
 	{% if group.gidNumber %}
-	<tr>
+	<tr class={% cycle rowcycle %}>
 		<td>&nbsp;</td>
 		<td>GIDNumber:</td>
 		<td>{{group.gidNumber}}</td>
 	</tr>
 	{% endif %}
-	<tr>
+	<tr class={% cycle rowcycle %}>
 		<td>&nbsp;</td>
 		<td>Type:</td>
 		<td>{{group.parent}}</td>
@@ -30,7 +30,7 @@
 		</td>
 	</tr>
 	{% for member in group.members %}
-	<tr>
+	<tr class={% cycle rowcycle %}>
 		<td><a href='rmuser/{{member}}/'
 			onclick="return confirm('Really remove user {{member}} from group {{group.cn}}?')"><img
 			src='/site_media/delete.gif' alt='Remove' /></a></td>
@@ -47,7 +47,7 @@
 		</td>
 	</tr>
 	{% for member in group.getPrimaryMembers %}
-	<tr>
+	<tr class={% cycle rowcycle %}>
 		<td></td>
 		<td colspan='2'><a href='/userman2/users/{{member}}/'>{{member}}</a></td>
 	</tr>
