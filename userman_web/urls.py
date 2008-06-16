@@ -35,7 +35,7 @@ urlpatterns += patterns('userman.views.aliases',
     (r'^userman2/aliases/$', 'displayAliases'),
     (r'^userman2/aliases/([a-zA-Z][a-zA-Z\-_\d]+)/$', 'displayAlias'),
     (r'^userman2/aliases/([a-zA-Z][a-zA-Z\-_\d]+)/rm/$', 'rmAlias'),
-    (r'^userman2/aliases/([a-zA-Z][a-zA-Z\-_\d]+)/rmuser/([a-zA-Z][\@\.a-zA-Z\d]+)/$', 'rmuser'),
+    (r'^userman2/aliases/([a-zA-Z][a-zA-Z\-_\d]+)/rmuser/([a-zA-Z][-+_\@\.a-zA-Z\d]+)/$', 'rmuser'),
     (r'^userman2/aliases/([a-zA-Z][a-zA-Z\-_\d]+)/adduser/$', 'adduser'),
 
     # Uncomment this for admin:
