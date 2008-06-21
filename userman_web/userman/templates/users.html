@@ -42,17 +42,15 @@
 		<td>{% if user.ankSamba %}+{% else %}-{% endif %}</td>
 	</tr>
 	{% endfor %}
-	{% comment %}
 	<tr class='total'>
 		<td colspan='3'>Total:</td>
-		<td colspan='3'>$totalcnt</td>
-		<td>$delcnt</td>
-		<td>$chlocalcnt</td>
-		<td>$chsambacnt</td>
-		<td>$anklocalcnt</td>
-		<td>$anksambacnt</td>
+		<td colspan='2'>{{ count.total }}</td>
+		<td>{{ count.del }}</td>
+		<td>{{ count.chlocal }}</td>
+		<td>{{ count.chsamba }}</td>
+		<td>{{ count.anklocal }}</td>
+		<td>{{ count.anksamba }}</td>
 	</tr>
-	{% endcomment %}
 </table>
 </form>
 {% endblock %}
