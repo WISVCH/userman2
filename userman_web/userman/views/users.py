@@ -20,7 +20,7 @@ def displayUsers(request):
     count = {"total":0, "del":0, "chlocal":0, "chsamba":0, "anklocal":0, "anksamba":0}
     for u in users:
             count["total"] += 1
-            # FIXME: Moet nog geïmplementeerd worden
+            # FIXME: Moet nog geimplementeerd worden
             #if u.toBeDeleted:
             #	count["del"] += 1
             if u.chLocal:
