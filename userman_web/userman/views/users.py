@@ -16,8 +16,23 @@ def displayUsers(request):
     else:
 	form = UsersForm()
 	users = user.GetAllUsers()
+
+    count = {"total":0, "del":0, "chlocal":0, "chsamba":0, "anklocal":0, "anksamba":0}
+    for u in users:
+            count["total"] += 1
+            # FIXME: Moet nog geïmplementeerd worden
+            #if u.toBeDeleted:
+            #	count["del"] += 1
+            if u.chLocal:
+                    count["chlocal"] += 1
+            if u.chSamba:
+                    count["chsamba"] += 1
+            if u.ankLocal:
+                    count["anklocal"] += 1
+            if u.ankSamba:
+                    count["anksamba"] += 1
     
-    return render_to_response('users.html', {'users': users, 'form': form})
+    return render_to_response('users.html', {'users': users, 'form': form, 'count': count})
 
 
 @cache_control(no_cache=True, must_revalidate=True)
