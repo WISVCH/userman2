@@ -272,15 +272,13 @@ def Exists(uid):
 def GetFreeUIDNumber():
     ld = LDAPConn()
     ld.connectAnon()
-    for i in range(settings.MIN_USER_ID, settings.MAX_USER_ID):
+    for i in range(settings.MIN_USER_ID, settings.MAX_USER_ID+1):
         res = ld.l.search_s(settings.LDAP_USERDN, ldap.SCOPE_SUBTREE, "uidNumber=" + str(i))
         if len(res) == 0:
-            break;
+            return i
     
-    if i == settings.MAX_USER_ID:
-        raise Exception, "No more free user IDs"
-    return i
-    
+    raise Exception, "No more free user IDs"
+
 def GeneratePassword(length = 8):
     chars = string.letters + string.letters + string.digits + string.punctuation
     return ''.join([random.choice(chars) for i in range(length)])
