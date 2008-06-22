@@ -144,12 +144,10 @@ def GetFreeGIDNumber():
     for i in range(settings.MIN_GROUP_ID, settings.MAX_GROUP_ID):
         res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_SUBTREE, "gidNumber=" + str(i))
         if len(res) == 0:
-            break;
+            return i
     
-    if i == settings.MAX_GROUP_ID:
-        raise Exception, "No more free group IDs"
-    return i
-    
+    raise Exception, "No more free group IDs"
+
 def Add(parent, cn):
     ld = LDAPConn()
     ld.connectRoot()
