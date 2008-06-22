@@ -272,7 +272,7 @@ def Exists(uid):
 def GetFreeUIDNumber():
     ld = LDAPConn()
     ld.connectAnon()
-    for i in range(settings.MIN_USER_ID, settings.MAX_USER_ID+1):
+    for i in range(settings.MIN_USER_ID, settings.MAX_USER_ID):
         res = ld.l.search_s(settings.LDAP_USERDN, ldap.SCOPE_SUBTREE, "uidNumber=" + str(i))
         if len(res) == 0:
             return i
