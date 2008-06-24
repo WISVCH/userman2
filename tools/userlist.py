@@ -1,4 +1,7 @@
 #!/usr/bin/python
+import sys
+sys.path.append("..")
+
 import userman.model.user
 import re
 
