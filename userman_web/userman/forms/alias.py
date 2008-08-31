@@ -15,7 +15,7 @@ class PossibleAliases:
         return iter( [("","")] + [ (username, username) for username in alias.getAllAliasNames() ])
 
 class AliasForm(forms.Form):
-    uid = forms.RegexField(regex="^[@.a-zA-Z\d \-\$]+$", required=False)
+    uid = forms.RegexField(regex="^[@.a-zA-Z\d\-_]+$", required=False)
     cn = forms.RegexField(regex="^[^:^,]+$", required=False)
 
 class AddUserForm(forms.Form):

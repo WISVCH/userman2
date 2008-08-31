@@ -63,6 +63,7 @@ def adduser(request, cn):
 
     return render_to_response('form.html', {'form': form, 'uid': groupObj.cn})
 
+@cache_control(no_cache=True, must_revalidate=True)
 def addGroup(request, parent):
     if not parent in group.GetParents():
         raise Http404
@@ -82,6 +83,7 @@ def addGroup(request, parent):
     
     return render_to_response('form.html', {'form': form, 'uid': "groups"})
 
+@cache_control(no_cache=True, must_revalidate=True)
 def rmGroup(request, cn):
     try:
         groupObj = group.FromCN(cn)
