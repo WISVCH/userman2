@@ -63,6 +63,7 @@ def adduser(request, cn):
 
     return render_to_response('form.html', {'form': form, 'uid': aliasObj.cn})
 
+@cache_control(no_cache=True, must_revalidate=True)
 def addAlias(request, parent):
     if not parent in alias.GetParents():
         raise Http404
@@ -79,6 +80,7 @@ def addAlias(request, parent):
 
     return render_to_response('form.html', {'form': form, 'uid': "aliases"})
 
+@cache_control(no_cache=True, must_revalidate=True)
 def rmAlias(request, cn):
     try:
         aliasObj = alias.fromCN(cn)

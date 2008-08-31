@@ -6,6 +6,7 @@ from django.conf import settings
 
 from userman.forms.user import *
 
+@cache_control(no_cache=True, must_revalidate=True)
 def displayUsers(request):
     if (request.GET):
 	form = UsersForm(request.GET)
@@ -166,6 +167,7 @@ def userChpriv(request, uid):
 
     return render_to_response('userpriv.html', {'form': form, 'user': userObj})
 
+@cache_control(no_cache=True, must_revalidate=True)
 def userRmpriv(request, uid, service, server):
     try:
         userObj = user.FromUID(uid)
@@ -188,6 +190,7 @@ def userShowldif(request, uid):
 
     return render_to_response('usershowldif.html', {'user': userObj})
 
+@cache_control(no_cache=True, must_revalidate=True)
 def addUser(request):
     if request.method == 'POST':
         form = AddUserForm(request.POST)
@@ -209,6 +212,7 @@ def addUser(request):
     
     return render_to_response('form.html', {'form': form, 'uid': "users"})
 
+@cache_control(no_cache=True, must_revalidate=True)
 def rmUser(request, uid):
     try:
         userObj = user.FromUID(uid)    
@@ -218,6 +222,7 @@ def rmUser(request, uid):
     userObj.remove()
     return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/')
 
+@cache_control(no_cache=True, must_revalidate=True)
 def removeProfile(request, uid):
     try:
         userObj = user.FromUID(uid)    
@@ -228,6 +233,7 @@ def removeProfile(request, uid):
     newAction.locked = False
     return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid + '/')
 
+@cache_control(no_cache=True, must_revalidate=True)
 def genLoginScript(request, uid):
     try:
         userObj = user.FromUID(uid)    
@@ -238,6 +244,7 @@ def genLoginScript(request, uid):
     newAction.locked = False
     return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid + '/')
 
+@cache_control(no_cache=True, must_revalidate=True)
 def resetPassword(request, uid):
     try:
         userObj = user.FromUID(uid)    

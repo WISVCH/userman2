@@ -42,4 +42,4 @@ class AddUserForm(forms.Form):
     access = forms.MultipleChoiceField(initial=('ssh@ch','samba@ank','samba@ch'), choices=(('ssh@ch', 'ssh@ch'),('samba@ank','samba@ank'), ('samba@ch', 'samba@ch'), ('ssh@ank', 'ssh@ank'), ('ssh@frans', 'ssh@frans')))
 
 class ChpassForm(forms.Form):
-    password = forms.CharField(widget=forms.PasswordInput, min_length = 8)    
+    password = forms.CharField(widget=forms.PasswordInput, min_length = 8)
