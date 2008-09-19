@@ -10,7 +10,7 @@ from group import Group
 from os.path import abspath, exists
 from os import makedirs
 import os
-from shutil import copy2
+from shutil import copy2, rmtree
 import tarfile
 
 import ldap
@@ -156,7 +156,7 @@ class Action:
 	tar = tarfile.open (os.path.join (config.graveyardDir, "GROUP_" + group.getCN() + "-" + str(int(time())) + ".tar.gz"), "w:gz")
 	tar.add (homedir)
 	tar.close()
-	self.rmTree (homedir)
+	rmtree (homedir)
 
 	if config.enableSambaShareRegen:
 	    regenSambaGroupConf()
@@ -265,7 +265,7 @@ class Action:
 		mydocsdest = mydocsdest + str(time())
 	    os.rename(mydocssrc, mydocsdest)
 	if exists (baseprofile):
-	    self.rmTree (baseprofile)
+	    rmtree (baseprofile)
 
 	return True
 
@@ -284,7 +284,7 @@ class Action:
 	tar = tarfile.open (os.path.join (config.graveyardDir, user.getUID() + "-" + str(int(time())) + ".tar.gz"), "w:gz")
 	tar.add (homedir)
 	tar.close()
-	self.rmTree (homedir)
+	rmtree (homedir)
 
 	return True
 
@@ -356,11 +356,3 @@ class Action:
 	    for name in dirs:
 		destname = os.path.join (dest + "/" + root[len(src):], name)
 		os.mkdir(destname)
-
-    def rmTree (self, dest):
-	for root, dirs, files in os.walk(dest, topdown=False):
-	    for name in files:
-        	os.remove(os.path.join(root, name))
-	    for name in dirs:
-	        os.rmdir(os.path.join(root, name))
-	os.rmdir(dest)
