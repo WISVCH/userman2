@@ -24,4 +24,4 @@ class AddUserForm(forms.Form):
     email = forms.EmailField (required=False)
 
 class AddAliasForm(forms.Form):
-    common_name = forms.RegexField(regex="^[a-zA-Z\d\-_\$]+$", required=True)
+    common_name = forms.RegexField(regex="^[a-zA-Z\d\-_\$.]+$", required=True)
