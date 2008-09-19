@@ -52,7 +52,7 @@ class Group (LDAPConn):
     def remove(self):
         removeAction = action.Add('removeGroup', 'frans.chnet', self.dn, 'Remove group entry in LDAP for ' + self.dn)
         if not self.parent == "None" and not self.parent == "Besturen":
-            removeAnkGroupDirAction = removeGroupDir('ank.chnet', removeAction)
+            removeAnkGroupDirAction = self.removeGroupDir('ank.chnet', removeAction)
             removeAnkGroupDirAction.locked = False
         removeAction.locked = False
 
