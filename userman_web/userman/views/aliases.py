@@ -11,7 +11,7 @@ def displayAliases(request):
     if (request.GET):
         form = AliasForm(request.GET)
         if form.is_valid():
-            aliases = alias.getAllAliases(form.clean_data)
+            aliases = alias.getAllAliases(form.cleaned_data)
         else:
             aliases = alias.getAllAliases()
     else:
@@ -54,9 +54,9 @@ def adduser(request, cn):
         form = AddUserForm(request.POST)
         if form.is_valid():
             aliasObj.connectRoot()
-            if form.clean_data['uid']: aliasObj.addMember(str(form.clean_data['uid']))
-            elif form.clean_data['alias']: aliasObj.addMember(str(form.clean_data['alias']))
-            elif form.clean_data['email']: aliasObj.addMember(str(form.clean_data['email']))
+            if form.cleaned_data['uid']: aliasObj.addMember(str(form.cleaned_data['uid']))
+            elif form.cleaned_data['alias']: aliasObj.addMember(str(form.cleaned_data['alias']))
+            elif form.cleaned_data['email']: aliasObj.addMember(str(form.cleaned_data['email']))
             return HttpResponseRedirect(settings.USERMAN_PREFIX + '/aliases/' + aliasObj.cn + '/')
     else:
         form = AddUserForm()
@@ -71,10 +71,10 @@ def addAlias(request, parent):
     if request.method == 'POST':
         form = AddAliasForm(request.POST)
         if form.is_valid():
-            if alias.Exists(form.clean_data['common_name']):
+            if alias.Exists(form.cleaned_data['common_name']):
                 raise Http404
-            alias.Add(parent, str(form.clean_data['common_name']))
-            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/aliases/' + form.clean_data['common_name'] + '/')
+            alias.Add(parent, str(form.cleaned_data['common_name']))
+            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/aliases/' + form.cleaned_data['common_name'] + '/')
     else:
         form = AddAliasForm()
 

@@ -62,17 +62,19 @@ class LDAPConn (object):
             raise Exception, "The object you are modifying has no dn"
         if not self.connected:
             self.connectRoot()
-        mod_attrs = [ (ldap.MOD_DELETE, k, v) for (k, v) in changes.items() ]
+		# Django uses unicode everywhere, but the ldap module wants
+		# strings, not unicode objects, so that's why we call str()
+		# here.
+        mod_attrs = [ (ldap.MOD_DELETE, k, str(v)) for (k, v) in changes.items() ]
         self.l.modify_s(self.dn, mod_attrs)
 
-    def mailAdmin (self, subject, message):                                                                                                                                                                    
-        msg = MIMEText(message)                                                                                                                                                                                
-        msg['Subject'] = subject;                                                                                                                                                                              
-        msg['From'] = settings.ADMIN_MAIL                                                                                                                                                                         
-        msg['To'] = settings.ADMIN_MAIL                                                                                                                                                                           
-                                                                                                                                                                                                               
-        s = smtplib.SMTP()                                                                                                                                                                                     
-        s.connect()                                                                                                                                                                                            
-        s.sendmail(settings.ADMIN_MAIL, [settings.ADMIN_MAIL], msg.as_string())                                                                                                                                      
-        s.close()
-  
+    def mailAdmin (self, subject, message):
+		msg = MIMEText(message)
+		msg['Subject'] = subject
+		msg['From'] = settings.ADMIN_MAIL
+		msg['To'] = settings.ADMIN_MAIL
+		
+		s = smtplib.SMTP()
+		s.connect()
+		s.sendmail(settings.ADMIN_MAIL, [settings.ADMIN_MAIL], msg.as_string())
+		s.close()

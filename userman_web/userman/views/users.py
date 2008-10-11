@@ -11,7 +11,7 @@ def displayUsers(request):
     if (request.GET):
 	form = UsersForm(request.GET)
 	if form.is_valid():
-	    users = user.GetAllUsers(form.clean_data)
+	    users = user.GetAllUsers(form.cleaned_data)
 	else:
     	    users = user.GetAllUsers()
     else:
@@ -55,7 +55,7 @@ def userChfn(request, uid):
     if request.method == 'POST':
 	form = ChfnForm(request.POST)
 	if form.is_valid():
-	    userObj.gecos = form.clean_data
+	    userObj.gecos = form.cleaned_data
 	    return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid +'/')
     else:
 	    form = ChfnForm( initial=userObj.gecos)
@@ -72,7 +72,7 @@ def userChdesc(request, uid):
     if request.method == 'POST':
 	form = ChdescForm(request.POST)
 	if form.is_valid():
-	    userObj.description = str(form.clean_data["description"])
+	    userObj.description = str(form.cleaned_data["description"])
 	    return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid +'/')
     else:
 	    form = ChdescForm( initial={"description": userObj.description})
@@ -89,7 +89,7 @@ def userChsh(request, uid):
     if request.method == 'POST':
 	form = ChshForm(request.POST)
 	if form.is_valid():
-	    userObj.loginShell = str(form.clean_data["login_shell"])
+	    userObj.loginShell = str(form.cleaned_data["login_shell"])
 	    return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid +'/')
     else:
 	    form = ChshForm( initial={"login_shell": userObj.loginShell})
@@ -107,7 +107,7 @@ def userChgroup(request, uid):
     if request.method == 'POST':
 	form = ChgroupForm(request.POST)
 	if form.is_valid():
-	    userObj.gidNumber = str(form.clean_data["gid_number"])
+	    userObj.gidNumber = str(form.cleaned_data["gid_number"])
 	    return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid +'/')
     else:
 	    form = ChgroupForm( initial={"gid_number": userObj.gidNumber})
@@ -124,7 +124,7 @@ def chHomeCH(request, uid):
     if request.method == 'POST':
         form = ChHomeForm(request.POST)
         if form.is_valid():
-            userObj.homeDirectoryCH = str(form.clean_data["new_directory"])
+            userObj.homeDirectoryCH = str(form.cleaned_data["new_directory"])
             return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid +'/')
     else:
         form = ChHomeForm( initial={"new_directory": userObj.description})
@@ -141,7 +141,7 @@ def chHomeAnk(request, uid):
     if request.method == 'POST':
         form = ChHomeForm(request.POST)
         if form.is_valid():
-            userObj.homeDirectoryAnk = str(form.clean_data["new_directory"])
+            userObj.homeDirectoryAnk = str(form.cleaned_data["new_directory"])
             return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid +'/')
     else:
         form = ChHomeForm( initial={"new_directory": userObj.description})
@@ -158,9 +158,9 @@ def userChpriv(request, uid):
     if request.method == 'POST':
 	form = ChprivForm(request.POST)
 	if form.is_valid():
-	    serviceStr = str(form.clean_data["service"]) + "@" + str(form.clean_data["server"])
+	    serviceStr = str(form.cleaned_data["service"]) + "@" + str(form.cleaned_data["server"])
 	    if not serviceStr in userObj.authorizedServices:
-		userObj.addAuthorizedService(str(form.clean_data["service"]) + "@" + str(form.clean_data["server"]))
+		userObj.addAuthorizedService(str(form.cleaned_data["service"]) + "@" + str(form.cleaned_data["server"]))
 		return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid +'/chpriv/')
     else:
 	    form = ChprivForm()
@@ -195,18 +195,18 @@ def addUser(request):
     if request.method == 'POST':
         form = AddUserForm(request.POST)
         if form.is_valid():
-            if user.Exists(form.clean_data['uid']):
+            if user.Exists(form.cleaned_data['uid']):
                 raise Http404
-            newUser = user.Add(str(form.clean_data['uid']), str(form.clean_data['full_name']))
+            newUser = user.Add(str(form.cleaned_data['uid']), str(form.cleaned_data['full_name']))
             newUser.createHomeDir('ank.chnet').locked = False
             newUser.createHomeDir('ch.chnet').locked = False
             newUser.createMailbox('ch.chnet').locked = False
             newUser.generateLogonScript('ank.chnet').locked = False
-            for access in form.clean_data['access']:
+            for access in form.cleaned_data['access']:
                 newUser.addAuthorizedService(str(access))
 #            newUser.createSambaEntry()
             
-            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + form.clean_data['uid'] + '/')
+            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + form.cleaned_data['uid'] + '/')
     else:
         form = AddUserForm()
     
@@ -264,7 +264,7 @@ def chPassword(request, uid):
     if request.method == 'POST':
         form = ChpassForm(request.POST)
         if form.is_valid():
-            userObj.changePassword(form.clean_data['password'])
+            userObj.changePassword(form.cleaned_data['password'])
             return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid +'/')
     else:
         form = ChpassForm()
