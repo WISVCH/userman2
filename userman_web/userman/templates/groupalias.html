@@ -37,7 +37,7 @@
 {%if group.gidNumber %}
 		<td colspan='2'><a href='/userman2/users/{{member}}/'>{{member}}</a></td>
 {% else %}
-		<td colspan='2'>{{member|aliaslink}}</td>
+		<td colspan='2'>{{member|aliaslink|safe}}</td>
 {%endif%}
 	</tr>
 	{%endfor%} {% if group.gidNumber %}

@@ -1,4 +1,4 @@
-from django import newforms as forms
+from django import forms
 from userman.model import user
 from userman.model import alias
 

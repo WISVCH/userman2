@@ -13,7 +13,7 @@ def displayGroups(request):
     if (request.GET):
         form = GroupsForm(request.GET)
         if form.is_valid():
-            groups = group.GetAllGroups(form.clean_data)
+            groups = group.GetAllGroups(form.cleaned_data)
         else:
             groups = group.GetAllGroups()
     else:
@@ -56,7 +56,7 @@ def adduser(request, cn):
         form = AddUserForm(request.POST)
         if form.is_valid():
             groupObj.connectRoot()
-            groupObj.addMember(str(form.clean_data["user"]))
+            groupObj.addMember(str(form.cleaned_data["user"]))
             return HttpResponseRedirect(settings.USERMAN_PREFIX + '/groups/' + groupObj.cn + '/')
     else:
         form = AddUserForm()
@@ -71,13 +71,13 @@ def addGroup(request, parent):
     if request.method == 'POST':
         form = AddGroupForm(request.POST)
         if form.is_valid():
-            if group.Exists(form.clean_data['common_name']):
+            if group.Exists(form.cleaned_data['common_name']):
                 raise Http404
-            newGroup = group.Add(parent, str(form.clean_data['common_name']))
+            newGroup = group.Add(parent, str(form.cleaned_data['common_name']))
             if not newGroup.parent == "None" and not newGroup.parent == "Besturen":
                 newAction = newGroup.createGroupDir('ank.chnet')
                 newAction.locked = False
-            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/groups/' + form.clean_data['common_name'] + '/')
+            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/groups/' + form.cleaned_data['common_name'] + '/')
     else:
         form = AddGroupForm()
     

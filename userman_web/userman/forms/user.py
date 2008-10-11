@@ -1,4 +1,4 @@
-from django import newforms as forms
+from django import forms
 
 class ChfnForm(forms.Form):
     full_name = forms.RegexField(regex="^[^:^,]+$", error_message="Gecos entries may not contain : or ,")
