@@ -88,3 +88,4 @@ class LDAPConn (object):
 		s.connect()
 		s.sendmail(settings.ADMIN_MAIL, [settings.ADMIN_MAIL], msg.as_string())
 		s.close()
+
