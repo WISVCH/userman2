@@ -46,7 +46,12 @@ class LDAPConn (object):
     def addObject(self, dn, changes):
         if not self.connected:
             self.connectRoot()
-        mod_attrs = [ (k, v) for (k, v) in changes.items() ]
+        mod_attrs = []
+        for (k, v) in changes.items():
+            if isinstance(v, unicode):
+                mod_attrs.append((k, str(v)))
+            else:
+                mod_attrs.append((k, v))
 #        assert False, mod_attrs
         self.l.add_s(dn, mod_attrs)
 
@@ -65,7 +70,12 @@ class LDAPConn (object):
 		# Django uses unicode everywhere, but the ldap module wants
 		# strings, not unicode objects, so that's why we call str()
 		# here.
-        mod_attrs = [ (ldap.MOD_DELETE, k, str(v)) for (k, v) in changes.items() ]
+        for (k, v) in changes.items():
+            if isinstance(v, unicode):
+                mod_attrs.append((ldap.MOD_DELETE, k, str(v)))
+            else:
+                mod_attrs.append((ldap.MOD_DELETE, k, v))
+
         self.l.modify_s(self.dn, mod_attrs)
 
     def mailAdmin (self, subject, message):
