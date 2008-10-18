@@ -67,9 +67,7 @@ class LDAPConn (object):
             raise Exception, "The object you are modifying has no dn"
         if not self.connected:
             self.connectRoot()
-		# Django uses unicode everywhere, but the ldap module wants
-		# strings, not unicode objects, so that's why we call str()
-		# here.
+        mod_attrs = []
         for (k, v) in changes.items():
             if isinstance(v, unicode):
                 mod_attrs.append((ldap.MOD_DELETE, k, str(v)))
