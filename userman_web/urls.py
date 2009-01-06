@@ -27,7 +27,7 @@ urlpatterns += patterns('userman.views.groups',
     (r'^userman2/groups/$', 'displayGroups'),
     (r'^userman2/groups/([a-zA-Z][a-zA-Z\d\-_]+)/$', 'displayGroup'),
     (r'^userman2/groups/([a-zA-Z][a-zA-Z\d\-_]+)/rm/$', 'rmGroup'),
-    (r'^userman2/groups/([a-zA-Z][a-zA-Z\d\-_]+)/rmuser/([a-zA-Z][a-zA-Z\d-_]+)/$', 'rmuser'),
+    (r'^userman2/groups/([a-zA-Z][a-zA-Z\d\-_]+)/rmuser/([a-zA-Z][a-zA-Z\d_-]+)/$', 'rmuser'),
     (r'^userman2/groups/([a-zA-Z][a-zA-Z\d\-_]+)/adduser/$', 'adduser'),
 )
 urlpatterns += patterns('userman.views.aliases',
