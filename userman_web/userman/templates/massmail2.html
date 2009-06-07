@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% block title %}Manage Users{% endblock %}
 {% block content %}
-<form action='sendmail' method='get'>
+<form action='sendmail/' method='post'>
 <table>
 	<tr class='title'>
 		<td>Recipients: {% for user in users %} {{ user }}, {% endfor %}

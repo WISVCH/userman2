@@ -53,8 +53,8 @@ def writeMail(request):
 
 def sendMail(request):
     usernames = []
-    if request.GET:
-	form = SendMailForm(request.GET)
+    if request.POST:
+	form = SendMailForm(request.POST)
 	if form.is_valid():
 	    usernames = form.cleaned_data["users"]
 	    if form.cleaned_data["reallysend"]:
