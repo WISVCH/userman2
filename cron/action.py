@@ -17,7 +17,9 @@ import ldap
 import smtplib
 from email.MIMEText import MIMEText
 
+from datetime import datetime
 from time import time
+from time import strptime
 from ldap.cidict import cidict
 
 class Action:
@@ -312,10 +314,13 @@ class Action:
 	return True
     
     def warnRemove (self, attrs):
-	removalTime = float(attrs['arguments'][0])
-	if time() > removalTime:
+	removalTime = datetime(*(strptime(attrs['arguments'][0],  "%Y-%m-%d %H:%M:%S")[0:6]))                                                                                                                                                                           
+	
+#	(attrs['arguments'][0])
+	if datetime.now() > removalTime:
 	    user = User (self.l, attrs['affectedDN'][0])
 	    self.mailAdmin ("Admin notice, notify for " + user.getUID(),"Beheerder, \n\nGebruiker "+  user.getUID() + " staat vandaag voor verwijdering aangemerkt.\n\n")
+#	    self.lock()
 	    return True
 
 	return False

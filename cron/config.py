@@ -1,5 +1,5 @@
 localHostname = "test.chnet"
-adminMail = 'pccom@ch.tudelft.nl'
+adminMail = 'adriaan@ch.tudelft.nl'
 
 # LDAP Settings
 ldapServername = "ldaps://frans.chnet"

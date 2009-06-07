@@ -1,4 +1,5 @@
 from userman.model import user
+from userman.model import action
 from django.shortcuts import render_to_response
 from django.http import Http404, HttpResponseRedirect
 from django.views.decorators.cache import cache_control
@@ -18,6 +19,8 @@ def displayUsers(request):
 	form = UsersForm()
 	users = user.GetAllUsers()
 
+    rmWarnUsers = [ user.User(curaction.affectedDN).uid for curaction in action.GetAllActions({"actionName": "warnRemove"}) ]
+    print rmWarnUsers
     count = {"total":0, "del":0, "chlocal":0, "chsamba":0, "anklocal":0, "anksamba":0}
     for u in users:
             count["total"] += 1
@@ -33,7 +36,7 @@ def displayUsers(request):
             if u.ankSamba:
                     count["anksamba"] += 1
     
-    return render_to_response('users.html', {'users': users, 'form': form, 'count': count})
+    return render_to_response('users.html', {'users': users, 'form': form, 'count': count, 'rmWarnUsers': rmWarnUsers})
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -76,6 +79,23 @@ def userChdesc(request, uid):
 	    return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid +'/')
     else:
 	    form = ChdescForm( initial={"description": userObj.description})
+    				    
+    return render_to_response('form.html', {'form': form, 'uid': userObj.uid})
+
+@cache_control(no_cache=True, must_revalidate=True)
+def userChwarnRm(request, uid):
+    try:
+        userObj = user.FromUID(uid)
+    except Exception, e:
+        raise Http404
+    
+    if request.method == 'POST':
+	form = ChwarnRmForm(request.POST)
+	if form.is_valid():
+	    userObj.toBeDeleted = form.cleaned_data["toBeDeleted"]
+	    return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid +'/')
+    else:
+	    form = ChwarnRmForm( initial={"toBeDeleted": userObj.toBeDeleted})
     				    
     return render_to_response('form.html', {'form': form, 'uid': userObj.uid})
 

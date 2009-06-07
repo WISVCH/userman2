@@ -8,6 +8,7 @@ urlpatterns = patterns('userman.views.users',
     (r'^userman2/users/([a-zA-Z][a-zA-Z\d\-_]+)/$', 'displayUser'),
     (r'^userman2/users/([a-zA-Z][a-zA-Z\d\-_]+)/chfn/$', 'userChfn'),
     (r'^userman2/users/([a-zA-Z][a-zA-Z\d\-_]+)/chdesc/$', 'userChdesc'),
+    (r'^userman2/users/([a-zA-Z][a-zA-Z\d\-_]+)/chwarnrm/$', 'userChwarnRm'),
     (r'^userman2/users/([a-zA-Z][a-zA-Z\d\-_]+)/chsh/$', 'userChsh'),
     (r'^userman2/users/([a-zA-Z][a-zA-Z\d\-_]+)/chpriv/$', 'userChpriv'),
     (r'^userman2/users/([a-zA-Z][a-zA-Z\d\-_]+)/chpriv/rm/([a-zA-z]+)@([a-zA-z]+)/$', 'userRmpriv'),
@@ -20,6 +21,12 @@ urlpatterns = patterns('userman.views.users',
     (r'^userman2/users/([a-zA-Z][a-zA-Z\d\-_]+)/genloginscript/$', 'genLoginScript'),
     (r'^userman2/users/([a-zA-Z][a-zA-Z\d\-_]+)/removeprofile/$', 'removeProfile'),
     (r'^userman2/users/([a-zA-Z][a-zA-Z\d\-_]+)/rm/$', 'rmUser'),
+)
+
+urlpatterns += patterns('userman.views.massmail',
+    (r'^userman2/massmail/$', 'selectUsers'),
+    (r'^userman2/massmail/writemail/$', 'writeMail'),
+    (r'^userman2/massmail/writemail/sendmail/$', 'sendMail'),
 )
 
 urlpatterns += patterns('userman.views.groups',

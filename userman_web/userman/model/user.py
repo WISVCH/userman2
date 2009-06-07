@@ -13,6 +13,7 @@ import os
 import time
 import re
 import subprocess
+import datetime
 
 class User (LDAPConn):
     """Represents a user in the ldap tree."""
@@ -32,7 +33,6 @@ class User (LDAPConn):
     def _get_uid(self):
         return self.__attrs["uid"][0]
     uid = property (_get_uid)
-
 
     def _get_uidNumber(self):
         return int(self.__attrs["uidNumber"][0])
@@ -143,6 +143,28 @@ class User (LDAPConn):
         newAction.locked = False
         
     homeDirectoryAnk = property(_get_homeDir, _set_homeDir)
+    
+    def _get_toBeDeleted(self):
+	actions = action.GetAllActions({'actionName': 'warnRemove', 'affectedDN': self.dn}, self)
+	if actions:
+	    newdate = datetime.datetime(*(time.strptime(actions[0].arguments,  "%Y-%m-%d %H:%M:%S")[0:6]))
+	    return newdate
+	return False;
+
+    def _set_toBeDeleted(self, newdate):
+	actions = action.GetAllActions({'actionName': 'warnRemove', 'affectedDN': self.dn})
+	if actions:
+	    if newdate:
+	        actions[0].arguments = newdate.strftime("%Y-%m-%d %H:%M:%S");
+		actions[0].locked = False;
+	    else:
+		actions[0].remove();
+	else:
+	    newaction = action.Add('warnRemove', 'ch.chnet', self.dn, "Send removal warning")
+	    newaction.arguments = newdate.strftime("%Y-%m-%d %H:%M:%S")
+	    newaction.locked = False;
+
+    toBeDeleted = property(_get_toBeDeleted, _set_toBeDeleted)
 
     def createHomeDir(self, host):
         return action.Add('createHomeDir', host, self.dn, 'Create home directory on ' + host + ' for ' + self.uid)
