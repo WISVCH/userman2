@@ -40,7 +40,7 @@ class UsersForm(forms.Form):
     noanksamba = forms.BooleanField(required=False, initial=False)
 
 class AddUserForm(forms.Form):
-    uid = forms.RegexField(regex="^[a-zA-Z][a-zA-Z\d\-$_]+$", error_message="UID entry must consist of alphanumeric characters")
+    uid = forms.RegexField(regex="^[a-z][a-z\d\-$_]+$", error_message="UID entry must consist of alphanumeric characters, and be lower case")
     full_name = forms.RegexField(regex="^[^:^,]+$", error_message="Full name entry may not contain : or ,")
     access = forms.MultipleChoiceField(initial=('ssh@ch','samba@ank','samba@ch'), choices=(('ssh@ch', 'ssh@ch'),('samba@ank','samba@ank'), ('samba@ch', 'samba@ch'), ('ssh@ank', 'ssh@ank'), ('ssh@frans', 'ssh@frans')))
 
