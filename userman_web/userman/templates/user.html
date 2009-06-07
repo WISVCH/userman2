@@ -107,6 +107,6 @@
 <a href='resetpasswd/' onclick="return confirm('Reset password for {{ user.uid }}?')">Reset user's password</a></p>
 <p><a href='genloginscript/'>Regenerate user's login script</a> <br />
 <a href='removeprofile/' onclick="return confirm('Remove profile for {{ user.uid }}?')">Remove user's profile</a> <br />
-<a href='mailrmwarning/' onclick="return confirm('Send removal warning to user {{ user.uid }}?')">Send Removal Warning</a> <br />
+<a href='/userman2/massmail/writemail/?users={{ user.uid }}&fromaddress=beheer%40ch.tudelft.nl')">Send Removal Warning</a> <br />
 <a href='rm/' onclick="return confirm('Are you very sure you really want to delete {{ user.uid }}?')">Remove user</a></p>
 {% endblock %}

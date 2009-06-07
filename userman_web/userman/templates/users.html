@@ -29,9 +29,7 @@
 	{% for user in users %}
 	<tr class='{% cycle odd,even %}'>
 		<td><a href='{{ user.uid }}/'><img src='/site_media/edit.gif'alt='Edit' /></a></td>
-		<td><a href='{{ user.uid }}/mailrmwarning/'
-			onclick="return confirm('Really send removal warning to {{ user.uid }}?')"><img
-			src='/site_media/delete.gif' alt='Delete' /></a></td>
+		<td><a href='/userman2/massmail/writemail/?users={{ user.uid }}&fromaddress=beheer%40ch.tudelft.nl'><img src='/site_media/delete.gif' alt='Delete' /></a></td>
 		<td>{{ user.uid }}</td>
 		<td>{{ user.gecos.full_name|default:"&nbsp;" }}</td>
 		<td>{{ user.uidNumber }}</td>

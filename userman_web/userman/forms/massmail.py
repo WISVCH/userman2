@@ -38,7 +38,7 @@ class WriteMailForm(forms.Form):
     subject = forms.CharField(required=False)
     body = forms.CharField(required=False, widget=forms.Textarea)
     removaldue = forms.IntegerField(required=False)
-    removalunits = forms.ChoiceField(required=False, choices=[('weeks', 'weeks'),('days', 'days'), ('months', 'months')])
+    removalunits = forms.ChoiceField(required=False, choices=[('None', 'None'),('days', 'days'), ('weeks', 'weeks'),('months', 'months')])
     
 class SendMailForm(forms.Form):
     possibleUsers = [ (username, username) for username in user.GetAllUserNames() ]         
@@ -46,5 +46,6 @@ class SendMailForm(forms.Form):
     fromaddress = forms.EmailField(required=True, widget=forms.HiddenInput)
     subject = forms.CharField(required=True, widget=forms.HiddenInput)
     body = forms.CharField(required=True, widget=forms.HiddenInput)
-    removaldate = forms.DateField(required=False, widget=forms.HiddenInput)
+    removaldue = forms.IntegerField(required=False, widget=forms.HiddenInput)
+    removalunits = forms.ChoiceField(required=False, choices=[('None', 'None'), ('days', 'days'),  ('weeks', 'weeks'),('months', 'months')], widget=forms.HiddenInput)
     reallysend = forms.BooleanField(required=False)

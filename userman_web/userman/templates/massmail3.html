@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% block title %}Review mass mail{% endblock %}
 {% block content %}
-<form action='' method='get'>
+<form action='' method='post'>
 <table>
 	<tr class='title'>
 		<td>Recipients: {% for user in users %} {{ user }}, {% endfor %}
@@ -12,7 +12,10 @@
 		<td>Subject: {{ subject }}</td>
 	</tr>
 	<tr class='title'>
-		<td>{{ body }}</td>
+		<td>Account removal warning: {{ removaldue }} {{removalunits}}</td>
+	</tr>
+	<tr class='title'>
+		<td>Body: {{ body }}</td>
 	</tr>
 	<tr class='title'>
 		<td>Confirm send: {{ form.reallysend }}</td>
@@ -22,6 +25,8 @@
 {{ form.fromaddress }}
 {{ form.subject }}
 {{ form.body }}
+{{ form.removaldue }}
+{{ form.removalunits }}
 <input type='submit' value='Send'/>
 </form>
 {% endblock %}
