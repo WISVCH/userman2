@@ -5,6 +5,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.views.decorators.cache import cache_control
 from django.conf import settings
 
+import datetime
 from userman.forms.massmail import *
 from email.MIMEText import MIMEText
 import smtplib
@@ -57,16 +58,27 @@ def sendMail(request):
 	if form.is_valid():
 	    usernames = form.cleaned_data["users"]
 	    if form.cleaned_data["reallysend"]:
-		for user in form.cleaned_data['users']:
+		removaldate = False
+		if form.cleaned_data["removalunits"] == "days":
+		    removaldate = datetime.datetime.now() + datetime.timedelta(days=form.cleaned_data["removaldue"])
+		elif form.cleaned_data["removalunits"] == "weeks":
+		    removaldate = datetime.datetime.now() + datetime.timedelta(weeks=form.cleaned_data["removaldue"])
+		elif form.cleaned_data["removalunits"] == "months":
+		    removaldate = datetime.datetime.now() + datetime.timedelta(days=form.cleaned_data["removaldue"]*30)
+    		
+		for username in usernames:
 		    msg = MIMEText(form.cleaned_data["body"])
 		    msg['Subject'] = form.cleaned_data["subject"]
 		    msg['From'] = form.cleaned_data["fromaddress"]
-		    msg['To'] = user + "@ch.tudelft.nl"
-    		    print msg;
+		    msg['To'] = username + "@ch.tudelft.nl"
+		    msg['Bcc'] = "beheer@ch.tudelft.nl"
 		    s = smtplib.SMTP()
 	    	    s.connect()
-	    	    s.sendmail(form.cleaned_data["fromaddress"], [user + "@ch.tudelft.nl"], msg.as_string())
+	    	    s.sendmail(form.cleaned_data["fromaddress"], [username + "@ch.tudelft.nl"], msg.as_string())
 	    	    s.close()
+		    if removaldate:
+			userObj = user.FromUID(username)
+			userObj.toBeDeleted = removaldate
 		return HttpResponseRedirect('/userman2/massmail/')
     	    return render_to_response('massmail3.html', {'form': form, 'users': usernames, 'fromaddress': form.cleaned_data['fromaddress'], 'subject': form.cleaned_data['subject'], 'body': form.cleaned_data['body'], 'removaldue': form.cleaned_data['removaldue'], 'removalunits': form.cleaned_data['removalunits']})
 
