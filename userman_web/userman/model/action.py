@@ -82,6 +82,26 @@ def FromCN(cn, ld=None):
     (dn, attrs) = res[0]
     return Action(dn, attrs)
 
+def GetAllActions(filter_data=False, ld=None):
+    if not ld:
+        ld = LDAPConn()
+        ld.connectAnon()
+    if not ld.connected:
+	ld.connectRoot()
+
+    if filter_data:
+        filter_string = "(&"
+        if 'actionName' in filter_data and filter_data['actionName']: filter_string += "(actionName=" + filter_data['actionName'] + ")"
+        if 'affectedDN' in filter_data and filter_data['affectedDN']: filter_string += "(affectedDN=" + filter_data['affectedDN'] + ")"
+        if 'cn' in filter_data and filter_data['cn']: filter_string += "(cn=*" + filter_data['cn'] + "*)"
+        filter_string += ")"
+        res = ld.l.search_s(settings.LDAP_ACTIONDN, ldap.SCOPE_SUBTREE, filter_string)
+    else:
+        res = ld.l.search_s(settings.LDAP_ACTIONDN, ldap.SCOPE_SUBTREE)
+    res.sort()
+    ret = [Action(dn, attrs) for (dn, attrs) in res]
+    return ret
+
 def Exists(cn, ld=None):
     if not ld:
         ld = LDAPConn()

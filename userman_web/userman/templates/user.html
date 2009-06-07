@@ -44,6 +44,12 @@
 		<td>{{ user.description }}</td>
 	</tr>
 	<tr class='{% cycle rowcolor %}'>
+		<td><a href='chwarnrm'><img src='/site_media/edit.gif'
+			alt='Edit' /></a></td>
+		<td>Removal date</td>
+		<td>{{ user.toBeDeleted }}</td>
+	</tr>
+	<tr class='{% cycle rowcolor %}'>
 		<td><a href='chsh'><img src='/site_media/edit.gif' alt='Edit' /></a></td>
 		<td>Login Shell</td>
 		<td>{{ user.loginShell }}</td>
