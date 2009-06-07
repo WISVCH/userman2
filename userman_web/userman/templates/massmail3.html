@@ -1,0 +1,27 @@
+{% extends "base.html" %} {% block title %}Review mass mail{% endblock %}
+{% block content %}
+<form action='' method='get'>
+<table>
+	<tr class='title'>
+		<td>Recipients: {% for user in users %} {{ user }}, {% endfor %}
+	</tr>
+	<tr class='title'>
+		<td>From: {{ fromaddress }}</td>
+	</tr>
+	<tr class='title'>
+		<td>Subject: {{ subject }}</td>
+	</tr>
+	<tr class='title'>
+		<td>{{ body }}</td>
+	</tr>
+	<tr class='title'>
+		<td>Confirm send: {{ form.reallysend }}</td>
+	</tr>
+</table>
+{{ form.users }}
+{{ form.fromaddress }}
+{{ form.subject }}
+{{ form.body }}
+<input type='submit' value='Send'/>
+</form>
+{% endblock %}
