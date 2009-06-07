@@ -68,6 +68,6 @@ def sendMail(request):
 	    	    s.sendmail(form.cleaned_data["fromaddress"], [user + "@ch.tudelft.nl"], msg.as_string())
 	    	    s.close()
 		return HttpResponseRedirect('/userman2/massmail/')
-    	    return render_to_response('massmail3.html', {'form': form, 'users': usernames, 'fromaddress': form.cleaned_data['fromaddress'], 'subject': form.cleaned_data['subject'], 'body': form.cleaned_data['body'], 'removaldate': form.cleaned_data['removal_date']})
-	
+    	    return render_to_response('massmail3.html', {'form': form, 'users': usernames, 'fromaddress': form.cleaned_data['fromaddress'], 'subject': form.cleaned_data['subject'], 'body': form.cleaned_data['body'], 'removaldue': form.cleaned_data['removaldue'], 'removalunits': form.cleaned_data['removalunits']})
+
     return HttpResponseRedirect('/userman2/massmail/')
