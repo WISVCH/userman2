@@ -4,7 +4,6 @@
 <table>
 	<tr class='title'>
 		<td><input type='image' src='/site_media/filter.gif' alt='Filter' /></td>
-		<td>Deletion Mark {{ form.deleted }}</td>
 		<td>CH L {{ form.chlocal }}{{ form.nochlocal }}</td>
 		<td>CH S {{ form.chsamba }}{{ form.nochsamba }}</td>
 		<td>Ank L {{ form.anklocal }}{{ form.noanklocal }}</td>
@@ -30,7 +29,6 @@
 	<tr class='title'>
 		<td>UID</td>
 		<td>Common Name</td>
-		<td>Deletion Mark</td>
 		<td>CH L</td>
 		<td>CH S</td>
 		<td>Ank L</td>
@@ -40,7 +38,6 @@
 	<tr class='{% cycle odd,even %}'>
 		<td>{{ user.uid }}</td>
 		<td>{{ user.gecos.full_name|default:"&nbsp;" }}</td>
-		<td>{{ user.toBeDeleted|date:"F d Y - H i"|default:"Never" }}</td>
 		<td>{% if user.chLocal %}+{% else %}-{% endif %}</td>
 		<td>{% if user.chSamba %}+{% else %}-{% endif %}</td>
 		<td>{% if user.ankLocal %}+{% else %}-{% endif %}</td>
