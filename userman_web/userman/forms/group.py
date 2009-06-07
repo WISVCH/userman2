@@ -10,4 +10,4 @@ class AddUserForm(forms.Form):
     user = forms.ChoiceField(choices=possibleUsers)
     
 class AddGroupForm(forms.Form):
-    common_name = forms.RegexField(regex="^[a-zA-Z\d\-_]+$", required=True)
+    common_name = forms.RegexField(regex="^[a-z\d\-_]+$", required=True)
