@@ -42,7 +42,7 @@ class UsersForm(forms.Form):
 class AddUserForm(forms.Form):
     uid = forms.RegexField(regex="^[a-z][a-z\d\-$_]+$", error_message="UID entry must consist of alphanumeric characters, and be lower case")
     full_name = forms.RegexField(regex="^[^:^,]+$", error_message="Full name entry may not contain : or ,")
-    access = forms.MultipleChoiceField(initial=('ssh@ch','samba@ank','samba@ch'), choices=(('ssh@ch', 'ssh@ch'),('samba@ank','samba@ank'), ('samba@ch', 'samba@ch'), ('ssh@ank', 'ssh@ank'), ('ssh@frans', 'ssh@frans')))
+    access = forms.MultipleChoiceField(initial=('samba@ank','samba@ch'), choices=(('ssh@ch', 'ssh@ch'),('samba@ank','samba@ank'), ('samba@ch', 'samba@ch'), ('ssh@ank', 'ssh@ank'), ('ssh@frans', 'ssh@frans')))
 
 class ChpassForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput, min_length = 8)
