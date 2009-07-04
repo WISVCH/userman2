@@ -95,11 +95,11 @@ class User (LDAPConn):
 
     # login permissions
     def get_chLocal(self):
-        return "ssh@ch" in self.authorizedServices
+        return "sshd@ch" in self.authorizedServices
     chLocal = property (get_chLocal)
 
     def get_ankLocal(self):
-        return "ssh@ank" in self.authorizedServices
+        return "sshd@ank" in self.authorizedServices
     ankLocal = property (get_ankLocal)
 
     def get_ankSamba(self):
@@ -263,12 +263,12 @@ def GetAllUsers(filter_data=False):
         if filter_data['uid']: filter_string += "(uid=*" + filter_data['uid'] + "*)"
         if filter_data['cn']: filter_string += "(cn=*" + filter_data['cn'] + "*)"
         if filter_data['uidnumber']: filter_string += "(uidNumber=" + str(filter_data['uidnumber']) + ")"
-        if filter_data['chlocal']: filter_string += "(authorizedService=ssh@ch)"
-        if filter_data['nochlocal']: filter_string += "(!(authorizedService=ssh@ch))"
+        if filter_data['chlocal']: filter_string += "(authorizedService=sshd@ch)"
+        if filter_data['nochlocal']: filter_string += "(!(authorizedService=sshd@ch))"
         if filter_data['chsamba']: filter_string += "(authorizedService=samba@ch)"
         if filter_data['nochsamba']: filter_string += "(!(authorizedService=samba@ch))"
-        if filter_data['anklocal']: filter_string += "(authorizedService=ssh@ank)"
-        if filter_data['noanklocal']: filter_string += "(!(authorizedService=ssh@ank))"
+        if filter_data['anklocal']: filter_string += "(authorizedService=sshd@ank)"
+        if filter_data['noanklocal']: filter_string += "(!(authorizedService=sshd@ank))"
         if filter_data['anksamba']: filter_string += "(authorizedService=samba@ank)"
         if filter_data['noanksamba']: filter_string += "(!(authorizedService=samba@ank))"
         filter_string += ")"
