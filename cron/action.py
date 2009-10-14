@@ -29,7 +29,10 @@ class Action:
 
     def getChildren (self):
 	# Process Sub-actions
-	res = self.l.search_s(self.dn, ldap.SCOPE_ONELEVEL)
+	try:
+	    res = self.l.search_s(self.dn, ldap.SCOPE_ONELEVEL)
+	except ldap.NO_SUCH_OBJECT:
+	    return []
 	ret = [ Action(self.l, dn) for (dn, attrs) in res ]
 	return ret
 
