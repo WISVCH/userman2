@@ -31,7 +31,7 @@ def selectUsers(request):
             def f(x): return x.uid not in excluded_users
             users = filter(f, users)
         else:
-                users = user.GetAllUsers()
+            users = user.GetAllUsers()
     else:
         form = MassMailForm()
         users = user.GetAllUsers()
@@ -72,13 +72,13 @@ def sendMail(request):
                     msg['From'] = form.cleaned_data["fromaddress"]
                     msg['To'] = username + "@ch.tudelft.nl"
                     s = smtplib.SMTP()
-                        s.connect()
-                        s.sendmail(form.cleaned_data["fromaddress"], [username + "@ch.tudelft.nl", "beheer@ch.tudelft.nl"], msg.as_string())
-                        s.close()
+                    s.connect()
+                    s.sendmail(form.cleaned_data["fromaddress"], [username + "@ch.tudelft.nl", "beheer@ch.tudelft.nl"], msg.as_string())
+                    s.close()
                     if removaldate:
                         userObj = user.FromUID(username)
                         userObj.toBeDeleted = removaldate
                 return HttpResponseRedirect('/userman2/massmail/')
-                return render_to_response('massmail3.html', {'form': form, 'users': usernames, 'fromaddress': form.cleaned_data['fromaddress'], 'subject': form.cleaned_data['subject'], 'body': form.cleaned_data['body'], 'removaldue': form.cleaned_data['removaldue'], 'removalunits': form.cleaned_data['removalunits']})
+            return render_to_response('massmail3.html', {'form': form, 'users': usernames, 'fromaddress': form.cleaned_data['fromaddress'], 'subject': form.cleaned_data['subject'], 'body': form.cleaned_data['body'], 'removaldue': form.cleaned_data['removaldue'], 'removalunits': form.cleaned_data['removalunits']})
 
     return HttpResponseRedirect('/userman2/massmail/')
