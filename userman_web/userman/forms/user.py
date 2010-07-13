@@ -17,7 +17,7 @@ class ChprivForm(forms.Form):
     service = forms.ChoiceField(choices=(("sshd", "sshd"), ("samba", "samba"), ("cron", "cron")))
 
 class ChshForm(forms.Form):
-    login_shell = forms.ChoiceField(choices=(('/bin/bash','/bin/bash'), ("/usr/bin/tcsh", "/usr/bin/tcsh"), ("/bin/false", "/bin/false")))
+    login_shell = forms.ChoiceField(choices=(('/bin/bash','/bin/bash'), ("/bin/zsh", "/bin/zsh"), ("/usr/bin/tcsh", "/usr/bin/tcsh"), ("/bin/false", "/bin/false")))
 
 class ChgroupForm(forms.Form):
     gid_number = forms.ChoiceField(choices=((100,'users'), (50,'staff')))
