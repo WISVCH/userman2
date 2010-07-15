@@ -73,7 +73,7 @@ def sendMail(request):
                     msg['To'] = username + "@ch.tudelft.nl"
                     s = smtplib.SMTP()
                     s.connect()
-                    s.sendmail(form.cleaned_data["fromaddress"], [username + "@ch.tudelft.nl", "beheer@ch.tudelft.nl"], msg.as_string())
+                    s.sendmail(form.cleaned_data["fromaddress"], [username + "@ch.tudelft.nl"], msg.as_string())
                     s.close()
                     if removaldate:
                         userObj = user.FromUID(username)
