@@ -33,7 +33,7 @@ enableQuotas = False
 homeDirBase = "/export/gebruikers/"
 profileDir = "/export/gebruikers/ntprofile/"
 skelDir = "/etc/skel/"
-graveyardDir = "/var/local/graveyard/"
+graveyardDir = "/var/mail/graveyard/"
 quotaString = "30000 32500 0 0 -a /dev/sdc3"
 
 # Mailboxes
