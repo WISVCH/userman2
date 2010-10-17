@@ -2,7 +2,6 @@
 
 #local imports
 import config
-from generateloginscript import generateLoginScript
 from regeneratesambagroupconf import regenSambaGroupConf
 from user import User
 from group import Group
@@ -107,9 +106,9 @@ class Action:
 	elif attrs['actionName'][0] == 'warnRemove':
 	    return self.warnRemove(attrs)
 	elif attrs['actionName'][0] == 'generateLogonScript':
-	    return self.generateLoginScript(attrs)
+	    return True
 	elif attrs['actionName'][0] == 'generateAllLogonScripts':
-	    return self.generateAllLoginScripts(attrs)
+	    return True
 	else:
 	    raise Exception, 'unknown actionName: ' + attrs['actionName'][0]
 
@@ -119,7 +118,7 @@ class Action:
 
 	user = User (self.l, self.getAffectedDN())
 
-	if os.system("/usr/local/userman/scripts/createMailbox.pl " + user.getUID()):
+	if os.system("/usr/local/userman/cron/scripts/createMailbox.pl " + user.getUID()):
 	    raise Exception, "Error creating mailbox for user " + user.getUID()
 	
 	return True
@@ -130,7 +129,7 @@ class Action:
 	    
 	user = User (self.l, self.getAffectedDN())
 
-	if os.system("/usr/local/userman/scripts/renameMailbox.pl " + self.getArguments() + " " + user.getUID()):
+	if os.system("/usr/local/userman/cron/scripts/renameMailbox.pl " + self.getArguments() + " " + user.getUID()):
 	    raise Exception, "Error renaming mailbox for user " + user.getUID() + " from " + self.getArguments()
 
 	return True
@@ -141,7 +140,7 @@ class Action:
 
 	user = User (self.l, self.getAffectedDN())
 
-	if os.system("/usr/local/userman/scripts/removeMailbox.pl " + user.getUID() + " " + config.graveyardDir):
+	if os.system("/usr/local/userman/cron/scripts/removeMailbox.pl " + user.getUID() + " " + config.graveyardDir):
 	    raise Exception, "Error removing mailbox for user " + user.getUID()
 
 	return True
@@ -249,26 +248,8 @@ class Action:
 	if not homedir.startswith(config.homeDirBase):
 	    raise Exception, "Home directories must be created in " + config.homeDirBase
 
-	baseprofile = os.path.join (config.profileDir, user.getUID() + ".pdm")
-	desktopsrc = os.path.join (baseprofile, "Desktop")
-	mydocssrc = os.path.join (baseprofile, "My Documents")
-	personalsrc = os.path.join (baseprofile, "Personal")
-	desktopdest = os.path.join (homedir, "Desktop")
-	mydocsdest = os.path.join (homedir, "My Documents")
-	personaldest = os.path.join (homedir, "Personal")
-
-	if exists(desktopsrc):
-	    if exists(desktopdest):
-		desktopdest = desktopdest + str(time())
-	    os.rename(desktopsrc, desktopdest)
-	if exists(personalsrc):
-	    if exists(personaldest):
-		personaldest = personaldest + str(time())
-	    os.rename(personalsrc, personaldest)
-	if exists(mydocssrc):
-	    if exists(mydocsdest):
-		mydocsdest = mydocsdest + str(time())
-	    os.rename(mydocssrc, mydocsdest)
+	baseprofile = os.path.join (config.profileDir, user.getUID() + ".pdm.V2")
+	
 	if exists (baseprofile):
 	    rmtree (baseprofile)
 
@@ -299,23 +280,7 @@ class Action:
 
 	self.l.delete_s (self.getAffectedDN());
 	return True
-			
-    def generateLoginScript(self, attrs):
-	if not config.enableLoginScriptGen:
-	    raise Exception, "Login Script Generation not enabled on host " + self.getHost()
-	
-	generateLoginScript(User(self.l, attrs['affectedDN'][0]))
-	return True
-    
-    def generateAllLoginScripts(self, attrs):
-	if not config.enableLoginScriptGen:
-	    raise Exception, "Login Script Generation not enabled on host " + self.getHost()
 
-	res = self.l.search_s(config.ldapUserOU, ldap.SCOPE_ONELEVEL)                                                                                                                                                  
-    	for (dn, _) in res:           
-	    generateLoginScript(User(self.l, dn))
-	return True
-    
     def warnRemove (self, attrs):
 	removalTime = datetime(*(strptime(attrs['arguments'][0],  "%Y-%m-%d %H:%M:%S")[0:6]))                                                                                                                                                                           
 	
