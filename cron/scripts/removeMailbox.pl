@@ -10,7 +10,7 @@ if (-d $archivedir && $s_uid) {
 #    $crpassword =~ /(.*)/;
 #    $crpassword = $1;
 
-    my $mbxpath = `sudo -u cyrus /usr/sbin/mbpath user.$s_uid`;
+    my $mbxpath = `su cyrus -c '/usr/sbin/mbpath user.$s_uid'`;
     chop ($mbxpath);
 
     # Cyrus mail bewaren
