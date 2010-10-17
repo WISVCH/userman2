@@ -2,22 +2,19 @@
 use strict;
 use Cyrus::IMAP::Admin;
 
-exit 1;
-
 my $s_olduid = $ARGV[0];
 my $s_uid = $ARGV[1];
 
 #my $crpassword 	= `cat /etc/cyrus.secret`;
-my $crpassword 	= "dummy";
-$crpassword =~ /(.*)/;
-$crpassword = $1;
+#$crpassword =~ /(.*)/;
+#$crpassword = $1;
 
 if ( $s_olduid && $s_uid ) {
 	print "Should rename mailbox ($s_olduid) to ($s_uid)\n";
 
         # Cyrus mail verwijderen
-        my $cyradm = Cyrus::IMAP::Admin->new('ch.chnet');
-        $cyradm->authenticate(-user=>'cyrus', -password=>$crpassword);
+        my $cyradm = Cyrus::IMAP::Admin->new('ch.tudelft.nl');
+        $cyradm->authenticate(-user=>'cyrus');
 
         my $inboxname = "user.$s_olduid";
         my $newinboxname = "user.$s_uid";
