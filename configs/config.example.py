@@ -1,4 +1,4 @@
-localHostname = "ch.chnet"
+localHostname = "hendrik.chnet"
 adminMail = 'pccom@ch.tudelft.nl'
 
 # LDAP Settings
@@ -17,13 +17,6 @@ ldapMachineOU = "ou=Computers,dc=ank,dc=chnet"
 enableUserRemoval = True
 enableGroupRemoval = True
 
-# generation of loginscripts
-enableLoginScriptGen = False
-loginScriptDir = "/export/netlogon/"
-loginScriptTemplate = loginScriptDir + "logintemplate"
-loginScriptKixTemplate = loginScriptDir + "loginkixtemplate"
-loginScriptKixEndTemplate = loginScriptDir + "loginkixendtemplate"
-
 # Group directories
 enableGroupDirCreation = False
 enableGroupDirRemoval = False
@@ -32,15 +25,15 @@ groupDirBase = "/export/groepen/userman_test/"
 groupLocations = { 'Commissies': 'commissies', 'Overig' : 'overig' }
 
 # Home directories
-enableHomeDirCreation = True
-enableHomeDirMove = True
-enableHomeDirRemoval = True
+enableHomeDirCreation = False
+enableHomeDirMove = False
+enableHomeDirRemoval = False
 enableProfileRemoval = False
-enableQuotas = True
-homeDirBase = "/home/"
-profileDir = "/home/ntprofile/"
+enableQuotas = False
+homeDirBase = "/export/gebruikers/"
+profileDir = "/export/gebruikers/ntprofile/"
 skelDir = "/etc/skel/"
-graveyardDir = "/mnt/space2/removed_accounts/"
+graveyardDir = "/var/local/graveyard/"
 quotaString = "30000 32500 0 0 -a /dev/sdc3"
 
 # Mailboxes
