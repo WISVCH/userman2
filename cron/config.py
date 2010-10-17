@@ -1,5 +1,5 @@
-localHostname = "test.chnet"
-adminMail = 'adriaan@ch.tudelft.nl'
+localHostname = "ch.chnet"
+adminMail = 'pccom@ch.tudelft.nl'
 
 # LDAP Settings
 ldapServername = "ldaps://frans.chnet"
@@ -18,33 +18,32 @@ enableUserRemoval = True
 enableGroupRemoval = True
 
 # generation of loginscripts
-enableLoginScriptGen = True
+enableLoginScriptGen = False
 loginScriptDir = "/export/netlogon/"
 loginScriptTemplate = loginScriptDir + "logintemplate"
 loginScriptKixTemplate = loginScriptDir + "loginkixtemplate"
 loginScriptKixEndTemplate = loginScriptDir + "loginkixendtemplate"
 
 # Group directories
-enableGroupDirCreation = True
-enableGroupDirRemoval = True
-enableSambaShareRegen = True
-groupDirBase = "/export/groepen/"
+enableGroupDirCreation = False
+enableGroupDirRemoval = False
+enableSambaShareRegen = False
+groupDirBase = "/export/groepen/userman_test/"
 groupLocations = { 'Commissies': 'commissies', 'Overig' : 'overig' }
 
 # Home directories
 enableHomeDirCreation = True
 enableHomeDirMove = True
 enableHomeDirRemoval = True
-enableProfileRemoval = True
-enableQuotas = False
-homeDirBase = "/export/gebruikers/"
-profileDir = "/export/ntprofile/"
+enableProfileRemoval = False
+enableQuotas = True
+homeDirBase = "/home/"
+profileDir = "/home/ntprofile/"
 skelDir = "/etc/skel/"
-graveyardDir = "/var/local/graveyard/"
+graveyardDir = "/mnt/space2/removed_accounts/"
 quotaString = "30000 32500 0 0 -a /dev/sdc3"
 
 # Mailboxes
-enableMailboxCreation = False
-enableMailboxRemoval = False
-enableMailboxRename = False
-
+enableMailboxCreation = True
+enableMailboxRemoval = True
+enableMailboxRename = True
