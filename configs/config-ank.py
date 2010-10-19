@@ -29,7 +29,7 @@ enableGroupDirCreation = True
 enableGroupDirRemoval = True
 enableSambaShareRegen = True
 groupDirBase = "/export/groepen/"
-groupLocations = { 'Commissies': 'commissies', 'Overig' : 'overig' }
+groupLocations = { 'Commissies': 'commissies', 'Overig' : 'overig', 'VerenigingsCommissies': 'verenigingscommissies' }
 
 # Home directories
 enableHomeDirCreation = True
@@ -38,7 +38,7 @@ enableHomeDirRemoval = True
 enableProfileRemoval = True
 enableQuotas = False
 homeDirBase = "/export/gebruikers/"
-profileDir = "/export/ntprofile/"
+profileDir = "/export/gebruikers/ntprofile/"
 skelDir = "/etc/skel/"
 graveyardDir = "/var/local/graveyard/"
 quotaString = "30000 32500 0 0 -a /dev/sdc3"
