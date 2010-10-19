@@ -178,9 +178,9 @@ class Action:
         self.chownTree(homedir, 0, group.getGIDNumber())
 	os.system("setfacl -R --set u::rwx,g::rwx,o:---,d:o:---,d:g::---,d:u::rwx,d:g:vc:rx,g:vc:rx,d:g:bestuur:rx,g:bestuur:rx,d:g:"+ group.getCN() + ":rwx,g:" + group.getCN() + ":rwx " + homedir)
 
-
 	if config.enableSambaShareRegen:
 	    regenSambaGroupConf()
+	
 	return True
 
     def removeGroup(self, attrs):
