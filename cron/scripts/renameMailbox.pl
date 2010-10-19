@@ -19,11 +19,11 @@ if ( $s_olduid && $s_uid ) {
         my $inboxname = "user.$s_olduid";
         my $newinboxname = "user.$s_uid";
 
-        print "\t[ Set acl ]$inboxname\n";
+        print "\t[ Set acl ] $inboxname\n";
         $cyradm->setaclmailbox($inboxname, 'cyrus', 'c');
         print STDERR "Error: ", $cyradm->error, "\n" if $cyradm->error;
 
-        print "\t[ Rename mailstore ]$inboxname\n";
+        print "\t[ Rename mailstore ] $inboxname\n";
         $cyradm->renamemailbox($inboxname, $newinboxname);
         print STDERR "Error: ", $cyradm->error, "\n" if $cyradm->error;
 	exit (0);

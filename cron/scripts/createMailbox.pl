@@ -20,7 +20,7 @@ $cyradm->authenticate(-user=>'cyrus');
 #$cyradm->authenticate(-user=>'cyrus', -password=>$crpassword);
 
 my $inboxname = "user.$s_uid";
-print "\n[ Creating Inbox ]$inboxname\n";
+print "\n[ Creating Inbox ] $inboxname\n";
 $cyradm->createmailbox($inboxname);
 if ($cyradm->error)
 {
