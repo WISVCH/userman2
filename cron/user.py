@@ -24,7 +24,7 @@ class User:
 	return int(self.attrs["gidNumber"][0])
 
     def getHomeDirectory(self, host):
-	if host == 'ch.chnet':
+	if host == 'rob.chnet':
 	    return self.attrs["homeDirectoryCH"][0]
 	else:
 	    return self.attrs["homeDirectory"][0]
