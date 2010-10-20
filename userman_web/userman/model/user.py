@@ -181,8 +181,8 @@ class User (LDAPConn):
     def removeProfile(self, host, parent=False):
         return action.Add('removeProfile', host, self.dn, 'Remove profile on ' + host + ' for ' + self.uid, parent)
 
-    def generateLogonScript(self, host):
-        return action.Add('generateLogonScript', host, self.dn, 'Generate logonscript on ' + host + ' for ' + self.uid)
+    # def generateLogonScript(self, host):
+        # return action.Add('generateLogonScript', host, self.dn, 'Generate logonscript on ' + host + ' for ' + self.uid)
 
     def get_ldif(self):
         out = StringIO()
@@ -336,6 +336,6 @@ def Add(uid, fullname):
 
     return FromUID(entry['uid'])
 
-def GenerateAllLogonscripts(host):
-    return action.Add('generateAllLogonScripts', host, '', 'Regenerate all logon scripts')
+# def GenerateAllLogonscripts(host):
+    # return action.Add('generateAllLogonScripts', host, '', 'Regenerate all logon scripts')
     
