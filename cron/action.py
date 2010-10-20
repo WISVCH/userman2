@@ -291,7 +291,7 @@ class Action:
 
     def mailAdmin (self, subject, message):
 	msg = MIMEText(message)
-	msg['Subject'] = subject;
+	msg['Subject'] = subject
 	msg['From'] = config.adminMail
 	msg['To'] = config.adminMail
     
