@@ -18,7 +18,6 @@ urlpatterns = patterns('userman.views.users',
     (r'^userman2/users/([a-zA-Z][a-zA-Z\d\-_]+)/chhomech/$', 'chHomeCH'),
     (r'^userman2/users/([a-zA-Z][a-zA-Z\d\-_]+)/resetpasswd/$', 'resetPassword'),
     (r'^userman2/users/([a-zA-Z][a-zA-Z\d\-_]+)/chpasswd/$', 'chPassword'),
-    (r'^userman2/users/([a-zA-Z][a-zA-Z\d\-_]+)/genloginscript/$', 'genLoginScript'),
     (r'^userman2/users/([a-zA-Z][a-zA-Z\d\-_]+)/removeprofile/$', 'removeProfile'),
     (r'^userman2/users/([a-zA-Z][a-zA-Z\d\-_]+)/rm/$', 'rmUser'),
 )
