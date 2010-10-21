@@ -207,7 +207,7 @@ class User (LDAPConn):
         removeAction = action.Add('removeUser', 'frans.chnet', self.dn, 'Remove user ' + self.uid)
         removeHomedirAnk = self.removeHomedir('ank.chnet', removeAction)
         removeProfileAnk = self.removeProfile('ank.chnet', removeHomedirAnk)
-        removeHomedirCh = self.removeHomedir('ch.chnet', removeAction)
+        removeHomedirCh = self.removeHomedir('rob.chnet', removeAction)
         removeMailboxCh = self.removeMailbox('ch.chnet', removeHomedirCh)
 
         # Unlock removal tree
