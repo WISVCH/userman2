@@ -318,7 +318,7 @@ def Add(uid, fullname):
     entry['userPassword'] = '!disabled'
     entry['cn'] = fullname
     entry['displayName'] = fullname
-    entry['gecos'] = fullname +",,,"
+    entry['gecos'] = fullname + ",,,"
     entry['gidNumber'] = str(settings.USER_GIDNUMBER)
     entry['homeDirectory'] = settings.ANK_HOME_BASE + entry['uid']
     entry['homeDirectoryCH'] = settings.CH_HOME_BASE + entry['uid']
@@ -328,11 +328,12 @@ def Add(uid, fullname):
     entry['shadowWarning'] = str(7)
 
     ld.addObject(dn, entry)
+
     retcode = subprocess.call('sudo ' + '/var/www_python/userman/scripts/createsambauser ' + re.escape(uid) + ' ' + re.escape(password), shell=True)
     if retcode != 0:
         raise Exception, "Child failed"
 
-    ld.mailAdmin('Account aangemaakt voor ' + uid, 'Dear Pc.com,\n\n a new account was created for ' + uid + ' with password ' + password + '\n\nRegards,\n\nThe CH user manager spam-bot\n\n\nOpt-out? there is no opt-out!')
+    ld.mailAdmin('Account aangemaakt voor ' + uid, 'Dear Pc.com,\n\n a new account was created for ' + uid + ' (' + entry['displayName'] + ') with password ' + password + '\n\nRegards,\n\nThe CH user manager spam-bot\n\n\nOpt-out? there is no opt-out!')
 
     return FromUID(entry['uid'])
 
