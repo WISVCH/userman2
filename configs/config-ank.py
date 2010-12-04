@@ -29,7 +29,7 @@ enableGroupDirCreation = True
 enableGroupDirRemoval = True
 enableSambaShareRegen = True
 groupDirBase = "/export/groepen/"
-groupLocations = { 'Commissies': 'commissies', 'Overig' : 'overig', 'VerenigingsCommissies': 'verenigingscommissies' }
+groupLocations = { 'Commissies': 'commissies', 'Overig' : 'overig' }
 
 # Home directories
 enableHomeDirCreation = True
