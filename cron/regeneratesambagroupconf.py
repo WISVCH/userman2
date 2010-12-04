@@ -8,7 +8,7 @@ def regenSambaGroupConf():
 
     output = "# Automatically generated. Do Not Edit!"
 
-    for parent in ("commissies", "besturen", "overig", "verenigingscommissies"):
+    for parent in ("commissies", "besturen", "overig"):
 	for dir in os.listdir(os.path.join(config.groupDirBase, parent)):
 	    dirname = os.path.join(config.groupDirBase, parent, dir)
 	    if not os.path.isdir(dirname):
