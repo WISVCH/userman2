@@ -8,7 +8,7 @@ def regenSambaGroupConf():
 
     output = "# Automatically generated. Do Not Edit!"
 
-    for parent in ("commissies", "besturen", "overig", "verenigingscommissies"):
+    for parent in ("commissies", "besturen", "overig"):
 	for dir in os.listdir(os.path.join(config.groupDirBase, parent)):
 	    dirname = os.path.join(config.groupDirBase, parent, dir)
 	    if not os.path.isdir(dirname):
@@ -16,10 +16,11 @@ def regenSambaGroupConf():
 	    if dir == "generator":
 		continue
 	    output += "\n"
-	    output += "	[" + dir + "]\n"
-	    output += "	path = " + dirname + "\n"
-	    output += "	browseable = no\n"
-	    output += "	readonly = no\n"
+	    output += "[" + dir + "]\n"
+	    output += "path = " + dirname + "\n"
+	    output += "browseable = no\n"
+	    output += "readonly = no\n"
+	    output += "hide files = /desktop.ini/Desktop.ini/$RECYCLE.BIN/Thumbs.db/~$*/\n"
 
     f = open(outFile, "w")
     f.write(output)
