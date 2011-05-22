@@ -2,6 +2,10 @@
 use strict;
 use Cyrus::IMAP::Admin;
 
+my $crpassword  = `cat /etc/cyrus.secret`;
+$crpassword =~ /(.*)/;
+$crpassword = $1;
+
 my $s_uid = $ARGV[0];
 my $archivedir = $ARGV[1];
 
@@ -17,11 +21,12 @@ if (-d $archivedir && $s_uid) {
         `rm /var/mail/$s_uid`;
     }
     
-    system("kinit -t /etc/cyrus.keytab cyrus");
+#    system("kinit -t /etc/cyrus.keytab cyrus");
 
     # Cyrus mail verwijderen
     my $cyradm = Cyrus::IMAP::Admin->new('ch.tudelft.nl');
-    $cyradm->authenticate(-user=>'cyrus');
+    $cyradm->authenticate(-user=>'cyrus', -password=>$crpassword);
+#   $cyradm->authenticate(-user=>'cyrus');
 
     my $inboxname = "user.$s_uid";
     # Set ACL

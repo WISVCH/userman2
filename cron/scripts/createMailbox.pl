@@ -3,21 +3,21 @@ use strict;
 use Cyrus::IMAP::Admin;
 
 # Config settings.
-#my $crpassword 	= `cat /etc/cyrus.secret`;
+my $crpassword 	= `cat /etc/cyrus.secret`;
 my $s_uid 	= $ARGV[0];
 
 #
 # Password strippen van enter
 #
-#$crpassword =~ /(.*)/;
-#$crpassword = $1;
+$crpassword =~ /(.*)/;
+$crpassword = $1;
 
-system("kinit -t /etc/cyrus.keytab cyrus");
+#system("kinit -t /etc/cyrus.keytab cyrus");
 
 my $cyradm = Cyrus::IMAP::Admin->new('ch.tudelft.nl');
-$cyradm->authenticate(-user=>'cyrus');
+#$cyradm->authenticate(-user=>'cyrus');
 
-#$cyradm->authenticate(-user=>'cyrus', -password=>$crpassword);
+$cyradm->authenticate(-user=>'cyrus', -password=>$crpassword);
 
 my $inboxname = "user.$s_uid";
 print "\n[ Creating Inbox ] $inboxname\n";

@@ -5,16 +5,17 @@ use Cyrus::IMAP::Admin;
 my $s_olduid = $ARGV[0];
 my $s_uid = $ARGV[1];
 
-#my $crpassword 	= `cat /etc/cyrus.secret`;
-#$crpassword =~ /(.*)/;
-#$crpassword = $1;
+my $crpassword 	= `cat /etc/cyrus.secret`;
+$crpassword =~ /(.*)/;
+$crpassword = $1;
 
 if ( $s_olduid && $s_uid ) {
 	print "Should rename mailbox ($s_olduid) to ($s_uid)\n";
 
         # Cyrus mail verwijderen
         my $cyradm = Cyrus::IMAP::Admin->new('ch.tudelft.nl');
-        $cyradm->authenticate(-user=>'cyrus');
+	$cyradm->authenticate(-user=>'cyrus', -password=>$crpassword);
+#        $cyradm->authenticate(-user=>'cyrus');
 
         my $inboxname = "user.$s_olduid";
         my $newinboxname = "user.$s_uid";
