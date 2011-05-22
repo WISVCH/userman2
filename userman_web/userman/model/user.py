@@ -181,8 +181,8 @@ class User (LDAPConn):
     def removeProfile(self, host, parent=False):
         return action.Add('removeProfile', host, self.dn, 'Remove profile on ' + host + ' for ' + self.uid, parent)
 
-    def generateLogonScript(self, host):
-        return action.Add('generateLogonScript', host, self.dn, 'Generate logonscript on ' + host + ' for ' + self.uid)
+    # def generateLogonScript(self, host):
+        # return action.Add('generateLogonScript', host, self.dn, 'Generate logonscript on ' + host + ' for ' + self.uid)
 
     def get_ldif(self):
         out = StringIO()
@@ -207,7 +207,7 @@ class User (LDAPConn):
         removeAction = action.Add('removeUser', 'frans.chnet', self.dn, 'Remove user ' + self.uid)
         removeHomedirAnk = self.removeHomedir('ank.chnet', removeAction)
         removeProfileAnk = self.removeProfile('ank.chnet', removeHomedirAnk)
-        removeHomedirCh = self.removeHomedir('ch.chnet', removeAction)
+        removeHomedirCh = self.removeHomedir('rob.chnet', removeAction)
         removeMailboxCh = self.removeMailbox('ch.chnet', removeHomedirCh)
 
         # Unlock removal tree
@@ -318,7 +318,7 @@ def Add(uid, fullname):
     entry['userPassword'] = '!disabled'
     entry['cn'] = fullname
     entry['displayName'] = fullname
-    entry['gecos'] = fullname +",,,"
+    entry['gecos'] = fullname + ",,,"
     entry['gidNumber'] = str(settings.USER_GIDNUMBER)
     entry['homeDirectory'] = settings.ANK_HOME_BASE + entry['uid']
     entry['homeDirectoryCH'] = settings.CH_HOME_BASE + entry['uid']
@@ -328,14 +328,15 @@ def Add(uid, fullname):
     entry['shadowWarning'] = str(7)
 
     ld.addObject(dn, entry)
+
     retcode = subprocess.call('sudo ' + '/var/www_python/userman/scripts/createsambauser ' + re.escape(uid) + ' ' + re.escape(password), shell=True)
     if retcode != 0:
         raise Exception, "Child failed"
 
-    ld.mailAdmin('Account aangemaakt voor ' + uid, 'Dear Pc.com,\n\n a new account was created for ' + uid + ' with password ' + password + '\n\nRegards,\n\nThe CH user manager spam-bot\n\n\nOpt-out? there is no opt-out!')
+    ld.mailAdmin('Account aangemaakt voor ' + uid, 'Dear Pc.com,\n\n a new account was created for ' + uid + ' (' + entry['displayName'] + ') with password ' + password + '\n\nRegards,\n\nThe CH user manager spam-bot\n\n\nOpt-out? there is no opt-out!')
 
     return FromUID(entry['uid'])
 
-def GenerateAllLogonscripts(host):
-    return action.Add('generateAllLogonScripts', host, '', 'Regenerate all logon scripts')
+# def GenerateAllLogonscripts(host):
+    # return action.Add('generateAllLogonScripts', host, '', 'Regenerate all logon scripts')
     

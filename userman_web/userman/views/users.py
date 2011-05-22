@@ -219,9 +219,9 @@ def addUser(request):
                 raise Http404
             newUser = user.Add(str(form.cleaned_data['uid']), str(form.cleaned_data['full_name']))
             newUser.createHomeDir('ank.chnet').locked = False
-            newUser.createHomeDir('ch.chnet').locked = False
+            newUser.createHomeDir('rob.chnet').locked = False
             newUser.createMailbox('ch.chnet').locked = False
-            newUser.generateLogonScript('ank.chnet').locked = False
+            # newUser.generateLogonScript('ank.chnet').locked = False
             for access in form.cleaned_data['access']:
                 newUser.addAuthorizedService(str(access))
 #            newUser.createSambaEntry()
@@ -253,16 +253,16 @@ def removeProfile(request, uid):
     newAction.locked = False
     return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid + '/')
 
-@cache_control(no_cache=True, must_revalidate=True)
-def genLoginScript(request, uid):
-    try:
-        userObj = user.FromUID(uid)    
-    except Exception, e:
-        raise Http404
-    
-    newAction = userObj.generateLogonScript('ank.chnet')
-    newAction.locked = False
-    return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid + '/')
+# @cache_control(no_cache=True, must_revalidate=True)
+# def genLoginScript(request, uid):
+#     try:
+#         userObj = user.FromUID(uid)    
+#     except Exception, e:
+#         raise Http404
+#     
+#     newAction = userObj.generateLogonScript('ank.chnet')
+#     newAction.locked = False
+#     return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid + '/')
 
 @cache_control(no_cache=True, must_revalidate=True)
 def resetPassword(request, uid):
