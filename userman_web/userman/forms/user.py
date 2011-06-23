@@ -31,11 +31,9 @@ class UsersForm(forms.Form):
     uidnumber = forms.IntegerField(required=False)
     deleted = forms.BooleanField(required=False, initial=False)
     chlocal = forms.BooleanField(required=False, initial=False)
-    chsamba = forms.BooleanField(required=False, initial=False)
     anklocal = forms.BooleanField(required=False, initial=False)
     anksamba = forms.BooleanField(required=False, initial=False)
     nochlocal = forms.BooleanField(required=False, initial=False)
-    nochsamba = forms.BooleanField(required=False, initial=False)
     noanklocal = forms.BooleanField(required=False, initial=False)
     noanksamba = forms.BooleanField(required=False, initial=False)
 
