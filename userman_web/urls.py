@@ -2,7 +2,11 @@ from django.conf.urls.defaults import *
 from django.conf import settings
 
 #from userman_web.views import users
-urlpatterns = patterns('userman.views.users',
+urlpatterns = patterns('django.views.generic.simple',
+    (r'^userman2/$', 'direct_to_template', {'template': 'index.html'}),
+)
+
+urlpatterns += patterns('userman.views.users',
     (r'^userman2/adduser/$', 'addUser'),
     (r'^userman2/users/$', 'displayUsers'),
     (r'^userman2/users/([a-zA-Z][a-zA-Z\d\-_]+)/$', 'displayUser'),
@@ -36,6 +40,7 @@ urlpatterns += patterns('userman.views.groups',
     (r'^userman2/groups/([a-zA-Z][a-zA-Z\d\-_]+)/rmuser/([a-zA-Z][a-zA-Z\d_-]+)/$', 'rmuser'),
     (r'^userman2/groups/([a-zA-Z][a-zA-Z\d\-_]+)/adduser/$', 'adduser'),
 )
+
 urlpatterns += patterns('userman.views.aliases',
     (r'^userman2/addalias/([a-zA-Z][a-zA-Z\-_\d.]+)/$', 'addAlias'),
     (r'^userman2/aliases/$', 'displayAliases'),
@@ -43,9 +48,12 @@ urlpatterns += patterns('userman.views.aliases',
     (r'^userman2/aliases/([a-zA-Z][a-zA-Z\-_\d.]+)/rm/$', 'rmAlias'),
     (r'^userman2/aliases/([a-zA-Z][a-zA-Z\-_\d.]+)/rmuser/([a-zA-Z\d][-+_\@\.a-zA-Z\d]+)/$', 'rmuser'),
     (r'^userman2/aliases/([a-zA-Z][a-zA-Z\-_\d.]+)/adduser/$', 'adduser'),
+)
 
-    # Uncomment this for admin:
-#     (r'^admin/', include('django.contrib.admin.urls')),
+urlpatterns += patterns('userman.views.computers',
+    (r'^userman2/addcomputer/$', 'addComputer'),
+    (r'^userman2/computers/$', 'displayComputers'),
+    (r'^userman2/computers/([a-zA-Z][a-zA-Z\-_\d.]+\$)/rm/$', 'rmComputer'),
 )
 
 if settings.DEBUG:

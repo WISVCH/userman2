@@ -20,6 +20,27 @@ class Computer (LDAPConn):
         (_, attrs) = res[0]
         self.__attrs = cidict(attrs)
 
+    def _get_uid(self):
+        return self.__attrs["uid"][0]
+    uid = property (_get_uid)
+
+    def _get_uidNumber(self):
+        return int(self.__attrs["uidNumber"][0])
+    uidNumber = property (_get_uidNumber)
+
+    def remove(self):
+        self.delObject()
+
+def getAllComputers():
+    """Returns all aliases under LDAP_ALIASDN, in a dictionary sorted by their ou"""
+    ld = LDAPConn()
+    ld.connectAnon()
+    res = ld.l.search_s(settings.LDAP_COMPUTERDN, ldap.SCOPE_ONELEVEL)
+
+    res.sort(key=lambda computer: computer[0].lower())
+    ret = [Computer(dn, attrs) for (dn, attrs) in res]
+    return ret
+
 def FromUID(uid):
     try:
         return Computer("uid=" + uid + "," + settings.LDAP_COMPUTERDN)
@@ -42,13 +63,21 @@ def Add(uid):
 
     dn = 'uid=' + uid + ',' + settings.LDAP_COMPUTERDN
     entry = {'uid': uid}
-    entry['objectClass'] = ['posixAccount']
+    entry['objectClass'] = ['account', 'chbakAccount']
     entry['uidNumber'] = str(GetFreeUIDNumber())
     entry['cn'] = "Machine Account "+uid
     entry['gidNumber'] = str(settings.MACHINE_GIDNUMBER)
     entry['homeDirectory'] = "/dev/null"
+    entry['authorizedService'] = "samba@ank";
 
     ld.addObject(dn, entry)
-    retcode = subprocess.call('sudo ' + '/var/www_python/userman/scripts/createsambamachine ' + re.escape(uid)), shell=True)
+
+    retcode = subprocess.call('sudo /var/www_python/userman/scripts/createsambamachine ' + re.escape(uid), shell=True)
     if retcode != 0:
         raise Exception, "Child failed"
+
+def Exists(uid):
+    ld = LDAPConn()
+    ld.connectAnon()
+    res = ld.l.search_s(settings.LDAP_COMPUTERDN, ldap.SCOPE_SUBTREE, "uid="+uid)
+    return len(res) != 0
