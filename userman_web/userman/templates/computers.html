@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<table>
+	<tr class='title'>
+		<td></td>
+		<td>UID</td>
+	</tr>
+	{% for computer in computers %}
+	<tr class='{% cycle odd,even %}'>
+		<td><a href='/userman2/computers/{{ computer.uid }}/rm'><img src='/site_media/delete.gif' alt='Delete' /></a></td>
+		<td>{{ computer.uid }}</td>
+	</tr>
+	{% endfor %}
+	<tr class='total'>
+		<td></td>
+		<td>{{ count }}</td>
+	</tr>
+</table>
+{% endblock %}
