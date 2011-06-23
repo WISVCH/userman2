@@ -21,7 +21,7 @@ def displayUsers(request):
 
     rmWarnUsers = [ user.User(curaction.affectedDN).uid for curaction in action.GetAllActions({"actionName": "warnRemove"}) ]
     print rmWarnUsers
-    count = {"total":0, "del":0, "chlocal":0, "chsamba":0, "anklocal":0, "anksamba":0}
+    count = {"total":0, "del":0, "chlocal":0, "anklocal":0, "anksamba":0}
     for u in users:
             count["total"] += 1
             # FIXME: Moet nog geimplementeerd worden
@@ -29,8 +29,6 @@ def displayUsers(request):
             #	count["del"] += 1
             if u.chLocal:
                     count["chlocal"] += 1
-            if u.chSamba:
-                    count["chsamba"] += 1
             if u.ankLocal:
                     count["anklocal"] += 1
             if u.ankSamba:

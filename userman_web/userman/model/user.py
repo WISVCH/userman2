@@ -106,11 +106,6 @@ class User (LDAPConn):
         return "samba@ank" in self.authorizedServices
     ankSamba = property (get_ankSamba)
 
-    def get_chSamba(self):
-#        assert False, self.authorizedServices
-        return "samba@ch" in self.authorizedServices
-    chSamba = property (get_chSamba)
-
     def _get_authorizedServices(self):
         if 'authorizedservice' in self.__attrs:
             return self.__attrs["authorizedService"]
@@ -265,8 +260,6 @@ def GetAllUsers(filter_data=False):
         if filter_data['uidnumber']: filter_string += "(uidNumber=" + str(filter_data['uidnumber']) + ")"
         if filter_data['chlocal']: filter_string += "(authorizedService=sshd@ch)"
         if filter_data['nochlocal']: filter_string += "(!(authorizedService=sshd@ch))"
-        if filter_data['chsamba']: filter_string += "(authorizedService=samba@ch)"
-        if filter_data['nochsamba']: filter_string += "(!(authorizedService=samba@ch))"
         if filter_data['anklocal']: filter_string += "(authorizedService=sshd@ank)"
         if filter_data['noanklocal']: filter_string += "(!(authorizedService=sshd@ank))"
         if filter_data['anksamba']: filter_string += "(authorizedService=samba@ank)"

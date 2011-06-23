@@ -10,7 +10,6 @@
 		<td>UIDNumber</td>
 		<td>Deletion Mark</td>
 		<td>CH L</td>
-		<td>CH S</td>
 		<td>Ank L</td>
 		<td>Ank S</td>
 	</tr>
@@ -22,7 +21,6 @@
 		<td>{{ form.uidnumber }}</td>
 		<td>{{ form.deleted }}</td>
 		<td>{{ form.chlocal }}{{ form.nochlocal }}</td>
-		<td>{{ form.chsamba }}{{ form.nochsamba }}</td>
 		<td>{{ form.anklocal }}{{ form.noanklocal }}</td>
 		<td>{{ form.anksamba }}{{ form.noanksamba }}</td>
 	</tr>
@@ -35,7 +33,6 @@
 		<td>{{ user.uidNumber }}</td>
 		<td>{% for rmWarnUser in rmWarnUsers %} {% ifequal user.uid rmWarnUser %} {{ user.toBeDeleted|date:"F d Y - H i"|default:"Never" }} {% endifequal %} {% endfor %}</td>
 		<td>{% if user.chLocal %}+{% else %}-{% endif %}</td>
-		<td>{% if user.chSamba %}+{% else %}-{% endif %}</td>
 		<td>{% if user.ankLocal %}+{% else %}-{% endif %}</td>
 		<td>{% if user.ankSamba %}+{% else %}-{% endif %}</td>
 	</tr>
@@ -45,7 +42,6 @@
 		<td colspan='2'>{{ count.total }}</td>
 		<td>{{ count.del }}</td>
 		<td>{{ count.chlocal }}</td>
-		<td>{{ count.chsamba }}</td>
 		<td>{{ count.anklocal }}</td>
 		<td>{{ count.anksamba }}</td>
 	</tr>
