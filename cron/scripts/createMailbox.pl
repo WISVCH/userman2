@@ -3,8 +3,8 @@ use strict;
 use Cyrus::IMAP::Admin;
 
 # Config settings.
-my $crpassword 	= `cat /etc/cyrus.secret`;
-my $s_uid 	= $ARGV[0];
+my $crpassword = `cat /etc/cyrus.secret`;
+my $s_uid      = $ARGV[0];
 
 #
 # Password strippen van enter
@@ -27,7 +27,7 @@ if ($cyradm->error)
     print STDERR "Error: ", $cyradm->error, "\n";
     exit(1);
 }
-$cyradm->setquota("user.$s_uid", "STORAGE", "1048576");
+$cyradm->setquota("user.$s_uid", "STORAGE", "2097152");
 if ($cyradm->error)
 {
     print STDERR "Error: ", $cyradm->error, "\n";
