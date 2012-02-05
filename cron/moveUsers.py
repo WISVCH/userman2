@@ -41,16 +41,11 @@ if __name__ == "__main__":
 	l = ldap.initialize(ldapServername)
 
 	try:
-    	    l.simple_bind_s(ldapUsername, ldapPass)
+	    l.simple_bind_s(ldapUsername, ldapPass)
 	except ldap.LDAPError, e:
-    	    sys.stderr.write("Fatal Error.\n")
-    	    if type(e.message) == dict:
-        	for (k, v) in e.message.iteritems():
-            	    sys.stderr.write("%s: %sn" % (k, v))
-    	    else:
-        	sys.stderr.write("Error: %sn" % e.message);
-
-    	    sys.exit()
+	    sys.stderr.write("Fatal Error.\n")
+    	sys.stderr.write("Error: %s" % e)
+	    sys.exit()
 	
 	if (sys.argv[1] == "--all"):
 	    res = l.search_s(ldapUserOU, ldap.SCOPE_ONELEVEL)
