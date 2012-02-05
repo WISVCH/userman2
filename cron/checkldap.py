@@ -43,13 +43,8 @@ try:
     try:
 	l.simple_bind_s(config.ldapUsername, config.ldapPass)
     except ldap.LDAPError, e:
-        sys.stderr.write("Fatal Error.n")
-        if type(e.message) == dict:
-            for (k, v) in e.message.iteritems():
-                sys.stderr.write("%s: %sn" % (k, v))
-        else:
-            sys.stderr.write("Error: %sn" % e.message);
-
+        sys.stderr.write("Fatal Error.\n")
+        sys.stderr.write("Error: %s" % e)
         sys.exit()
 
     res = l.search_s(config.ldapActionsOU, ldap.SCOPE_ONELEVEL)
