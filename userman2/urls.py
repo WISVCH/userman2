@@ -6,7 +6,7 @@ urlpatterns = patterns('django.views.generic.simple',
     (r'^userman2/$', 'direct_to_template', {'template': 'index.html'}),
 )
 
-urlpatterns += patterns('userman.views.users',
+urlpatterns += patterns('userman2.views.users',
     (r'^userman2/adduser/$', 'addUser'),
     (r'^userman2/users/$', 'displayUsers'),
     (r'^userman2/users/([a-zA-Z][a-zA-Z\d\-_]+)/$', 'displayUser'),
@@ -26,13 +26,13 @@ urlpatterns += patterns('userman.views.users',
     (r'^userman2/users/([a-zA-Z][a-zA-Z\d\-_]+)/rm/$', 'rmUser'),
 )
 
-urlpatterns += patterns('userman.views.massmail',
+urlpatterns += patterns('userman2.views.massmail',
     (r'^userman2/massmail/$', 'selectUsers'),
     (r'^userman2/massmail/writemail/$', 'writeMail'),
     (r'^userman2/massmail/writemail/sendmail/$', 'sendMail'),
 )
 
-urlpatterns += patterns('userman.views.groups',
+urlpatterns += patterns('userman2.views.groups',
     (r'^userman2/addgroup/([a-zA-Z\d]+)/$', 'addGroup'),
     (r'^userman2/groups/$', 'displayGroups'),
     (r'^userman2/groups/([a-zA-Z][a-zA-Z\d\-_]+)/$', 'displayGroup'),
@@ -41,7 +41,7 @@ urlpatterns += patterns('userman.views.groups',
     (r'^userman2/groups/([a-zA-Z][a-zA-Z\d\-_]+)/adduser/$', 'adduser'),
 )
 
-urlpatterns += patterns('userman.views.aliases',
+urlpatterns += patterns('userman2.views.aliases',
     (r'^userman2/addalias/([a-zA-Z][a-zA-Z\-_\d.]+)/$', 'addAlias'),
     (r'^userman2/aliases/$', 'displayAliases'),
     (r'^userman2/aliases/([a-zA-Z][a-zA-Z\-_\d.]+)/$', 'displayAlias'),
@@ -50,7 +50,7 @@ urlpatterns += patterns('userman.views.aliases',
     (r'^userman2/aliases/([a-zA-Z][a-zA-Z\-_\d.]+)/adduser/$', 'adduser'),
 )
 
-urlpatterns += patterns('userman.views.computers',
+urlpatterns += patterns('userman2.views.computers',
     (r'^userman2/addcomputer/$', 'addComputer'),
     (r'^userman2/computers/$', 'displayComputers'),
     (r'^userman2/computers/([a-zA-Z][a-zA-Z\-_\d.]+\$)/rm/$', 'rmComputer'),

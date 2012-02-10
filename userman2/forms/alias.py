@@ -1,6 +1,6 @@
 from django import forms
-from userman.model import user
-from userman.model import alias
+from userman2.model import user
+from userman2.model import alias
 
 # The code under AddUserForm is only evaluated once at start-up, so if
 # we create the list of choices there it will never be changed even if

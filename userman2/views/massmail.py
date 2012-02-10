@@ -1,12 +1,12 @@
-from userman.model import user
-from userman.model import group
+from userman2.model import user
+from userman2.model import group
 from django.shortcuts import render_to_response
 from django.http import Http404, HttpResponseRedirect
 from django.views.decorators.cache import cache_control
 from django.conf import settings
 
 import datetime
-from userman.forms.massmail import *
+from userman2.forms.massmail import *
 from email.MIMEText import MIMEText
 import smtplib
 

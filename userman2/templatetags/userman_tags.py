@@ -1,8 +1,8 @@
 from django import template
 from django.template.defaultfilters import stringfilter
-from userman.model import group
-from userman.model import alias
-from userman.model import user
+from userman2.model import group
+from userman2.model import alias
+from userman2.model import user
 register = template.Library()
 
 @register.filter

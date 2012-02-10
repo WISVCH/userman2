@@ -5,7 +5,7 @@ import subprocess
 from ldapconn import LDAPConn
 from ldap.cidict import cidict
 from django.conf import settings
-from userman.model import action
+from userman2.model import action
 
 class Group (LDAPConn):
     def __init__ (self, dn, attrs = False):
@@ -39,7 +39,7 @@ class Group (LDAPConn):
 
     def _get_members(self):
         if 'memberuid' in self.__attrs:
-    	    return self.__attrs["memberUid"]
+            return self.__attrs["memberUid"]
         return []
     members = property(_get_members)
 
@@ -57,7 +57,7 @@ class Group (LDAPConn):
         removeAction.locked = False
 
     def getPrimaryMembers(self):
-        from userman.model import user
+        from userman2.model import user
         return user.GetPrimaryMembersForGid(self.gidNumber)
 
     def removeGroupDir(self, host, parent):

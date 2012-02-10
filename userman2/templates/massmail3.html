@@ -3,24 +3,24 @@
 {% block content %}
 <form action='' method='post'>
 <table>
-	<tr class='title'>
-		<td>Recipients: {% for user in users %} {{ user }}, {% endfor %}
-	</tr>
-	<tr class='title'>
-		<td>From: {{ fromaddress }}</td>
-	</tr>
-	<tr class='title'>
-		<td>Subject: {{ subject }}</td>
-	</tr>
-	<tr class='title'>
-		<td>Account removal warning: {{ removaldue }} {{removalunits}}</td>
-	</tr>
-	<tr class='title'>
-		<td>Body: {{ body }}</td>
-	</tr>
-	<tr class='title'>
-		<td>Confirm send: {{ form.reallysend }}</td>
-	</tr>
+    <tr class='title'>
+        <td>Recipients: {% for user in users %} {{ user }}, {% endfor %}
+    </tr>
+    <tr class='title'>
+        <td>From: {{ fromaddress }}</td>
+    </tr>
+    <tr class='title'>
+        <td>Subject: {{ subject }}</td>
+    </tr>
+    <tr class='title'>
+        <td>Account removal warning: {{ removaldue }} {{removalunits}}</td>
+    </tr>
+    <tr class='title'>
+        <td>Body: {{ body }}</td>
+    </tr>
+    <tr class='title'>
+        <td>Confirm send: {{ form.reallysend }}</td>
+    </tr>
 </table>
 {{ form.users }}
 {{ form.fromaddress }}

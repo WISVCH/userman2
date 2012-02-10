@@ -3,8 +3,8 @@ use strict;
 use Cyrus::IMAP::Admin;
 
 # Config settings.
-my $crpassword 	= `cat /etc/cyrus.secret`;
-my $s_uid 	= $ARGV[0];
+my $crpassword     = `cat /etc/cyrus.secret`;
+my $s_uid     = $ARGV[0];
 
 #
 # Password strippen van enter
@@ -25,12 +25,12 @@ foreach my $attrib (sort keys %info) {
     $attrib =~ /([^\/]*)$/;
     my $attrname = $1;
     if ($ARGV[1]) {
-	if ($ARGV[1] eq $attrname) {
-    	    print $info{$attrib};
-	}
+    if ($ARGV[1] eq $attrname) {
+            print $info{$attrib};
+    }
     } else {
-	print "$inboxname ";
-	print $attrname . ": ";
+    print "$inboxname ";
+    print $attrname . ": ";
         print $info{$attrib} . "\n";
     }
 }

@@ -3,3 +3,4 @@ syntax: glob
 ._*
 cron/config.py
 *.pyc
+local.py

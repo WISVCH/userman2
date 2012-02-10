@@ -11,6 +11,7 @@ class LDAPConn (object):
     def connectAnon(self):
         if self.connected:
             return
+        ldap.set_option(ldap.OPT_X_TLS_REQUIRE_CERT, ldap.OPT_X_TLS_ALLOW)
         self.l = ldap.initialize(settings.LDAP_HOST)
         self.connected = True
 
@@ -77,13 +78,13 @@ class LDAPConn (object):
         self.l.modify_s(self.dn, mod_attrs)
 
     def mailAdmin (self, subject, message):
-		msg = MIMEText(message)
-		msg['Subject'] = subject
-		msg['From'] = settings.ADMIN_MAIL
-		msg['To'] = settings.ADMIN_MAIL
-		
-		s = smtplib.SMTP()
-		s.connect()
-		s.sendmail(settings.ADMIN_MAIL, [settings.ADMIN_MAIL], msg.as_string())
-		s.close()
+        msg = MIMEText(message)
+        msg['Subject'] = subject
+        msg['From'] = settings.ADMIN_MAIL
+        msg['To'] = settings.ADMIN_MAIL
+        
+        s = smtplib.SMTP()
+        s.connect()
+        s.sendmail(settings.ADMIN_MAIL, [settings.ADMIN_MAIL], msg.as_string())
+        s.close()
 
