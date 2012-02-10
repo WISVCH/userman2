@@ -15,7 +15,7 @@ def process(action):
     processed = True
     for child in action.getChildren():
         if not process(child):
-	    processed = False
+            processed = False
 
     # Check wether or not to proceed with execution
     if not processed or (action.getHost() != config.localHostname) or action.isLocked():
@@ -23,25 +23,25 @@ def process(action):
 
     # Try execution
     try: 
-	action.lock()
-	if action.execute():
-	    action.mailAdmin("Action processed succesfully: " + action.getActionName(), "Admin,\n\nThe following action has been processed: " + str(action) + ".\n\nRegards,\nYour neighbourhood AI")
-	    action.delete()	
-	    return True
-	else:
-    	    action.unlock()
-    	    return False
+        action.lock()
+        if action.execute():
+            action.mailAdmin("Action processed succesfully: " + action.getActionName(), "Admin,\n\nThe following action has been processed: " + str(action) + ".\n\nRegards,\nYour neighbourhood AI")
+            action.delete()     
+            return True
+        else:
+            action.unlock()
+            return False
     except Exception, err:
-	action.mailAdmin("An error occured while processing " + action.getActionName(), "Admin,\n\nAn error occured while processing " + str(action) + ".\nThe error was: " + str(err) + "\nThe Action has been locked, and must be re-enabled manually.\n\nRegards,\nYour neighbourhood AI")
-	action.lock()
-	
+        action.mailAdmin("An error occured while processing " + action.getActionName(), "Admin,\n\nAn error occured while processing " + str(action) + ".\nThe error was: " + str(err) + "\nThe Action has been locked, and must be re-enabled manually.\n\nRegards,\nYour neighbourhood AI")
+        action.lock()
+        
 
 # Main loop, read pending actions and process them
 try:
     l = ldap.initialize(config.ldapServername)
 
     try:
-	l.simple_bind_s(config.ldapUsername, config.ldapPass)
+        l.simple_bind_s(config.ldapUsername, config.ldapPass)
     except ldap.LDAPError, e:
         sys.stderr.write("Fatal Error.\n")
         sys.stderr.write("Error: %s" % e)
@@ -50,11 +50,11 @@ try:
     res = l.search_s(config.ldapActionsOU, ldap.SCOPE_ONELEVEL)
 
     for (dn, _) in res:
-    	action = Action(l, dn)
-	process(action)
+        action = Action(l, dn)
+        process(action)
 
 finally:
     try:
-	l.unbind()
+        l.unbind()
     except ldap.LDAPError, e:
-	pass
+        pass

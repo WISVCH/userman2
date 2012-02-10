@@ -1,6 +1,6 @@
 from django import forms
-from userman.model import user
-from userman.model import group
+from userman2.model import user
+from userman2.model import group
 
 
 class MassMailForm(forms.Form):
@@ -10,9 +10,9 @@ class MassMailForm(forms.Form):
     supergroups = group.GetAllGroups()
     possibleGroups = []
     for groups in supergroups.items():
-	possibleGroups += [ (group.cn, group.cn) for group in groups[1] ]
-	possibleGroups.sort()
-	
+        possibleGroups += [ (group.cn, group.cn) for group in groups[1] ]
+        possibleGroups.sort()
+        
     groups = forms.MultipleChoiceField(required=False, choices=possibleGroups)
     excludedgroups = forms.MultipleChoiceField(required=False, choices=possibleGroups)
 

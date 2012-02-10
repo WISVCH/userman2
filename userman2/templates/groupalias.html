@@ -3,57 +3,57 @@
 {% load userman_tags %}
 {% block content %}
 <table>
-	<tr class='title'>
-		<td colspan='3'>
-		<h3>Group</h3>
-		</td>
-	</tr>
-	<tr class={% cycle odd,even as rowcycle %}>
-		<td>&nbsp;</td>
-		<td>CN:</td>
-		<td>{{group.cn}}</td>
-	</tr>
-	{% if group.gidNumber %}
-	<tr class={% cycle rowcycle %}>
-		<td>&nbsp;</td>
-		<td>GIDNumber:</td>
-		<td>{{group.gidNumber}}</td>
-	</tr>
-	{% endif %}
-	<tr class={% cycle rowcycle %}>
-		<td>&nbsp;</td>
-		<td>Type:</td>
-		<td>{{group.parent}}</td>
-	</tr>
-	<tr class='title'>
-		<td colspan='3'>
-		<h3>Members (<a href='adduser/'>+</a>)</h3>
-		</td>
-	</tr>
-	{% for member in group.members %}
-	<tr class={% cycle rowcycle %}>
-		<td><a href='rmuser/{{member}}/'
-			onclick="return confirm('Really remove user {{member}} from group {{group.cn}}?')"><img
-			src='/site_media/delete.gif' alt='Remove' /></a></td>
+    <tr class='title'>
+        <td colspan='3'>
+        <h3>Group</h3>
+        </td>
+    </tr>
+    <tr class={% cycle odd,even as rowcycle %}>
+        <td>&nbsp;</td>
+        <td>CN:</td>
+        <td>{{group.cn}}</td>
+    </tr>
+    {% if group.gidNumber %}
+    <tr class={% cycle rowcycle %}>
+        <td>&nbsp;</td>
+        <td>GIDNumber:</td>
+        <td>{{group.gidNumber}}</td>
+    </tr>
+    {% endif %}
+    <tr class={% cycle rowcycle %}>
+        <td>&nbsp;</td>
+        <td>Type:</td>
+        <td>{{group.parent}}</td>
+    </tr>
+    <tr class='title'>
+        <td colspan='3'>
+        <h3>Members (<a href='adduser/'>+</a>)</h3>
+        </td>
+    </tr>
+    {% for member in group.members %}
+    <tr class={% cycle rowcycle %}>
+        <td><a href='rmuser/{{member}}/'
+            onclick="return confirm('Really remove user {{member}} from group {{group.cn}}?')"><img
+            src='/site_media/delete.gif' alt='Remove' /></a></td>
 {%if group.gidNumber %}
-		<td colspan='2'><a href='/userman2/users/{{member}}/'>{{member}}</a></td>
+        <td colspan='2'><a href='/userman2/users/{{member}}/'>{{member}}</a></td>
 {% else %}
-		<td colspan='2'>{{member|aliaslink|safe}}</td>
+        <td colspan='2'>{{member|aliaslink|safe}}</td>
 {%endif%}
-	</tr>
-	{%endfor%} {% if group.gidNumber %}
-	<tr class='title'>
-		<td colspan='3'>
-		<h3>Primary Members</h3>
-		</td>
-	</tr>
-	{% for member in group.getPrimaryMembers %}
-	<tr class={% cycle rowcycle %}>
-		<td></td>
-		<td colspan='2'><a href='/userman2/users/{{member}}/'>{{member}}</a></td>
-	</tr>
-	{%endfor%} {% endif %}
+    </tr>
+    {%endfor%} {% if group.gidNumber %}
+    <tr class='title'>
+        <td colspan='3'>
+        <h3>Primary Members</h3>
+        </td>
+    </tr>
+    {% for member in group.getPrimaryMembers %}
+    <tr class={% cycle rowcycle %}>
+        <td></td>
+        <td colspan='2'><a href='/userman2/users/{{member}}/'>{{member}}</a></td>
+    </tr>
+    {%endfor%} {% endif %}
 </table>
 <p><a href='rm/'
-	onclick="return confirm('Really remove {{group.cn}}?')">Remove</a></p>
+    onclick="return confirm('Really remove {{group.cn}}?')">Remove</a></p>
 {% endblock %}

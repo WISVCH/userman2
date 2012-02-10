@@ -1,10 +1,10 @@
-from userman.model import computer
+from userman2.model import computer
 from django.shortcuts import render_to_response
 from django.http import Http404, HttpResponseRedirect
 from django.views.decorators.cache import cache_control
 from django.conf import settings
 
-from userman.forms.computer import *
+from userman2.forms.computer import *
 
 @cache_control(no_cache=True, must_revalidate=True)
 def displayComputers(request):

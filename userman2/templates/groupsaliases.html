@@ -3,26 +3,26 @@
 {% block content %}
 <form action='' method='get'>
 <table class='groupfilter'>
-	<tr class='title'>
-		<td><input type='image' src='/site_media/filter.gif' alt='Filter' /></td>
-		<td>memberUid: {{ form.uid }}</td>
-		<td>CN: {{ form.cn }}</td>
-	</tr>
+    <tr class='title'>
+        <td><input type='image' src='/site_media/filter.gif' alt='Filter' /></td>
+        <td>memberUid: {{ form.uid }}</td>
+        <td>CN: {{ form.cn }}</td>
+    </tr>
 </table>
 </form>
 {% for groupou in groups.items reversed %}
 <table class='group'>
-	<tr class='title'>
-		<td colspan='2'>
-		<h3>{{ groupou.0 }}(<a href='/userman2/add{% if alias %}alias{% else %}group{%endif%}/{{ groupou.0 }}'>+</a>)</h3>
-		</td>
-	</tr>
-	{% for group in groupou.1 %}
-	<tr class='{% cycle odd,even %}'>
-		<td><a href='{{ group.cn }}/'><img src='/site_media/edit.gif' alt='Edit' /></a></td>
-		<td>{{ group.cn }}</td>
-	</tr>
-	{% endfor %}
+    <tr class='title'>
+        <td colspan='2'>
+        <h3>{{ groupou.0 }}(<a href='/userman2/add{% if alias %}alias{% else %}group{%endif%}/{{ groupou.0 }}'>+</a>)</h3>
+        </td>
+    </tr>
+    {% for group in groupou.1 %}
+    <tr class='{% cycle odd,even %}'>
+        <td><a href='{{ group.cn }}/'><img src='/site_media/edit.gif' alt='Edit' /></a></td>
+        <td>{{ group.cn }}</td>
+    </tr>
+    {% endfor %}
 </table>
 {% endfor %}
 {% endblock %}

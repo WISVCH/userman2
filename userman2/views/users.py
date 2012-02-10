@@ -1,23 +1,23 @@
-from userman.model import user
-from userman.model import action
+from userman2.model import user
+from userman2.model import action
 from django.shortcuts import render_to_response
 from django.http import Http404, HttpResponseRedirect
 from django.views.decorators.cache import cache_control
 from django.conf import settings
 
-from userman.forms.user import *
+from userman2.forms.user import *
 
 @cache_control(no_cache=True, must_revalidate=True)
 def displayUsers(request):
     if (request.GET):
-	form = UsersForm(request.GET)
-	if form.is_valid():
-	    users = user.GetAllUsers(form.cleaned_data)
-	else:
-    	    users = user.GetAllUsers()
+        form = UsersForm(request.GET)
+        if form.is_valid():
+            users = user.GetAllUsers(form.cleaned_data)
+        else:
+            users = user.GetAllUsers()
     else:
-	form = UsersForm()
-	users = user.GetAllUsers()
+        form = UsersForm()
+        users = user.GetAllUsers()
 
     rmWarnUsers = [ user.User(curaction.affectedDN).uid for curaction in action.GetAllActions({"actionName": "warnRemove"}) ]
     print rmWarnUsers
@@ -26,7 +26,7 @@ def displayUsers(request):
             count["total"] += 1
             # FIXME: Moet nog geimplementeerd worden
             #if u.toBeDeleted:
-            #	count["del"] += 1
+            #   count["del"] += 1
             if u.chLocal:
                     count["chlocal"] += 1
             if u.ankLocal:
@@ -40,11 +40,11 @@ def displayUsers(request):
 @cache_control(no_cache=True, must_revalidate=True)
 def displayUser(request, uid):
     try:
-	userObj = user.FromUID(uid)
+        userObj = user.FromUID(uid)
     except Exception, e:
-	raise Http404
+        raise Http404
     return render_to_response('user.html', {'user': userObj})
-	 
+         
 
 @cache_control(no_cache=True, must_revalidate=True)
 def userChfn(request, uid):
@@ -54,13 +54,13 @@ def userChfn(request, uid):
         raise Http404
     
     if request.method == 'POST':
-	form = ChfnForm(request.POST)
-	if form.is_valid():
-	    userObj.gecos = form.cleaned_data
-	    return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid +'/')
+        form = ChfnForm(request.POST)
+        if form.is_valid():
+            userObj.gecos = form.cleaned_data
+            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid +'/')
     else:
-	    form = ChfnForm( initial=userObj.gecos)
-    				    
+            form = ChfnForm( initial=userObj.gecos)
+                                    
     return render_to_response('form.html', {'form': form, 'uid': userObj.uid})
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -71,13 +71,13 @@ def userChdesc(request, uid):
         raise Http404
     
     if request.method == 'POST':
-	form = ChdescForm(request.POST)
-	if form.is_valid():
-	    userObj.description = str(form.cleaned_data["description"])
-	    return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid +'/')
+        form = ChdescForm(request.POST)
+        if form.is_valid():
+            userObj.description = str(form.cleaned_data["description"])
+            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid +'/')
     else:
-	    form = ChdescForm( initial={"description": userObj.description})
-    				    
+            form = ChdescForm( initial={"description": userObj.description})
+                                    
     return render_to_response('form.html', {'form': form, 'uid': userObj.uid})
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -88,13 +88,13 @@ def userChwarnRm(request, uid):
         raise Http404
     
     if request.method == 'POST':
-	form = ChwarnRmForm(request.POST)
-	if form.is_valid():
-	    userObj.toBeDeleted = form.cleaned_data["toBeDeleted"]
-	    return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid +'/')
+        form = ChwarnRmForm(request.POST)
+        if form.is_valid():
+            userObj.toBeDeleted = form.cleaned_data["toBeDeleted"]
+            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid +'/')
     else:
-	    form = ChwarnRmForm( initial={"toBeDeleted": userObj.toBeDeleted})
-    				    
+            form = ChwarnRmForm( initial={"toBeDeleted": userObj.toBeDeleted})
+                                    
     return render_to_response('form.html', {'form': form, 'uid': userObj.uid})
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -105,12 +105,12 @@ def userChsh(request, uid):
         raise Http404
     
     if request.method == 'POST':
-	form = ChshForm(request.POST)
-	if form.is_valid():
-	    userObj.loginShell = str(form.cleaned_data["login_shell"])
-	    return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid +'/')
+        form = ChshForm(request.POST)
+        if form.is_valid():
+            userObj.loginShell = str(form.cleaned_data["login_shell"])
+            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid +'/')
     else:
-	    form = ChshForm( initial={"login_shell": userObj.loginShell})
+            form = ChshForm( initial={"login_shell": userObj.loginShell})
 
     return render_to_response('form.html', {'form': form, 'uid': userObj.uid})
 
@@ -123,12 +123,12 @@ def userChgroup(request, uid):
         raise Http404
     
     if request.method == 'POST':
-	form = ChgroupForm(request.POST)
-	if form.is_valid():
-	    userObj.gidNumber = str(form.cleaned_data["gid_number"])
-	    return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid +'/')
+        form = ChgroupForm(request.POST)
+        if form.is_valid():
+            userObj.gidNumber = str(form.cleaned_data["gid_number"])
+            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid +'/')
     else:
-	    form = ChgroupForm( initial={"gid_number": userObj.gidNumber})
+            form = ChgroupForm( initial={"gid_number": userObj.gidNumber})
 
     return render_to_response('form.html', {'form': form, 'uid': userObj.uid})
 
@@ -174,14 +174,14 @@ def userChpriv(request, uid):
         raise Http404
     
     if request.method == 'POST':
-	form = ChprivForm(request.POST)
-	if form.is_valid():
-	    serviceStr = str(form.cleaned_data["service"]) + "@" + str(form.cleaned_data["server"])
-	    if not serviceStr in userObj.authorizedServices:
-		userObj.addAuthorizedService(str(form.cleaned_data["service"]) + "@" + str(form.cleaned_data["server"]))
-		return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid +'/chpriv/')
+        form = ChprivForm(request.POST)
+        if form.is_valid():
+            serviceStr = str(form.cleaned_data["service"]) + "@" + str(form.cleaned_data["server"])
+            if not serviceStr in userObj.authorizedServices:
+                userObj.addAuthorizedService(str(form.cleaned_data["service"]) + "@" + str(form.cleaned_data["server"]))
+                return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid +'/chpriv/')
     else:
-	    form = ChprivForm()
+            form = ChprivForm()
 
     return render_to_response('userpriv.html', {'form': form, 'user': userObj})
 

@@ -1,10 +1,10 @@
-from userman.model import alias
+from userman2.model import alias
 from django.shortcuts import render_to_response
 from django.http import Http404, HttpResponseRedirect
 from django.views.decorators.cache import cache_control
 from django.conf import settings
 
-from userman.forms.alias import *
+from userman2.forms.alias import *
 
 @cache_control(no_cache=True, must_revalidate=True)
 def displayAliases(request):

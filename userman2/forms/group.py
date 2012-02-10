@@ -1,5 +1,5 @@
 from django import forms
-from userman.model import user
+from userman2.model import user
 
 class GroupsForm(forms.Form):
     uid = forms.RegexField(regex="^[a-zA-Z\d \-\$]+$", required=False)

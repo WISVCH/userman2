@@ -87,7 +87,7 @@ def GetAllActions(filter_data=False, ld=None):
         ld = LDAPConn()
         ld.connectAnon()
     if not ld.connected:
-	ld.connectRoot()
+        ld.connectRoot()
 
     if filter_data:
         filter_string = "(&"

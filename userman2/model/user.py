@@ -4,9 +4,9 @@ from StringIO import StringIO
 from ldapconn import LDAPConn
 from ldap.cidict import cidict
 from django.conf import settings
-from userman.model import group
-from userman.model import alias
-from userman.model import action
+from userman2.model import group
+from userman2.model import alias
+from userman2.model import action
 import random
 import string
 import os
@@ -86,7 +86,7 @@ class User (LDAPConn):
     def _get_gidNumber(self):
         """Returns the user's primary group ID number"""
         return int(self.__attrs["gidNumber"][0])
-	
+        
     def _set_gidNumber(self, gidNumber):
         """Sets the user's primary group ID number"""
         self.modifyEntries({'gidNumber': gidNumber})
@@ -140,24 +140,24 @@ class User (LDAPConn):
     homeDirectoryAnk = property(_get_homeDir, _set_homeDir)
     
     def _get_toBeDeleted(self):
-	actions = action.GetAllActions({'actionName': 'warnRemove', 'affectedDN': self.dn}, self)
-	if actions:
-	    newdate = datetime.datetime(*(time.strptime(actions[0].arguments,  "%Y-%m-%d %H:%M:%S")[0:6]))
-	    return newdate
-	return False;
+        actions = action.GetAllActions({'actionName': 'warnRemove', 'affectedDN': self.dn}, self)
+        if actions:
+            newdate = datetime.datetime(*(time.strptime(actions[0].arguments,  "%Y-%m-%d %H:%M:%S")[0:6]))
+            return newdate
+        return False;
 
     def _set_toBeDeleted(self, newdate):
-	actions = action.GetAllActions({'actionName': 'warnRemove', 'affectedDN': self.dn})
-	if actions:
-	    if newdate:
-	        actions[0].arguments = newdate.strftime("%Y-%m-%d %H:%M:%S");
-		actions[0].locked = False;
-	    else:
-		actions[0].remove();
-	else:
-	    newaction = action.Add('warnRemove', 'ch.chnet', self.dn, "Send removal warning")
-	    newaction.arguments = newdate.strftime("%Y-%m-%d %H:%M:%S")
-	    newaction.locked = False;
+        actions = action.GetAllActions({'actionName': 'warnRemove', 'affectedDN': self.dn})
+        if actions:
+            if newdate:
+                actions[0].arguments = newdate.strftime("%Y-%m-%d %H:%M:%S");
+                actions[0].locked = False;
+            else:
+                actions[0].remove();
+        else:
+            newaction = action.Add('warnRemove', 'ch.chnet', self.dn, "Send removal warning")
+            newaction.arguments = newdate.strftime("%Y-%m-%d %H:%M:%S")
+            newaction.locked = False;
 
     toBeDeleted = property(_get_toBeDeleted, _set_toBeDeleted)
 
@@ -223,19 +223,19 @@ class User (LDAPConn):
 
     def resetPassword(self):
         password = GeneratePassword()
-    	retcode = subprocess.call('sudo ' + '/var/www_python/userman/scripts/changesambapasswd' + ' ' + re.escape(self.uid) + ' ' + re.escape(password), shell=True)
-    	if retcode != 0:
-	    raise Exception, "Child failed"
+        retcode = subprocess.call('sudo ' + '/var/www_python/userman/scripts/changesambapasswd' + ' ' + re.escape(self.uid) + ' ' + re.escape(password), shell=True)
+        if retcode != 0:
+            raise Exception, "Child failed"
         self.mailAdmin('Password reset for ' + self.uid, 'Dear Pc.com,\n\n a new password was created for ' + self.uid + ' with password ' + password + '\n\nRegards,\n\nThe CH user manager spam-bot\n\n\nOpt-out? there is no opt-out!')
 
     def changePassword(self, password):
-    	retcode = subprocess.call('sudo ' + '/var/www_python/userman/scripts/changesambapasswd' + ' ' + re.escape(self.uid) + ' ' + re.escape(password), shell=True)
-    	if retcode != 0:
-	    raise Exception, "Child failed"
+        retcode = subprocess.call('sudo ' + '/var/www_python/userman/scripts/changesambapasswd' + ' ' + re.escape(self.uid) + ' ' + re.escape(password), shell=True)
+        if retcode != 0:
+            raise Exception, "Child failed"
         
 
     def __str__(self):
-	return "User: [ dn:'" + self.dn + ", uid:'" + self.uid + "', cn:'" +self.cn + "' ]"
+        return "User: [ dn:'" + self.dn + ", uid:'" + self.uid + "', cn:'" +self.cn + "' ]"
 
 def FromUID(uid):
     try:

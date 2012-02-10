@@ -73,7 +73,7 @@ def getIndirectCnForUid(uid, recurse=False, ld=None):
     if recurse:
         retval += aliases
     for alias in aliases:
-	retval += getIndirectCnForUid(alias, True, ld)
+        retval += getIndirectCnForUid(alias, True, ld)
     return retval
 
 def getAllAliasNames():

@@ -1,12 +1,12 @@
-from userman.model import group
-from userman.model import action
+from userman2.model import group
+from userman2.model import action
 
 from django.shortcuts import render_to_response
 from django.http import Http404, HttpResponseRedirect
 from django.views.decorators.cache import cache_control
 from django.conf import settings
 
-from userman.forms.group import *
+from userman2.forms.group import *
 
 @cache_control(no_cache=True, must_revalidate=True)
 def displayGroups(request):
