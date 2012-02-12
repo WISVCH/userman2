@@ -2,7 +2,7 @@
 import os
 
 ADMINS = (
-    # ('PC.Com', 'adriaan@ch.tudelft.nl'),
+    ('Beheer', 'beheer@ch.tudelft.nl'),
 )
 
 MANAGERS = ADMINS
@@ -61,7 +61,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
 )
 
-ROOT_URLCONF = 'userman2.urls'
+ROOT_URLCONF = 'userman.urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -75,32 +75,8 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+    'django.contrib.staticfiles',
     'userman2',
 )
-
-LDAP_HOST = 'ldaps://frans.chnet/'
-LDAP_USER = 'cn=admin,dc=ank,dc=chnet'
-LDAP_PASS = 'n0w|l8r'
-LDAP_BASE = 'dc=ank,dc=chnet'
-LDAP_ACTIONDN = 'ou=Actions,' + LDAP_BASE
-LDAP_USERDN = 'ou=People,' + LDAP_BASE
-LDAP_GROUPDN = 'ou=Group,' + LDAP_BASE
-LDAP_COMPUTERDN = 'ou=Computers,' + LDAP_BASE
-LDAP_ALIASDN = 'ou=Aliases,' + LDAP_BASE
-MIN_GROUP_ID = 1000
-MAX_GROUP_ID = 1500
-MIN_COMPUTER_ID = 5000
-MAX_COMPUTER_ID = 5500
-MIN_USER_ID = 1500
-MAX_USER_ID = 2500
-MACHINE_GIDNUMBER = 1102
-USER_GIDNUMBER = 100
-import time
-ANK_HOME_BASE = '/export/gebruikers/' + time.strftime('%Y') + '/'
-CH_HOME_BASE = '/home/' + time.strftime('%Y') + '/'
-DEFAULT_SHELL = '/bin/bash'
-GRAVEYARD_DIR = '/var/local/graveyard/'
-ADMIN_MAIL = 'pccom@ch.tudelft.nl'
-USERMAN_PREFIX='/userman2'
 
 from local import *

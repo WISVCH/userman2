@@ -1,8 +1,9 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang='en'>
 <head>
     <title>{% block title %}CH User Manager{% endblock %}</title>
-    <link rel='stylesheet' type='text/css' href='/site_media/main.css' />
+    <link rel='stylesheet' type='text/css' href='{% get_static_prefix %}main.css' />
 </head>
 <body>
     {% block content %}{% endblock %}

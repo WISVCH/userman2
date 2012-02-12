@@ -1,10 +1,11 @@
 {% extends "base.html" %}
 {% block title %}CH User Manager — Manage Users{% endblock %}
+{% load static %}
 {% block content %}
 <form action='' method='get'>
 <table>
     <tr class='title'>
-        <td><input type='image' src='/site_media/filter.gif' alt='Filter' /></td>
+        <td><input type='image' src='{% get_static_prefix %}filter.gif' alt='Filter' /></td>
         <td>CH L {{ form.chlocal }}{{ form.nochlocal }}</td>
         <td>Ank L {{ form.anklocal }}{{ form.noanklocal }}</td>
         <td>Ank S {{ form.anksamba }}{{ form.noanksamba }}</td>
