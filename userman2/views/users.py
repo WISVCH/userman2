@@ -25,14 +25,14 @@ def displayUsers(request):
     for u in users:
             count["total"] += 1
             # FIXME: Moet nog geimplementeerd worden
-            #if u.toBeDeleted:
-            #   count["del"] += 1
+            if u.toBeDeleted:
+                count["del"] += 1
             if u.chLocal:
-                    count["chlocal"] += 1
+                count["chlocal"] += 1
             if u.ankLocal:
-                    count["anklocal"] += 1
+                count["anklocal"] += 1
             if u.ankSamba:
-                    count["anksamba"] += 1
+                count["anksamba"] += 1
     
     return render_to_response('users.html', {'users': users, 'form': form, 'count': count, 'rmWarnUsers': rmWarnUsers})
 

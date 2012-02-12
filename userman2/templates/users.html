@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block title %}CH User Manager — Manage Users{% endblock %}
+{% load static %}
 {% block content %}
 <form action='' method='get'>
 <table>
@@ -16,7 +17,7 @@
     </tr>
     <tr class='title'>
         <td>&nbsp;</td>
-        <td><input type='image' src='/site_media/filter.gif' alt='Filter' /></td>
+        <td><input type='image' src='{% get_static_prefix %}filter.gif' alt='Filter' /></td>
         <td>{{ form.uid }}</td>
         <td>{{ form.cn }}</td>
         <td>{{ form.uidnumber }}</td>
@@ -27,15 +28,15 @@
     </tr>
     {% for user in users %}
     <tr class='{% cycle odd,even %}'>
-        <td><a href='{{ user.uid }}/'><img src='/site_media/edit.gif'alt='Edit' /></a></td>
-        <td><a href='/userman2/massmail/writemail/?users={{ user.uid }}&fromaddress=beheer%40ch.tudelft.nl'><img src='/site_media/delete.gif' alt='Delete' /></a></td>
+        <td><a href='{{ user.uid }}/'><img src='{% get_static_prefix %}edit.gif'alt='Edit' /></a></td>
+        <td><a href='/userman2/massmail/writemail/?users={{ user.uid }}&fromaddress=beheer%40ch.tudelft.nl'><img src='{% get_static_prefix %}delete.gif' alt='Delete' /></a></td>
         <td>{{ user.uid }}</td>
         <td>{{ user.gecos.full_name|default:"&nbsp;" }}</td>
         <td>{{ user.uidNumber }}</td>
         <td>{% for rmWarnUser in rmWarnUsers %} {% ifequal user.uid rmWarnUser %} {{ user.toBeDeleted|date:"F d Y - H i"|default:"Never" }} {% endifequal %} {% endfor %}</td>
-        <td>{% if user.chLocal %}+{% else %}-{% endif %}</td>
-        <td>{% if user.ankLocal %}+{% else %}-{% endif %}</td>
-        <td>{% if user.ankSamba %}+{% else %}-{% endif %}</td>
+        <td>{% if user.chLocal %}+{% endif %}</td>
+        <td>{% if user.ankLocal %}+{% endif %}</td>
+        <td>{% if user.ankSamba %}+{% endif %}</td>
     </tr>
     {% endfor %}
     <tr class='total'>

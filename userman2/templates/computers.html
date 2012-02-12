@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block title %}CH User Manager — Manage Computers{% endblock %}
+{% load static %}
 {% block content %}
 <table>
     <tr class='title'>
@@ -8,7 +9,7 @@
     </tr>
     {% for computer in computers %}
     <tr class='{% cycle odd,even %}'>
-        <td><a href='/userman2/computers/{{ computer.uid }}/rm'><img src='/site_media/delete.gif' alt='Delete' /></a></td>
+        <td><a href='/userman2/computers/{{ computer.uid }}/rm'><img src='{% get_static_prefix %}delete.gif' alt='Delete' /></a></td>
         <td>{{ computer.uid }}</td>
     </tr>
     {% endfor %}

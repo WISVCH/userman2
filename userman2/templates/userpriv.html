@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block title %}CH User Manager — User privileges for {{user.cn}}{% endblock %}
+{% load static %}
 {% block content %}
 <form method="post" action="">
 <table>
@@ -11,7 +12,7 @@
     {% for service in user.authorizedServices %}
     <tr>
         <td><a href='rm/{{ service }}'><img
-            src='/site_media/delete.gif' alt='Delete'></a></td>
+            src='{% get_static_prefix %}delete.gif' alt='Delete'></a></td>
         <td colspan='2'>{{ service }}</td>
     </tr>
     {% endfor %}
