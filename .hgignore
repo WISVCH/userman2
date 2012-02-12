@@ -4,3 +4,4 @@ syntax: glob
 cron/config.py
 *.pyc
 local.py
+static
