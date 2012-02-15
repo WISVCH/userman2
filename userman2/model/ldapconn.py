@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 from django.conf import settings
 import ldap
-import smtplib
-from email.MIMEText import MIMEText
 
 class LDAPConn (object):
     def __init__(self):
@@ -53,7 +51,6 @@ class LDAPConn (object):
                 mod_attrs.append((k, str(v)))
             else:
                 mod_attrs.append((k, v))
-#        assert False, mod_attrs
         self.l.add_s(dn, mod_attrs)
 
     def delObject(self):
@@ -76,15 +73,3 @@ class LDAPConn (object):
                 mod_attrs.append((ldap.MOD_DELETE, k, v))
 
         self.l.modify_s(self.dn, mod_attrs)
-
-    def mailAdmin (self, subject, message):
-        msg = MIMEText(message)
-        msg['Subject'] = subject
-        msg['From'] = settings.ADMIN_MAIL
-        msg['To'] = settings.ADMIN_MAIL
-        
-        s = smtplib.SMTP()
-        s.connect()
-        s.sendmail(settings.ADMIN_MAIL, [settings.ADMIN_MAIL], msg.as_string())
-        s.close()
-
