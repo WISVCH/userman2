@@ -13,8 +13,9 @@ from shutil import copy2, rmtree
 import tarfile
 
 import ldap
+import smtplib
+from email.MIMEText import MIMEText
 
-from django.core.mail import send_mail
 from datetime import datetime
 from time import time
 from time import strptime, strftime
@@ -289,7 +290,15 @@ class Action:
         return False
 
     def mailAdmin (self, subject, message):
-        send_mail('[Userman] ' + subject, message, config.adminMail, [config.adminMail])
+        msg = MIMEText(message)
+        msg['Subject'] = '[Userman] ' + subject
+        msg['From'] = config.adminMail
+        msg['To'] = config.adminMail
+
+        s = smtplib.SMTP()
+        s.connect()
+        s.sendmail(config.adminMail, [config.adminMail], msg.as_string())
+        s.close()
 
     def chmodTree(self, dest, mode, dirmode):
         os.chmod (dest, dirmode)
