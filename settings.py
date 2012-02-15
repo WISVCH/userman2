@@ -79,4 +79,6 @@ INSTALLED_APPS = (
     'userman2',
 )
 
+ROOT_PATH = os.path.dirname(__file__);
+
 from local import *
