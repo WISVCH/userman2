@@ -226,7 +226,7 @@ class User (LDAPConn):
         retcode = subprocess.call('sudo ' + os.path.join(settings.ROOT_PATH, 'scripts/changesambapasswd') + ' ' + re.escape(self.uid) + ' ' + re.escape(password), shell=True)
         if retcode != 0:
             raise Exception, "Child failed"
-        self.mailAdmin('Password reset for ' + self.uid, 'A new password was created for ' + self.uid + ' with password ' + password)
+        action.mailAdmin('Password reset: ' + self.uid, 'A new password was created for ' + self.uid + ' with password ' + password)
 
     def changePassword(self, password):
         retcode = subprocess.call('sudo ' + os.path.join(settings.ROOT_PATH, 'scripts/changesambapasswd') + ' ' + re.escape(self.uid) + ' ' + re.escape(password), shell=True)
@@ -326,7 +326,7 @@ def Add(uid, fullname):
     if retcode != 0:
         raise Exception, "Child failed"
 
-    ld.mailAdmin('Account created for ' + uid, 'A new account was created for ' + uid + ' (' + entry['displayName'] + ') with password ' + password)
+    action.mailAdmin('Account created: ' + uid, 'A new account was created for ' + uid + ' (' + entry['displayName'] + ') with password ' + password)
 
     return FromUID(entry['uid'])
 
