@@ -19,7 +19,7 @@ class LDAPConn (object):
         if self.connected:
             return
         self.l = ldap.initialize(settings.LDAP_HOST)
-        self.l.simple_bind_s(settings.LDAP_USER, settings.LDAP_PASS)
+        self.l.simple_bind_s(settings.LDAP_USER, settings.LDAP_PASSWORD)
         self.connected = True
 
     def disconnect(self):

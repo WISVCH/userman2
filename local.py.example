@@ -17,7 +17,7 @@ STATIC_URL = '/userman2/static/'
 LDAP_HOST = "ldaps://frans.chnet"
 LDAP_USER = "cn=admin,dc=ank,dc=chnet"
 f = open("/etc/ldap.secret")
-LDAP_PASS = f.read().strip()
+LDAP_PASSWORD = f.read().strip()
 f.close()
 LDAP_BASE = 'dc=ank,dc=chnet'
 LDAP_ACTIONDN = 'ou=Actions,' + LDAP_BASE
