@@ -223,13 +223,13 @@ class User (LDAPConn):
 
     def resetPassword(self):
         password = GeneratePassword()
-        retcode = subprocess.call('sudo ' + os.path.join(settings.ROOT_PATH, 'userman2/scripts/changesambapasswd') + ' ' + re.escape(self.uid) + ' ' + re.escape(password), shell=True)
+        retcode = subprocess.call('sudo ' + os.path.join(settings.ROOT_PATH, 'scripts/changesambapasswd') + ' ' + re.escape(self.uid) + ' ' + re.escape(password), shell=True)
         if retcode != 0:
             raise Exception, "Child failed"
-        self.mailAdmin('Password reset for ' + self.uid, 'Dear Pc.com,\n\n a new password was created for ' + self.uid + ' with password ' + password + '\n\nRegards,\n\nThe CH user manager spam-bot\n\n\nOpt-out? there is no opt-out!')
+        self.mailAdmin('Password reset for ' + self.uid, 'A new password was created for ' + self.uid + ' with password ' + password)
 
     def changePassword(self, password):
-        retcode = subprocess.call('sudo ' + os.path.join(settings.ROOT_PATH, 'userman2/scripts/changesambapasswd') + ' ' + re.escape(self.uid) + ' ' + re.escape(password), shell=True)
+        retcode = subprocess.call('sudo ' + os.path.join(settings.ROOT_PATH, 'scripts/changesambapasswd') + ' ' + re.escape(self.uid) + ' ' + re.escape(password), shell=True)
         if retcode != 0:
             raise Exception, "Child failed"
         
@@ -294,8 +294,8 @@ def GetFreeUIDNumber():
     
     raise Exception, "No more free user IDs"
 
-def GeneratePassword(length = 8):
-    chars = string.letters + string.letters + string.digits + string.punctuation
+def GeneratePassword(length = 10):
+    chars = string.letters + string.letters + string.digits
     return ''.join([random.choice(chars) for i in range(length)])
 
 def Add(uid, fullname):
@@ -322,11 +322,11 @@ def Add(uid, fullname):
 
     ld.addObject(dn, entry)
 
-    retcode = subprocess.call('sudo ' + os.path.join(settings.ROOT_PATH, 'userman2/scripts/changesambapasswd') + ' ' + re.escape(uid) + ' ' + re.escape(password), shell=True)
+    retcode = subprocess.call('sudo ' + os.path.join(settings.ROOT_PATH, 'scripts/changesambapasswd') + ' ' + re.escape(uid) + ' ' + re.escape(password), shell=True)
     if retcode != 0:
         raise Exception, "Child failed"
 
-    ld.mailAdmin('Account aangemaakt voor ' + uid, 'Dear PC.COM,\n\n a new account was created for ' + uid + ' (' + entry['displayName'] + ') with password ' + password + '\n\nRegards,\n\nThe CH user manager spam-bot\n\n\nOpt-out? there is no opt-out!')
+    ld.mailAdmin('Account created for ' + uid, 'A new account was created for ' + uid + ' (' + entry['displayName'] + ') with password ' + password)
 
     return FromUID(entry['uid'])
 
