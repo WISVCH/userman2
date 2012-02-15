@@ -155,7 +155,7 @@ def Add(parent, cn):
     dn = 'cn=' +cn +',ou=' + parent + ',' + settings.LDAP_GROUPDN
     gidNumber = GetFreeGIDNumber()
     ld.addObject(dn, {'objectClass': 'posixGroup', 'cn': cn, 'gidNumber': str(gidNumber)})
-    retcode = subprocess.call('sudo ' + os.path.join(settings.ROOT_PATH, 'scripts/addgroupmapping') + ' ' + re.escape(cn) + ' ' + re.escape(cn), shell=True)
+    retcode = subprocess.call('sudo ' + os.path.join(settings.ROOT_PATH, 'userman2/scripts/addgroupmapping') + ' ' + re.escape(cn) + ' ' + re.escape(cn), shell=True)
     if retcode != 0:
         raise Exception, "Child failed"
     return FromCN(cn)
