@@ -25,14 +25,14 @@ def process(action):
     try: 
         action.lock()
         if action.execute():
-            action.mailAdmin("Action processed succesfully: " + action.getActionName(), "Admin,\n\nThe following action has been processed: " + str(action) + ".\n\nRegards,\nYour neighbourhood AI")
+            action.mailAdmin("Action processed succesfully: " + action.getActionName(), "Admin,\n\nThe following action has been processed: " + str(action))
             action.delete()     
             return True
         else:
             action.unlock()
             return False
     except Exception, err:
-        action.mailAdmin("An error occured while processing " + action.getActionName(), "Admin,\n\nAn error occured while processing " + str(action) + ".\nThe error was: " + str(err) + "\nThe Action has been locked, and must be re-enabled manually.\n\nRegards,\nYour neighbourhood AI")
+        action.mailAdmin("An error occured while processing " + action.getActionName(), "Admin,\n\nAn error occured while processing " + str(action) + ".\nThe error was: " + str(err) + "\nThe Action has been locked, and must be re-enabled manually.")
         action.lock()
         
 

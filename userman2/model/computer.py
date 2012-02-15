@@ -72,7 +72,7 @@ def Add(uid):
 
     ld.addObject(dn, entry)
 
-    retcode = subprocess.call('sudo ' + os.path.join(settings.ROOT_PATH, 'userman2/scripts/createsambamachine') + ' ' + re.escape(uid), shell=True)
+    retcode = subprocess.call('sudo ' + os.path.join(settings.ROOT_PATH, 'scripts/createsambamachine') + ' ' + re.escape(uid), shell=True)
     if retcode != 0:
         raise Exception, "Child failed"
 
