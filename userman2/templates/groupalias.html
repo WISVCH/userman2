@@ -35,7 +35,7 @@
     <tr class={% cycle rowcycle %}>
         <td><a href='{% url userman2.views.groups.rmuser group.cn member %}'
             onclick="return confirm('Really remove user {{member}} from group {{group.cn}}?')"><img
-            src='{% get_static_prefix %}delete.gif' alt='Remove' /></a></td>
+            src='{% get_static_prefix %}delete.png' alt='Remove' /></a></td>
 {%if group.gidNumber %}
         <td colspan='2'><a href='{% url userman2.views.users.displayUser member %}'>{{member}}</a></td>
 {% else %}
