@@ -10,7 +10,7 @@
         </td>
     </tr>
     <tr class='{% cycle odd,even as rowcolor %}'>
-        <td><a href='chuid'><img src='{% get_static_prefix %}edit.gif'
+        <td><a href='chuid'><img src='{% get_static_prefix %}edit.png'
             alt='Edit' /></a></td>
         <td>UID</td>
         <td>{{ user.uid }}</td>
@@ -22,7 +22,7 @@
     </tr>
     <tr class='{% cycle rowcolor %}'>
         <td rowspan='4'><a href='chfn'><img
-            src='{% get_static_prefix %}edit.gif' alt='Edit' /></a></td>
+            src='{% get_static_prefix %}edit.png' alt='Edit' /></a></td>
         <td>Full Name</td>
         <td>{{ user.gecos.full_name }}</td>
     </tr>
@@ -39,36 +39,36 @@
         <td>{{ user.gecos.home_phone }}</td>
     </tr>
     <tr class='{% cycle rowcolor %}'>
-        <td><a href='chdesc'><img src='{% get_static_prefix %}edit.gif'
+        <td><a href='chdesc'><img src='{% get_static_prefix %}edit.png'
             alt='Edit' /></a></td>
         <td>Description</td>
         <td>{{ user.description }}</td>
     </tr>
     <tr class='{% cycle rowcolor %}'>
-        <td><a href='chwarnrm'><img src='{% get_static_prefix %}edit.gif'
+        <td><a href='chwarnrm'><img src='{% get_static_prefix %}edit.png'
             alt='Edit' /></a></td>
         <td>Removal date</td>
         <td>{{ user.toBeDeleted }}</td>
     </tr>
     <tr class='{% cycle rowcolor %}'>
-        <td><a href='chsh'><img src='{% get_static_prefix %}edit.gif' alt='Edit' /></a></td>
+        <td><a href='chsh'><img src='{% get_static_prefix %}edit.png' alt='Edit' /></a></td>
         <td>Login Shell</td>
         <td>{{ user.loginShell }}</td>
     </tr>
     <tr class='{% cycle rowcolor %}'>
-        <td><a href='chhomeank'><img src='{% get_static_prefix %}edit.gif'
+        <td><a href='chhomeank'><img src='{% get_static_prefix %}edit.png'
             alt='Edit' /></a></td>
         <td>Home Directory</td>
         <td>{{ user.homeDirectoryAnk }}</td>
     </tr>
     <tr class='{% cycle rowcolor %}'>
-        <td><a href='chhomech'><img src='{% get_static_prefix %}edit.gif'
+        <td><a href='chhomech'><img src='{% get_static_prefix %}edit.png'
             alt='Edit' /></a></td>
         <td>Home Directory (CH)</td>
         <td>{{ user.homeDirectoryCH }}</td>
     </tr>
     <tr class='{% cycle rowcolor %}'>
-        <td><a href='chgroup'><img src='{% get_static_prefix %}edit.gif'
+        <td><a href='chgroup'><img src='{% get_static_prefix %}edit.png'
             alt='Edit' /></a></td>
         <td>Primary Group ID</td>
         <td>{{ user.gidNumber }} (<a href='/userman2/groups/{{user.gidNumber|groupname}}'>{{user.gidNumber|groupname}}</a>)</td>
@@ -91,7 +91,7 @@
     <tr class='title'>
         <td colspan='3'>
         <h3>Authorized Services: <a href='chpriv'><img
-            src='{% get_static_prefix %}edit.gif' alt='Edit' /></a></h3>
+            src='{% get_static_prefix %}edit.png' alt='Edit' /></a></h3>
         </td>
     </tr>
     {% for service in user.authorizedServices %}

@@ -1,6 +1,7 @@
 body {
     margin: 9px 9px 0 9px;
     padding: 0;
+	padding-top: 40px;
     background: #ffffff;
     font-family: sans-serif;
 }
@@ -57,8 +58,136 @@ img {
     border : 0;
 }
 
-p.bottomtext {
-    clear: both;
+.navigation {
+	width: 100%;
+	
+	position: fixed;
+	top: 0;
+	left: 0;
+	
+	background-color: #000000;
+	box-shadow: rgba(0, 0, 0, 0.15) 0 3px 6px;
+}
+
+.navigation span {
+	float: left;
+	
+	font-weight: bold;
+	font-size: 11px;
+	color: #ffffff;
+	
+	margin-left: 12px;
+	margin-right: 7px;
+	
+	padding-top: 10px;
+}
+
+.navigation ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.navigation li {
+	float: left;
+	
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.navigation li a {
+	display: block;
+	
+	margin-left: 8px;
+	margin-right: 8px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	
+	padding-left: 28px;
+	padding-right: 7px;
+	padding-top: 6px;
+	padding-bottom: 6px;
+	
+	background-color: #000000;
+	background-position: 7px center;
+	background-repeat: no-repeat;
+	
+	font-size: 11px;
+	color: #ffffff;
+	text-decoration: none;
+	
+	text-shadow: rgba(0, 0, 0, 0.75) 1px 1px;
+	border-radius: 4px;
+	
+	transition: background-color 0.1s linear;
+	-moz-transition: background-color 0.1s linear;
+	-webkit-transition: background-color 0.1s linear;
+	-o-transition: background-color 0.1s linear;
+}
+
+.navigation li a:hover {
+	background-color: #666666;
+}
+
+.navigation .users-add a {
+	background-image: url('user_add.png');
+}
+
+.navigation .users-display a {
+	background-image: url('user.png');
+}
+
+.navigation .computers-add a {
+	background-image: url('computer_add.png');
+}
+
+.navigation .computers-display a {
+	background-image: url('computer.png');
+}
+
+.navigation .groups a {
+	background-image: url('group.png');
+}
+
+.navigation .aliases a {
+	background-image: url('chart_organisation.png');
+}
+
+.navigation .massmail a {
+	background-image: url('email_go.png');
+}
+
+.clearboth {
+	clear: both;
+}
+
+.footer {
+	margin-top: 15px;
+	margin-bottom: 10px;
+	
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	
+	font-size: 11px;
+	color: #00314D;
+	
+	background-color: #E6F4FC;
+	border-radius: 7px;
+}
+
+.bottomtext {
+	margin: 0;
+	padding: 0;
+	
+	font-weight: bold;
     color: black;
     background: none;
+}
+
+.copyright {
+	float: right;
+	color: #999999;
 }
