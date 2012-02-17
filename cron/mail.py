@@ -3,7 +3,7 @@
 import smtplib
 from email.MIMEText import MIMEText
 
-def mailAdmin (self, subject, message):
+def mailAdmin(subject, message):
     msg = MIMEText(message)
     msg['Subject'] = '[Userman] ' + subject
     msg['From'] = config.adminMail
