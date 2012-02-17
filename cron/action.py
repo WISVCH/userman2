@@ -13,8 +13,7 @@ from shutil import copy2, rmtree
 import tarfile
 
 import ldap
-import smtplib
-from email.MIMEText import MIMEText
+from mail import mailAdmin
 
 from datetime import datetime
 from time import time
@@ -284,21 +283,10 @@ class Action:
         (attrs['arguments'][0])
         if datetime.now() > removalTime:
             user = User (self.l, attrs['affectedDN'][0])
-            self.mailAdmin ("Admin notice, notify for " + user.getUID(),"Beheerder, \n\nGebruiker "+  user.getUID() + " staat vandaag voor verwijdering aangemerkt.\n\n")
+            mailAdmin ("Admin notice, notify for " + user.getUID(),"Beheerder, \n\nGebruiker "+  user.getUID() + " staat vandaag voor verwijdering aangemerkt.\n\n")
             return True
 
         return False
-
-    def mailAdmin (self, subject, message):
-        msg = MIMEText(message)
-        msg['Subject'] = '[Userman] ' + subject
-        msg['From'] = config.adminMail
-        msg['To'] = config.adminMail
-
-        s = smtplib.SMTP()
-        s.connect()
-        s.sendmail(config.adminMail, [config.adminMail], msg.as_string())
-        s.close()
 
     def chmodTree(self, dest, mode, dirmode):
         os.chmod (dest, dirmode)
