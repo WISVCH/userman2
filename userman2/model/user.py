@@ -7,7 +7,7 @@ from django.conf import settings
 from userman2.model import group
 from userman2.model import alias
 from userman2.model import action
-from mail import mailAdmin
+from cron.mail import mailAdmin
 import random
 import string
 import os
