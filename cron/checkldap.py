@@ -7,6 +7,7 @@ from action import Action
 import sys
 import ldap
 from ldap.cidict import cidict
+from mail import mailAdmin
 
 def process(action):
     """Process a tree of actions from the bottom up."""
@@ -25,14 +26,14 @@ def process(action):
     try: 
         action.lock()
         if action.execute():
-            action.mailAdmin("Success: " + action.getActionName(), "The following action has been processed: " + str(action))
+            mailAdmin("Success: " + action.getActionName(), "The following action has been processed: " + str(action))
             action.delete()     
             return True
         else:
             action.unlock()
             return False
     except Exception, err:
-        action.mailAdmin("ERROR: " + action.getActionName(), "An error occured while processing " + str(action) + ".\nThe error was: " + str(err) + "\nThe Action has been locked, and must be re-enabled manually.")
+        mailAdmin("ERROR: " + action.getActionName(), "An error occured while processing " + str(action) + ".\nThe error was: " + str(err) + "\nThe Action has been locked, and must be re-enabled manually.")
         action.lock()
 
 # Main loop, read pending actions and process them

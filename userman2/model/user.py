@@ -7,6 +7,7 @@ from django.conf import settings
 from userman2.model import group
 from userman2.model import alias
 from userman2.model import action
+from mail import mailAdmin
 import random
 import string
 import os
@@ -226,7 +227,7 @@ class User (LDAPConn):
         retcode = subprocess.call('sudo ' + os.path.join(settings.ROOT_PATH, 'scripts/changesambapasswd') + ' ' + re.escape(self.uid) + ' ' + re.escape(password), shell=True)
         if retcode != 0:
             raise Exception, "Child failed"
-        action.mailAdmin('Password reset: ' + self.uid, 'A new password was created for ' + self.uid + ' with password ' + password)
+        mailAdmin('Password reset: ' + self.uid, 'A new password was created for ' + self.uid + ' with password ' + password)
 
     def changePassword(self, password):
         retcode = subprocess.call('sudo ' + os.path.join(settings.ROOT_PATH, 'scripts/changesambapasswd') + ' ' + re.escape(self.uid) + ' ' + re.escape(password), shell=True)
@@ -326,7 +327,7 @@ def Add(uid, fullname):
     if retcode != 0:
         raise Exception, "Child failed"
 
-    action.mailAdmin('Account created: ' + uid, 'A new account was created for ' + uid + ' (' + entry['displayName'] + ') with password ' + password)
+    mailAdmin('Account created: ' + uid, 'A new account was created for ' + uid + ' (' + entry['displayName'] + ') with password ' + password)
 
     return FromUID(entry['uid'])
 
