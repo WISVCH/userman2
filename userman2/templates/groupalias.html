@@ -33,14 +33,16 @@
     </tr>
     {% for member in group.members %}
     <tr class={% cycle rowcycle %}>
-        <td><a href='{% url userman2.views.groups.rmuser group.cn member %}'
-            onclick="return confirm('Really remove user {{member}} from group {{group.cn}}?')"><img
-            src='{% get_static_prefix %}delete.png' alt='Remove' /></a></td>
-{%if group.gidNumber %}
-        <td colspan='2'><a href='{% url userman2.views.users.displayUser member %}'>{{member}}</a></td>
-{% else %}
-        <td colspan='2'>{{member|aliaslink|safe}}</td>
-{%endif%}
+        <td>
+            <a href='rmuser/{{member}}/' onclick="return confirm('Really remove user {{member}} from group {{group.cn}}?')">
+                <img src='{% get_static_prefix %}delete.png' alt='Remove' />
+            </a>
+        </td>
+        {%if group.gidNumber %}
+            <td colspan='2'><a href='{% url userman2.views.users.displayUser member %}'>{{member}}</a></td>
+        {% else %}
+            <td colspan='2'>{{member|aliaslink|safe}}</td>
+        {%endif%}
     </tr>
     {%endfor%} {% if group.gidNumber %}
     <tr class='title'>
