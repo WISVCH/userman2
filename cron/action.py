@@ -9,7 +9,7 @@ from group import Group
 from os.path import abspath, exists
 from os import makedirs
 import os
-from shutil import copy2, rmtree
+from shutil import copy2, move, rmtree
 import tarfile
 
 import ldap
@@ -248,7 +248,7 @@ class Action:
         baseprofile = os.path.join (config.profileDir, user.getUID() + ".pdm.V2")
         
         if exists(baseprofile):
-            move(baseprofile, baseprofile + time.strftime("%Y%m%d%H%M%S"))
+            move(baseprofile, baseprofile + '.old-' + strftime("%Y%m%d%H%M%S"))
 
         return True
 
