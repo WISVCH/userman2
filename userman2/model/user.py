@@ -200,14 +200,14 @@ class User (LDAPConn):
         removeAction = action.Add('removeUser', 'frans.chnet', self.dn, 'Remove user ' + self.uid)
         removeHomedirAnk = self.removeHomedir('ank.chnet', removeAction)
         removeProfileAnk = self.removeProfile('ank.chnet', removeHomedirAnk)
-        removeHomedirCh = self.removeHomedir('rob.chnet', removeAction)
-        removeMailboxCh = self.removeMailbox('ch.chnet', removeHomedirCh)
+        removeHomedirRob = self.removeHomedir('rob.chnet', removeAction)
+        removeMailboxCh = self.removeMailbox('ch.chnet', removeAction)
 
         # Unlock removal tree
         removeProfileAnk.locked = False
         removeHomedirAnk.locked = False
         removeMailboxCh.locked = False
-        removeHomedirCh.locked = False
+        removeHomedirRob.locked = False
         removeAction.locked = False
 
     def getSecondaryGroups(self):

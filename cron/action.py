@@ -135,7 +135,7 @@ class Action:
         user = User(self.l, self.getAffectedDN())
         mailbox = os.path.join(config.mailDir, user.getUID())
         
-        if exists(profile):
+        if exists(mailbox):
             tar = tarfile.open(os.path.join(config.graveyardDir, "MAILBOX_" + user.getUID() + "-" + str(int(time())) + ".tar.gz"), "w:gz")
             tar.add (mailbox)
             tar.close()
