@@ -33,10 +33,11 @@ enableQuotas = False
 homeDirBase = "/export/gebruikers/"
 profileDir = "/export/gebruikers/ntprofile/"
 skelDir = "/etc/skel/"
-graveyardDir = "/var/mail/graveyard/"
+graveyardDir = "/var/local/graveyard/"
+mailDir = "/var/mail/"
 quotaString = "30000 32500 0 0 -a /dev/sdc3"
 
 # Mailboxes
-enableMailboxCreation = True
+enableMailboxCreation = False
 enableMailboxRemoval = True
 enableMailboxRename = True

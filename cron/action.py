@@ -92,7 +92,7 @@ class Action:
         elif attrs['actionName'][0] == 'createHomeDir':
             return self.createHomeDir(attrs)
         elif attrs['actionName'][0] == 'createMailbox':
-            return self.createMailbox(attrs)
+            return True
         elif attrs['actionName'][0] == 'removeHomeDir':
             return self.removeHomeDir(attrs)
         elif attrs['actionName'][0] == 'removeProfile':
@@ -108,25 +108,23 @@ class Action:
         else:
             raise Exception, 'unknown actionName: ' + attrs['actionName'][0]
 
-    def createMailbox(self, attrs):
-        if not config.enableMailboxCreation:
-            raise Exception, "Mailbox creation not enabled on host " + self.getHost()
-
-        user = User (self.l, self.getAffectedDN())
-
-        if os.system("/usr/local/userman/cron/scripts/createMailbox.pl " + user.getUID()):
-            raise Exception, "Error creating mailbox for user " + user.getUID()
-        
-        return True
-
     def renameMailbox(self, attrs):
         if not config.enableMailboxRename:
             raise Exception, "Mailbox renaming not enabled on host " + self.getHost()
-            
-        user = User (self.l, self.getAffectedDN())
+        
+        user = User(self.l, self.getAffectedDN())
+        mailbox = os.path.join(config.mailDir, user.getUID())
+        oldmailbox = abspath(self.getArguments())
 
-        if os.system("/usr/local/userman/cron/scripts/renameMailbox.pl " + self.getArguments() + " " + user.getUID()):
-            raise Exception, "Error renaming mailbox for user " + user.getUID() + " from " + self.getArguments()
+        if exists (mailbox):
+            raise Exception, "New mailbox directory " + mailbox + " already exists!"
+        if not exists (oldmailbox):
+            raise Exception, "Old mailbox directory " + oldmailbox + " doesn't exist!"
+        if not mailbox.startswith(config.mailDir) or not oldmailbox.startswith(config.mailDir):
+            raise Exception, "Mailboxes must be created in " + config.mailDir
+
+        makedirs (mailDir)
+        os.rename(oldmailbox, mailDir)
 
         return True
 
@@ -134,10 +132,14 @@ class Action:
         if not config.enableMailboxRemoval:
             raise Exception, "Mailbox removal not enabled on host " + self.getHost()
 
-        user = User (self.l, self.getAffectedDN())
-
-        if os.system("/usr/local/userman/cron/scripts/removeMailbox.pl " + user.getUID() + " " + config.graveyardDir):
-            raise Exception, "Error removing mailbox for user " + user.getUID()
+        user = User(self.l, self.getAffectedDN())
+        mailbox = os.path.join(config.mailDir, user.getUID())
+        
+        if exists(profile):
+            tar = tarfile.open(os.path.join(config.graveyardDir, "MAILBOX_" + user.getUID() + "-" + str(int(time())) + ".tar.gz"), "w:gz")
+            tar.add (mailbox)
+            tar.close()
+            rmtree (mailbox)
 
         return True
 
@@ -221,9 +223,9 @@ class Action:
         oldhomedir = abspath(self.getArguments())
 
         if exists (homedir):
-            raise Exception, "New Home directory "+ homedir +" already exists!"
+            raise Exception, "New Home directory " + homedir + " already exists!"
         if not exists (oldhomedir):
-            raise Exception, "Old home directory "+ homedir +" doesn't exist!"
+            raise Exception, "Old home directory " + oldhomedir + " doesn't exist!"
         if not homedir.startswith(config.homeDirBase) or not oldhomedir.startswith(config.homeDirBase):
             raise Exception, "Home directories must be created in " + config.homeDirBase
 
@@ -237,17 +239,14 @@ class Action:
             raise Exception, "Profile removal not enabled on host " + self.getHost()
         
         user = User (self.l, self.getAffectedDN())
-        homedir = abspath(user.getHomeDirectory(self.getHost()))
 
-        if not exists (homedir):
-            raise Exception, "Home directory "+ homedir +" doesn't exist!"
-        if not homedir.startswith(config.homeDirBase):
-            raise Exception, "Home directories must be created in " + config.homeDirBase
-
-        baseprofile = os.path.join (config.profileDir, user.getUID() + ".pdm.V2")
+        profile = os.path.join (config.profileDir, user.getUID() + ".pdm.V2")
         
-        if exists(baseprofile):
-            move(baseprofile, baseprofile + '.old-' + strftime("%Y%m%d%H%M%S"))
+        if exists(profile):
+            tar = tarfile.open (os.path.join (config.graveyardDir, "PROFILE_" + user.getUID() + "-" + str(int(time())) + ".tar.gz"), "w:gz")
+            tar.add (profile)
+            tar.close()
+            rmtree (profile)
 
         return True
 
@@ -263,7 +262,7 @@ class Action:
         if not homedir.startswith(config.homeDirBase):
             raise Exception, "Home directories must be created in " + config.homeDirBase
 
-        tar = tarfile.open (os.path.join (config.graveyardDir, user.getUID() + "-" + str(int(time())) + ".tar.gz"), "w:gz")
+        tar = tarfile.open (os.path.join (config.graveyardDir, "HOMEDIR_" + user.getUID() + "-" + str(int(time())) + ".tar.gz"), "w:gz")
         tar.add (homedir)
         tar.close()
         rmtree (homedir)

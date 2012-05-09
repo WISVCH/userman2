@@ -165,9 +165,6 @@ class User (LDAPConn):
     def createHomeDir(self, host):
         return action.Add('createHomeDir', host, self.dn, 'Create home directory on ' + host + ' for ' + self.uid)
 
-    def createMailbox(self, host):
-        return action.Add('createMailbox', host, self.dn, 'Create mailbox on ' + host + ' for ' + self.uid)
-
     def removeMailbox(self, host, parent):
         return action.Add('removeMailbox', host, self.dn, 'Remove mailbox on ' + host + ' for ' + self.uid, parent)
 
