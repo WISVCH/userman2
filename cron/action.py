@@ -257,15 +257,14 @@ class Action:
         user = User (self.l, self.getAffectedDN())
         homedir = abspath(user.getHomeDirectory(self.getHost()))
 
-        if not exists (homedir):
-            raise Exception, "Home directory "+ homedir +" doesn't exist!"
         if not homedir.startswith(config.homeDirBase):
             raise Exception, "Home directories must be created in " + config.homeDirBase
 
-        tar = tarfile.open (os.path.join (config.graveyardDir, "HOMEDIR_" + user.getUID() + "-" + str(int(time())) + ".tar.gz"), "w:gz")
-        tar.add (homedir)
-        tar.close()
-        rmtree (homedir)
+        if exists (homedir):
+            tar = tarfile.open (os.path.join (config.graveyardDir, "HOMEDIR_" + user.getUID() + "-" + str(int(time())) + ".tar.gz"), "w:gz")
+            tar.add (homedir)
+            tar.close()
+            rmtree (homedir)
 
         return True
 

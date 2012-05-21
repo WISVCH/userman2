@@ -217,7 +217,6 @@ def addUser(request):
                 raise Http404
             newUser = user.Add(str(form.cleaned_data['uid']), str(form.cleaned_data['full_name']))
             newUser.createHomeDir('ank.chnet').locked = False
-            newUser.createHomeDir('rob.chnet').locked = False
 
             for access in form.cleaned_data['access']:
                 newUser.addAuthorizedService(str(access))
