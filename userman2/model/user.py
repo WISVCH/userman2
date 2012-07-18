@@ -320,7 +320,7 @@ def Add(uid, fullname):
 
     ld.addObject(dn, entry)
 
-    retcode = subprocess.call('sudo ' + os.path.join(settings.ROOT_PATH, 'scripts/changesambapasswd') + ' ' + re.escape(uid) + ' ' + re.escape(password), shell=True)
+    retcode = subprocess.call('sudo ' + os.path.join(settings.ROOT_PATH, 'scripts/createsambauser') + ' ' + re.escape(uid) + ' ' + re.escape(password), shell=True)
     if retcode != 0:
         raise Exception, "Child failed"
 
