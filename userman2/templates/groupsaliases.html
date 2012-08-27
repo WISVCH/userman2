@@ -17,7 +17,7 @@
         <td colspan='2'>
         <h3>
             {{ groupou.0 }}
-            {% if form.uid %}
+            {% if not form.uid.value %}
                 (<a href='/userman2/add{% if alias %}alias{% else %}group{%endif%}/{{ groupou.0 }}'>+</a>)
             {% endif %}
         </h3>
