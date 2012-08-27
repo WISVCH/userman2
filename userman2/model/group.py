@@ -2,6 +2,7 @@
 import ldap
 import re
 import subprocess
+import os
 from ldapconn import LDAPConn
 from ldap.cidict import cidict
 from django.conf import settings
