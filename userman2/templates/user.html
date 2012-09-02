@@ -103,11 +103,10 @@
     {%endfor%}
 </table>
 
-<p><a href='showldif'>Display an LDIF for this user</a></p>
-<p><a href='chpasswd/'>Change user's password</a> <br />
-<a href='resetpasswd/' onclick="return confirm('Reset password for {{ user.uid }}?')">Reset user's password</a></p>
-<p><a href='genloginscript/'>Regenerate user's login script</a> <br />
-<a href='removeprofile/' onclick="return confirm('Remove profile for {{ user.uid }}?')">Remove user's profile</a> <br />
-<a href='/userman2/massmail/writemail/?users={{ user.uid }}&fromaddress=beheer%40ch.tudelft.nl')">Send Removal Warning</a> <br />
-<a href='rm/' onclick="return confirm('Are you very sure you really want to delete {{ user.uid }}?')">Remove user</a></p>
+<p><ul><li><a href='showldif'>Display an LDIF for this user</a></ul></p>
+<p><ul><li><a href='chpasswd/'>Change user's password</a>
+<li><a href='resetpasswd/' onclick="return confirm('Reset password for {{ user.uid }}?')">Reset user's password</a></ul></p>
+<p><ul><li><a href='removeprofile/' onclick="return confirm('Remove profile for {{ user.uid }}?')">Remove user's profile</a>
+<li><a href='/userman2/massmail/writemail/?users={{ user.uid }}&fromaddress=beheer%40ch.tudelft.nl'>Send Removal Warning</a>
+<li><a href='rm/' onclick="return confirm('Are you very sure you really want to delete {{ user.uid }}?')">Remove user</a></ul>
 {% endblock %}

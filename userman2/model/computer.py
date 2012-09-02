@@ -4,6 +4,7 @@ from ldap.cidict import cidict
 from django.conf import settings
 import re
 import subprocess
+import os
 
 class Computer (LDAPConn):
     def __init__ (self, dn, attrs = False):
