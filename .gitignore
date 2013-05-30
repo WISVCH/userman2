@@ -4,3 +4,4 @@ cron/config.py
 *.pyc
 local.py
 static
+.userman2-env
