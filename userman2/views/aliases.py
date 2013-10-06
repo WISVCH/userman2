@@ -52,6 +52,7 @@ def adduser(request, cn):
     
     if request.method == 'POST':
         form = AddUserForm(request.POST)
+        # TODO: catch TYPE_OR_VALUE_EXISTS: {'info': 'modify/add: rfc822MailMember: value #0 already exists', 'desc': 'Type or value exists'}
         if form.is_valid():
             aliasObj.connectRoot()
             if form.cleaned_data['uid']: aliasObj.addMember(str(form.cleaned_data['uid']))
