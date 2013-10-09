@@ -20,13 +20,12 @@ def displayUsers(request):
         users = user.GetAllUsers()
 
     rmWarnUsers = [ user.User(curaction.affectedDN).uid for curaction in action.GetAllActions({"actionName": "warnRemove"}) ]
-    print rmWarnUsers
     count = {"total":0, "del":0, "chlocal":0, "anklocal":0, "anksamba":0}
     for u in users:
             count["total"] += 1
-            # FIXME: Moet nog geimplementeerd worden
-            if u.toBeDeleted:
-                count["del"] += 1
+            # Disabled because it will make an LDAP request for every user
+            #if u.toBeDeleted:
+            #    count["del"] += 1
             if u.chLocal:
                 count["chlocal"] += 1
             if u.ankLocal:
