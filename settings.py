@@ -76,6 +76,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.staticfiles',
+    'django_extensions',
     'userman2',
 )
 
