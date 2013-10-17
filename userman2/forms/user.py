@@ -13,7 +13,7 @@ class ChwarnRmForm(forms.Form):
     toBeDeleted = forms.DateTimeField(required=False)
 
 class ChprivForm(forms.Form):
-    server = forms.ChoiceField(choices=(("frans", "frans"), ("ank", "ank"), ("ch", "ch"), ("rob", "rob"), ("hendrik", "hendrik"), ("herman", "herman")))
+    server = forms.ChoiceField(choices=(("frans", "frans"), ("ank", "ank"), ("ch", "ch"), ("rob", "rob"), ("hendrik", "hendrik")))
     service = forms.ChoiceField(choices=(("sshd", "sshd"), ("samba", "samba"), ("cron", "cron")))
 
 class ChshForm(forms.Form):
