@@ -12,8 +12,4 @@ if [ "$2" != "" ] ; then
     exit 1
 fi
 
-#add samba information
-echo "$0: Add samba machine:"
 pdbedit -a -m $1
-
-exit 0

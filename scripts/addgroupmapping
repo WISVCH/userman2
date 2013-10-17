@@ -16,11 +16,4 @@ if [ "$3" != "" ] ; then
     exit 1
 fi
 
-echo "Mapping group $2 [windows] to $1 [unix]:"
-
-# Map group
 net groupmap add unixgroup="$1" type=domain ntgroup="$2"
-
-echo "Map Create groupmapping: Success!"
-
-exit 0

@@ -16,8 +16,4 @@ if [ "$3" != "" ] ; then
     exit 1
 fi
 
-#add samba information
-echo "$0: Add samba user:"
 echo -e "$2\n$2" |pdbedit -t -a -u $1
-
-exit 0
