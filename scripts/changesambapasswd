@@ -16,8 +16,4 @@ if [ "$3" != "" ] ; then
     exit 1
 fi
 
-#add samba information
-echo "$0: Change samba password"
 echo -e "$2\n$2" |smbpasswd -s $1
-
-exit 0
