@@ -6,7 +6,6 @@
 <table>
     <tr class='title'>
         <td>&nbsp;</td>
-        <td>&nbsp;</td>
         <td>UID</td>
         <td>Common Name</td>
         <td>UIDNumber</td>
@@ -16,7 +15,6 @@
         <td>Ank S</td>
     </tr>
     <tr class='title'>
-        <td>&nbsp;</td>
         <td><input type='image' src='{% get_static_prefix %}filter.png' alt='Filter' /></td>
         <td>{{ form.uid }}</td>
         <td>{{ form.cn }}</td>
@@ -29,7 +27,6 @@
     {% for user in users %}
     <tr class='{% cycle odd,even %}'>
         <td><a href='{{ user.uid }}/'><img src='{% get_static_prefix %}edit.png'alt='Edit' /></a></td>
-        <td><a href='/userman2/massmail/writemail/?users={{ user.uid }}&fromaddress=beheer%40ch.tudelft.nl'><img src='{% get_static_prefix %}delete.png' alt='Delete' /></a></td>
         <td>{{ user.uid }}</td>
         <td>{{ user.gecos.full_name|default:"&nbsp;" }}</td>
         <td>{{ user.uidNumber }}</td>
@@ -40,7 +37,7 @@
     </tr>
     {% endfor %}
     <tr class='total'>
-        <td colspan='3'>Total:</td>
+        <td colspan='2'>Total:</td>
         <td colspan='2'>{{ count.total }}</td>
         <td>{{ count.del }}</td>
         <td>{{ count.chlocal }}</td>
