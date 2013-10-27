@@ -2,7 +2,9 @@
 from django.conf import settings
 import ldap
 
+
 class LDAPConn (object):
+
     def __init__(self):
         self.connected = False
 
@@ -31,7 +33,7 @@ class LDAPConn (object):
             raise Exception, "The object you are modifying has no dn"
         if not self.connected:
             self.connectRoot()
-        mod_attrs = [ (ldap.MOD_REPLACE, k, v) for (k, v) in changes.items() ]
+        mod_attrs = [(ldap.MOD_REPLACE, k, v) for (k, v) in changes.items()]
         self.l.modify_s(self.dn, mod_attrs)
 
     def addEntries(self, changes):
@@ -39,7 +41,7 @@ class LDAPConn (object):
             raise Exception, "The object you are modifying has no dn"
         if not self.connected:
             self.connectRoot()
-        mod_attrs = [ (ldap.MOD_ADD, k, v) for (k, v) in changes.items() ]
+        mod_attrs = [(ldap.MOD_ADD, k, v) for (k, v) in changes.items()]
         self.l.modify_s(self.dn, mod_attrs)
 
     def addObject(self, dn, changes):

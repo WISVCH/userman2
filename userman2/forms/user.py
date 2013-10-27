@@ -1,29 +1,44 @@
 from django import forms
 
+
 class ChfnForm(forms.Form):
-    full_name = forms.RegexField(regex="^[^:^,]+$", error_message="Gecos entries may not contain : or ,")
-    room_number = forms.RegexField(regex="^[^:^,]+$", required=False, error_message="Gecos entries may not contain : or ,")
-    work_phone = forms.RegexField(regex="^[\d\-]+$", required=False, error_message="Phone numbers may only contain digits and -.")
-    home_phone = forms.RegexField(regex="^[\d\-]+$", required=False, error_message="Phone numbers may only contain digits and -.")
+    full_name = forms.RegexField(
+        regex="^[^:^,]+$", error_message="Gecos entries may not contain : or ,")
+    room_number = forms.RegexField(
+        regex="^[^:^,]+$", required=False, error_message="Gecos entries may not contain : or ,")
+    work_phone = forms.RegexField(
+        regex="^[\d\-]+$", required=False, error_message="Phone numbers may only contain digits and -.")
+    home_phone = forms.RegexField(
+        regex="^[\d\-]+$", required=False, error_message="Phone numbers may only contain digits and -.")
+
 
 class ChdescForm(forms.Form):
     description = forms.CharField(required=False)
 
+
 class ChwarnRmForm(forms.Form):
     toBeDeleted = forms.DateTimeField(required=False)
 
+
 class ChprivForm(forms.Form):
-    server = forms.ChoiceField(choices=(("frans", "frans"), ("ank", "ank"), ("ch", "ch"), ("rob", "rob"), ("hendrik", "hendrik")))
-    service = forms.ChoiceField(choices=(("sshd", "sshd"), ("samba", "samba"), ("cron", "cron")))
+    server = forms.ChoiceField(
+        choices=(("frans", "frans"), ("ank", "ank"), ("ch", "ch"), ("rob", "rob"), ("hendrik", "hendrik")))
+    service = forms.ChoiceField(
+        choices=(("sshd", "sshd"), ("samba", "samba"), ("cron", "cron")))
+
 
 class ChshForm(forms.Form):
-    login_shell = forms.ChoiceField(choices=(('/bin/bash','/bin/bash'), ("/bin/zsh", "/bin/zsh"), ("/usr/bin/tcsh", "/usr/bin/tcsh"), ("/bin/false", "/bin/false")))
+    login_shell = forms.ChoiceField(
+        choices=(('/bin/bash', '/bin/bash'), ("/bin/zsh", "/bin/zsh"), ("/usr/bin/tcsh", "/usr/bin/tcsh"), ("/bin/false", "/bin/false")))
+
 
 class ChgroupForm(forms.Form):
-    gid_number = forms.ChoiceField(choices=((100,'users'), (50,'staff')))
+    gid_number = forms.ChoiceField(choices=((100, 'users'), (50, 'staff')))
+
 
 class ChHomeForm(forms.Form):
     new_directory = forms.RegexField(regex="^[a-zA-Z\d\/\-\_]+$")
+
 
 class UsersForm(forms.Form):
     uid = forms.RegexField(regex="^[a-zA-Z\d \-\$]+$", required=False)
@@ -37,10 +52,15 @@ class UsersForm(forms.Form):
     noanklocal = forms.BooleanField(required=False, initial=False)
     noanksamba = forms.BooleanField(required=False, initial=False)
 
+
 class AddUserForm(forms.Form):
-    uid = forms.RegexField(regex="^[a-z][a-z\d\-$_]+$", error_message="UID entry must consist of alphanumeric characters, and be lower case")
-    full_name = forms.RegexField(regex="^[^:^,]+$", error_message="Full name entry may not contain : or ,")
-    access = forms.MultipleChoiceField(initial=('samba@ank',), choices=(('sshd@ch', 'sshd@ch'),('samba@ank','samba@ank'), ('samba@ch', 'samba@ch'), ('sshd@ank', 'sshd@ank'), ('sshd@frans', 'sshd@frans'), ('sshd@rob', 'sshd@rob')))
+    uid = forms.RegexField(
+        regex="^[a-z][a-z\d\-$_]+$", error_message="UID entry must consist of alphanumeric characters, and be lower case")
+    full_name = forms.RegexField(
+        regex="^[^:^,]+$", error_message="Full name entry may not contain : or ,")
+    access = forms.MultipleChoiceField(initial=('samba@ank',), choices=(('sshd@ch', 'sshd@ch'), ('samba@ank', 'samba@ank'), (
+        'samba@ch', 'samba@ch'), ('sshd@ank', 'sshd@ank'), ('sshd@frans', 'sshd@frans'), ('sshd@rob', 'sshd@rob')))
+
 
 class ChpassForm(forms.Form):
-    password = forms.CharField(widget=forms.PasswordInput, min_length = 8)
+    password = forms.CharField(widget=forms.PasswordInput, min_length=8)

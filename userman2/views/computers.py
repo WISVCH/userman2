@@ -6,14 +6,16 @@ from django.conf import settings
 
 from userman2.forms.computer import *
 
+
 @cache_control(no_cache=True, must_revalidate=True)
 def displayComputers(request):
     computers = computer.getAllComputers()
     count = 0
     for c in computers:
         count += 1
-    
+
     return render_to_response('computers.html', {'computers': computers, 'count': count})
+
 
 @cache_control(no_cache=True, must_revalidate=True)
 def addComputer(request):
@@ -24,12 +26,13 @@ def addComputer(request):
             if computer.Exists(uid):
                 raise Http404
             newComputer = computer.Add(uid)
-            
+
             return HttpResponseRedirect(settings.USERMAN_PREFIX + '/computers/')
     else:
         form = AddComputerForm()
-    
+
     return render_to_response('form.html', {'form': form, 'uid': "computers"})
+
 
 @cache_control(no_cache=True, must_revalidate=True)
 def rmComputer(request, cn):
@@ -37,7 +40,7 @@ def rmComputer(request, cn):
         computerObj = computer.FromUID(cn)
     except Exception, e:
         raise Http404
-    
+
     computerObj.connectRoot()
     computerObj.remove()
     return HttpResponseRedirect(settings.USERMAN_PREFIX + '/computers/')

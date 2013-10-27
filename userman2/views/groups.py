@@ -8,6 +8,7 @@ from django.conf import settings
 
 from userman2.forms.group import *
 
+
 @cache_control(no_cache=True, must_revalidate=True)
 def displayGroups(request):
     if (request.GET):
@@ -19,7 +20,7 @@ def displayGroups(request):
     else:
         form = GroupsForm()
         groups = group.GetAllGroups()
-    
+
     return render_to_response('groupsaliases.html', {'groups': groups, 'form': form})
 
 
@@ -31,13 +32,14 @@ def displayGroup(request, cn):
         raise Http404
     return render_to_response('groupalias.html', {'group': groupObj})
 
+
 @cache_control(no_cache=True, must_revalidate=True)
 def rmuser(request, cn, user):
     try:
         groupObj = group.FromCN(cn)
     except Exception, e:
         raise Http404
-    
+
     if not user in groupObj.members:
         raise Http404
 
@@ -45,13 +47,14 @@ def rmuser(request, cn, user):
     groupObj.removeMember(user)
     return HttpResponseRedirect(settings.USERMAN_PREFIX + '/groups/' + groupObj.cn + '/')
 
+
 @cache_control(no_cache=True, must_revalidate=True)
 def adduser(request, cn):
     try:
         groupObj = group.FromCN(cn)
     except Exception, e:
         raise Http404
-    
+
     if request.method == 'POST':
         form = AddUserForm(request.POST)
         if form.is_valid():
@@ -63,11 +66,12 @@ def adduser(request, cn):
 
     return render_to_response('form.html', {'form': form, 'uid': groupObj.cn})
 
+
 @cache_control(no_cache=True, must_revalidate=True)
 def addGroup(request, parent):
     if not parent in group.GetParents():
         raise Http404
-    
+
     if request.method == 'POST':
         form = AddGroupForm(request.POST)
         if form.is_valid():
@@ -80,8 +84,9 @@ def addGroup(request, parent):
             return HttpResponseRedirect(settings.USERMAN_PREFIX + '/groups/' + form.cleaned_data['common_name'] + '/')
     else:
         form = AddGroupForm()
-    
+
     return render_to_response('form.html', {'form': form, 'uid': "groups"})
+
 
 @cache_control(no_cache=True, must_revalidate=True)
 def rmGroup(request, cn):
@@ -89,8 +94,7 @@ def rmGroup(request, cn):
         groupObj = group.FromCN(cn)
     except Exception, e:
         raise Http404
-    
+
     groupObj.remove()
-    
+
     return HttpResponseRedirect(settings.USERMAN_PREFIX + '/groups/')
- 

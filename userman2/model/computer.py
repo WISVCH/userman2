@@ -6,8 +6,10 @@ import re
 import subprocess
 import os
 
+
 class Computer (LDAPConn):
-    def __init__ (self, dn, attrs = False):
+
+    def __init__(self, dn, attrs=False):
         LDAPConn.__init__(self)
         self.dn = dn
 
@@ -23,14 +25,15 @@ class Computer (LDAPConn):
 
     def _get_uid(self):
         return self.__attrs["uid"][0]
-    uid = property (_get_uid)
+    uid = property(_get_uid)
 
     def _get_uidNumber(self):
         return int(self.__attrs["uidNumber"][0])
-    uidNumber = property (_get_uidNumber)
+    uidNumber = property(_get_uidNumber)
 
     def remove(self):
         self.delObject()
+
 
 def getAllComputers():
     """Returns all aliases under LDAP_ALIASDN, in a dictionary sorted by their ou"""
@@ -42,21 +45,25 @@ def getAllComputers():
     ret = [Computer(dn, attrs) for (dn, attrs) in res]
     return ret
 
+
 def FromUID(uid):
     try:
         return Computer("uid=" + uid + "," + settings.LDAP_COMPUTERDN)
     except ldap.LDAPError, e:
         raise Exception, "Error finding computer " + uid
 
+
 def GetFreeUIDNumber():
     ld = LDAPConn()
     ld.connectAnon()
-    for i in range(settings.MIN_COMPUTER_ID, settings.MAX_COMPUTER_ID+1):
-        res = ld.l.search_s(settings.LDAP_COMPUTERDN, ldap.SCOPE_SUBTREE, "uidNumber=" + str(i))
+    for i in range(settings.MIN_COMPUTER_ID, settings.MAX_COMPUTER_ID + 1):
+        res = ld.l.search_s(
+            settings.LDAP_COMPUTERDN, ldap.SCOPE_SUBTREE, "uidNumber=" + str(i))
         if len(res) == 0:
             return i
-    
+
     raise Exception, "No more free user IDs"
+
 
 def Add(uid):
     ld = LDAPConn()
@@ -66,19 +73,22 @@ def Add(uid):
     entry = {'uid': uid}
     entry['objectClass'] = ['account', 'chbakAccount']
     entry['uidNumber'] = str(GetFreeUIDNumber())
-    entry['cn'] = "Machine Account "+uid
+    entry['cn'] = "Machine Account " + uid
     entry['gidNumber'] = str(settings.MACHINE_GIDNUMBER)
     entry['homeDirectory'] = "/dev/null"
-    entry['authorizedService'] = "samba@ank";
+    entry['authorizedService'] = "samba@ank"
 
     ld.addObject(dn, entry)
 
-    retcode = subprocess.call('sudo ' + os.path.join(settings.ROOT_PATH, 'scripts/createsambamachine') + ' ' + re.escape(uid), shell=True)
+    retcode = subprocess.call('sudo ' + os.path.join(
+        settings.ROOT_PATH, 'scripts/createsambamachine') + ' ' + re.escape(uid), shell=True)
     if retcode != 0:
         raise Exception, "Child failed"
+
 
 def Exists(uid):
     ld = LDAPConn()
     ld.connectAnon()
-    res = ld.l.search_s(settings.LDAP_COMPUTERDN, ldap.SCOPE_SUBTREE, "uid="+uid)
+    res = ld.l.search_s(
+        settings.LDAP_COMPUTERDN, ldap.SCOPE_SUBTREE, "uid=" + uid)
     return len(res) != 0
