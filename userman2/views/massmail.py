@@ -10,6 +10,7 @@ from userman2.forms.massmail import *
 from email.MIMEText import MIMEText
 import smtplib
 
+
 @cache_control(no_cache=True, must_revalidate=True)
 def selectUsers(request):
     if (request.GET):
@@ -18,17 +19,19 @@ def selectUsers(request):
             # Add all users, or just the selected groups
             if not form.cleaned_data["groups"] and not form.cleaned_data["users"]:
                 users = user.GetAllUsers(form.cleaned_data)
-            else: 
+            else:
                 usernames = set(form.cleaned_data["users"])
                 for groupname in form.cleaned_data["groups"]:
                     usernames |= set(group.FromCN(groupname).members)
-                users = [ user.FromUID (username) for username in usernames ]
-            
+                users = [user.FromUID(username) for username in usernames]
+
             # Filter excluded users
             excluded_users = set(form.cleaned_data["excludedusers"])
             for groupname in form.cleaned_data["excludedgroups"]:
-                excluded_users |=  set(group.FromCN(groupname).members)
-            def f(x): return x.uid not in excluded_users
+                excluded_users |= set(group.FromCN(groupname).members)
+
+            def f(x):
+                return x.uid not in excluded_users
             users = filter(f, users)
         else:
             users = user.GetAllUsers()
@@ -36,9 +39,10 @@ def selectUsers(request):
         form = MassMailForm()
         users = user.GetAllUsers()
 
-    count = {"total":len(users)}
-    
+    count = {"total": len(users)}
+
     return render_to_response('massmail.html', {'users': users, 'form': form, 'count': count})
+
 
 def writeMail(request):
     usernames = []
@@ -48,8 +52,9 @@ def writeMail(request):
             if not form.cleaned_data["users"]:
                 return HttpResponseRedirect('/userman2/massmail/')
             usernames = form.cleaned_data["users"]
-            
+
     return render_to_response('massmail2.html', {'form': form, 'users': usernames})
+
 
 def sendMail(request):
     usernames = []
@@ -60,12 +65,15 @@ def sendMail(request):
             if form.cleaned_data["reallysend"]:
                 removaldate = False
                 if form.cleaned_data["removalunits"] == "days":
-                    removaldate = datetime.datetime.now() + datetime.timedelta(days=form.cleaned_data["removaldue"])
+                    removaldate = datetime.datetime.now() + datetime.timedelta(
+                        days=form.cleaned_data["removaldue"])
                 elif form.cleaned_data["removalunits"] == "weeks":
-                    removaldate = datetime.datetime.now() + datetime.timedelta(weeks=form.cleaned_data["removaldue"])
+                    removaldate = datetime.datetime.now() + datetime.timedelta(
+                        weeks=form.cleaned_data["removaldue"])
                 elif form.cleaned_data["removalunits"] == "months":
-                    removaldate = datetime.datetime.now() + datetime.timedelta(days=form.cleaned_data["removaldue"]*30)
-                    
+                    removaldate = datetime.datetime.now() + datetime.timedelta(
+                        days=form.cleaned_data["removaldue"] * 30)
+
                 for username in usernames:
                     msg = MIMEText(form.cleaned_data["body"])
                     msg['Subject'] = form.cleaned_data["subject"]
@@ -73,7 +81,8 @@ def sendMail(request):
                     msg['To'] = username + "@ch.tudelft.nl"
                     s = smtplib.SMTP()
                     s.connect()
-                    s.sendmail(form.cleaned_data["fromaddress"], [username + "@ch.tudelft.nl"], msg.as_string())
+                    s.sendmail(
+                        form.cleaned_data["fromaddress"], [username + "@ch.tudelft.nl"], msg.as_string())
                     s.close()
                     if removaldate:
                         userObj = user.FromUID(username)

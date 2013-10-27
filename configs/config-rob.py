@@ -22,7 +22,7 @@ enableGroupDirCreation = False
 enableGroupDirRemoval = False
 enableSambaShareRegen = False
 groupDirBase = "/export/groepen/userman_test/"
-groupLocations = { 'Commissies': 'commissies', 'Overig' : 'overig' }
+groupLocations = {'Commissies': 'commissies', 'Overig': 'overig'}
 
 # Home directories
 enableHomeDirCreation = True

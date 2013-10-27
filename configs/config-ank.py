@@ -29,7 +29,7 @@ enableGroupDirCreation = True
 enableGroupDirRemoval = True
 enableSambaShareRegen = True
 groupDirBase = "/export/groepen/"
-groupLocations = { 'Commissies': 'commissies', 'Overig' : 'overig' }
+groupLocations = {'Commissies': 'commissies', 'Overig': 'overig'}
 
 # Home directories
 enableHomeDirCreation = True
@@ -47,4 +47,3 @@ quotaString = "30000 32500 0 0 -a /dev/sdc3"
 enableMailboxCreation = False
 enableMailboxRemoval = False
 enableMailboxRename = False
-

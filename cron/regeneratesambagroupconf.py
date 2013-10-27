@@ -4,7 +4,7 @@ import os
 
 
 def regenSambaGroupConf():
-    outFile='/etc/samba/shares_auto.conf'
+    outFile = '/etc/samba/shares_auto.conf'
 
     output = "# Automatically generated. Do Not Edit!"
 

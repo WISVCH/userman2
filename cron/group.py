@@ -4,8 +4,10 @@ import string
 import ldap
 from ldap.cidict import cidict
 
+
 class Group:
-    def __init__ (self, l, dn):
+
+    def __init__(self, l, dn):
         self.l = l
         self.dn = dn
         res = l.search_s(self.dn, ldap.SCOPE_BASE)

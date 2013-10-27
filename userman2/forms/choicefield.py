@@ -3,7 +3,10 @@ from django import forms
 # The choices property of ChoiceField evaluates the choices field with a list(),
 # such that the iterator is only evaluated once. We don't want that, so we
 # override the property here.
+
+
 class NoCacheChoiceField(forms.ChoiceField):
+
     def _get_choices(self):
         return self._choices
 

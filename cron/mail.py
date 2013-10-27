@@ -3,13 +3,14 @@
 import smtplib
 from email.MIMEText import MIMEText
 
+
 def mailAdmin(subject, message):
     msg = MIMEText(message)
     try:
-	from django.conf import settings
+        from django.conf import settings
         email = settings.ADMIN_MAIL
     except ImportError:
-	import config
+        import config
         email = config.adminMail
 
     msg['Subject'] = '[Userman] ' + subject
