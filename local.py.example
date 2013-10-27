@@ -32,7 +32,7 @@ MAX_COMPUTER_ID = 5500
 MIN_USER_ID = 1500
 MAX_USER_ID = 2500
 MACHINE_GIDNUMBER = 1102
-USER_GIDNUMBER = 1100
+USER_GIDNUMBER = 100
 import time
 ANK_HOME_BASE = '/export/gebruikers/' + time.strftime('%Y') + '/'
 CH_HOME_BASE = '/home/' + time.strftime('%Y') + '/'
