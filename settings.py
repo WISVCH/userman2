@@ -59,6 +59,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django_request_logger.middleware.StoreRequestMiddleware'
 )
 
 ROOT_URLCONF = 'userman.urls'
@@ -77,6 +78,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.staticfiles',
     'django_extensions',
+    'django_request_logger',
     'userman2',
 )
 

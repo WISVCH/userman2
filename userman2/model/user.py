@@ -275,7 +275,7 @@ def GetAllUserNames():
 
 def GetAllUsers(filter_data=False):
     ld = LDAPConn()
-    ld.connectRoot()
+    ld.connectAnon()
     if filter_data:
         filter_string = "(&"
         if filter_data['uid']:
@@ -309,7 +309,7 @@ def GetAllUsers(filter_data=False):
 
 def GetPrimaryMembersForGid(gid):
     ld = LDAPConn()
-    ld.connectRoot()
+    ld.connectAnon()
     res = ld.l.search_s(
         settings.LDAP_USERDN, ldap.SCOPE_ONELEVEL, 'gidNumber=' + str(gid))
     return [attribs["uid"][0] for dn, attribs in res]
@@ -372,7 +372,3 @@ def Add(uid, fullname):
               uid + ' (' + entry['displayName'] + ') with password ' + password)
 
     return FromUID(entry['uid'])
-
-# def GenerateAllLogonscripts(host):
-    # return action.Add('generateAllLogonScripts', host, '', 'Regenerate all
-    # logon scripts')
