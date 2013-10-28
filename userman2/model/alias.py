@@ -1,11 +1,11 @@
 import ldap
-from ldapconn import LDAPConn
 from ldap.cidict import cidict
 from django.conf import settings
 
+from ldapconn import LDAPConn
 
-class Alias (LDAPConn):
 
+class Alias(LDAPConn):
     def __init__(self, dn, attrs=False):
         LDAPConn.__init__(self)
         self.dn = dn
@@ -22,6 +22,7 @@ class Alias (LDAPConn):
 
     def _get_cn(self):
         return self.__attrs["cn"][0]
+
     cn = property(_get_cn)
 
     def _get_parent(self):
@@ -29,12 +30,14 @@ class Alias (LDAPConn):
         if parent == "Aliases":
             return "None"
         return parent
+
     parent = property(_get_parent)
 
     def _get_members(self):
         if 'rfc822mailmember' in self.__attrs:
             return self.__attrs['rfc822MailMember']
         return []
+
     members = property(_get_members)
 
     def removeMember(self, member):

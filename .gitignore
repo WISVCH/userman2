@@ -4,6 +4,7 @@ cron/config.py
 *.pyc
 local.py
 static
+.userman-env
 .userman2-env
 .idea
 *.iml
