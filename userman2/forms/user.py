@@ -22,14 +22,15 @@ class ChwarnRmForm(forms.Form):
 
 class ChprivForm(forms.Form):
     server = forms.ChoiceField(
-        choices=(("frans", "frans"), ("ank", "ank"), ("ch", "ch"), ("rob", "rob"), ("hendrik", "hendrik")))
+        choices=(("rob", "rob"), ("hendrik", "hendrik"), ("ank", "ank"), ("frans", "frans")))
     service = forms.ChoiceField(
         choices=(("sshd", "sshd"), ("samba", "samba"), ("cron", "cron")))
 
 
 class ChshForm(forms.Form):
     login_shell = forms.ChoiceField(
-        choices=(('/bin/bash', '/bin/bash'), ("/bin/zsh", "/bin/zsh"), ("/usr/bin/tcsh", "/usr/bin/tcsh"), ("/bin/false", "/bin/false")))
+        choices=(('/bin/bash', '/bin/bash'), ("/bin/zsh", "/bin/zsh"), ("/usr/bin/tcsh", "/usr/bin/tcsh"),
+                 ("/bin/false", "/bin/false")))
 
 
 class ChgroupForm(forms.Form):
@@ -55,11 +56,12 @@ class UsersForm(forms.Form):
 
 class AddUserForm(forms.Form):
     uid = forms.RegexField(
-        regex="^[a-z][a-z\d\-$_]+$", error_message="UID entry must consist of alphanumeric characters, and be lower case")
+        regex="^[a-z][a-z\d\-$_]+$",
+        error_message="UID entry must consist of alphanumeric characters, and be lower case")
     full_name = forms.RegexField(
         regex="^[^:^,]+$", error_message="Full name entry may not contain : or ,")
-    access = forms.MultipleChoiceField(initial=('samba@ank',), choices=(('sshd@ch', 'sshd@ch'), ('samba@ank', 'samba@ank'), (
-        'samba@ch', 'samba@ch'), ('sshd@ank', 'sshd@ank'), ('sshd@frans', 'sshd@frans'), ('sshd@rob', 'sshd@rob')))
+    access = forms.MultipleChoiceField(initial=('samba@ank',),
+                                       choices=(('samba@ank', 'samba@ank'), ('sshd@rob', 'sshd@rob')))
 
 
 class ChpassForm(forms.Form):
