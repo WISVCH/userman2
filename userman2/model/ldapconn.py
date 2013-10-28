@@ -1,12 +1,13 @@
 #!/usr/bin/env python
+import logging
+
 from django.conf import settings
 import ldap
 
-import logging
 auditlog = logging.getLogger("userman2.audit")
 
-class LDAPConn (object):
 
+class LDAPConn(object):
     def __init__(self):
         self.connected = False
         self.dn = None
@@ -50,7 +51,11 @@ class LDAPConn (object):
             self.connectRoot()
         auditlog.info("Add to dn '%s' entries %s", self.dn, changes)
         mod_attrs = [(ldap.MOD_ADD, k, v) for (k, v) in changes.items()]
-        self.l.modify_s(self.dn, mod_attrs)
+        try:
+            self.l.modify_s(self.dn, mod_attrs)
+        except ldap.TYPE_OR_VALUE_EXISTS:
+            auditlog.error("FAILED (TYPE_OR_VALUE_EXISTS): Add to dn '%s' entries %s", self.dn, changes)
+            raise LDAPError("Attribute already exists.")
 
     def addObject(self, dn, changes):
         if not self.connected:
@@ -86,3 +91,11 @@ class LDAPConn (object):
 
         auditlog.info("Remove from dn '%s' entries %s", self.dn, mod_attrs)
         self.l.modify_s(self.dn, mod_attrs)
+
+
+class LDAPError(Exception):
+    def __init__(self, message):
+        self.message = message
+
+    def __str__(self):
+        return repr(self.message)

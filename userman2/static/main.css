@@ -1,7 +1,6 @@
 body {
     margin: 9px 9px 0 9px;
-    padding: 0;
-	padding-top: 40px;
+    padding: 40px 0 0;
     background: #ffffff;
     font-family: sans-serif;
 }
@@ -12,13 +11,13 @@ h3 {
 }
 
 table.group {
-    margin: 0px 5px 5px 5px;
+    margin: 0 5px 5px 5px;
     float: left;
     width: 19%;
 }
 
 table.groupfilter {
-    margin: 0px 0px 0px 5px;
+    margin: 0 0 0 5px;
     float: none;
 }
 
@@ -49,151 +48,145 @@ tr {
     background: #e5e5ff;
 }
 
-
 td {
     padding: 2px;
 }
 
 img {
-    border : 0;
+    border: 0;
 }
 
 .navigation {
-	width: 100%;
-	
-	position: fixed;
-	top: 0;
-	left: 0;
-	
-	background-color: #000000;
-	box-shadow: rgba(0, 0, 0, 0.15) 0 3px 6px;
+    width: 100%;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    background-color: #000000;
+    box-shadow: rgba(0, 0, 0, 0.15) 0 3px 6px;
 }
 
 .navigation span {
-	float: left;
-	
-	font-weight: bold;
-	font-size: 11px;
-	color: #ffffff;
-	
-	margin-left: 12px;
-	margin-right: 7px;
-	
-	padding-top: 10px;
+    float: left;
+
+    font-weight: bold;
+    font-size: 11px;
+    color: #ffffff;
+
+    margin-left: 12px;
+    margin-right: 7px;
+
+    padding-top: 10px;
 }
 
 .navigation ul {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-	height: 35px;
-	overflow: hidden;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    height: 35px;
+    overflow: hidden;
 }
 
 .navigation ul:hover {
-	height: auto;
+    height: auto;
 }
 
 .navigation li {
-	float: left;
-	
-	list-style: none;
-	margin: 0;
-	padding: 0;
+    float: left;
+
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 .navigation li a {
-	display: block;
-	
-	margin-left: 8px;
-	margin-right: 8px;
-	margin-top: 5px;
-	margin-bottom: 5px;
-	
-	padding-left: 28px;
-	padding-right: 7px;
-	padding-top: 6px;
-	padding-bottom: 6px;
-	
-	background-color: #000000;
-	background-position: 7px center;
-	background-repeat: no-repeat;
-	
-	font-size: 11px;
-	color: #ffffff;
-	text-decoration: none;
-	
-	text-shadow: rgba(0, 0, 0, 0.75) 1px 1px;
-	border-radius: 4px;
-	
-	transition: background-color 0.1s linear;
-	-moz-transition: background-color 0.1s linear;
-	-webkit-transition: background-color 0.1s linear;
-	-o-transition: background-color 0.1s linear;
+    display: block;
+
+    margin: 5px 8px;
+
+    padding: 6px 7px 6px 28px;
+
+    background: #000000 no-repeat 7px center;
+
+    font-size: 11px;
+    color: #ffffff;
+    text-decoration: none;
+
+    text-shadow: rgba(0, 0, 0, 0.75) 1px 1px;
+    border-radius: 4px;
+
+    transition: background-color 0.1s linear;
+    -moz-transition: background-color 0.1s linear;
+    -webkit-transition: background-color 0.1s linear;
+    -o-transition: background-color 0.1s linear;
 }
 
 .navigation li a:hover {
-	background-color: #666666;
+    background-color: #666666;
 }
 
 .navigation .users-add a {
-	background-image: url('user_add.png');
+    background-image: url('user_add.png');
 }
 
 .navigation .users-display a {
-	background-image: url('user.png');
+    background-image: url('user.png');
 }
 
 .navigation .computers-add a {
-	background-image: url('computer_add.png');
+    background-image: url('computer_add.png');
 }
 
 .navigation .computers-display a {
-	background-image: url('computer.png');
+    background-image: url('computer.png');
 }
 
 .navigation .groups a {
-	background-image: url('group.png');
+    background-image: url('group.png');
 }
 
 .navigation .aliases a {
-	background-image: url('chart_organisation.png');
+    background-image: url('chart_organisation.png');
 }
 
 .navigation .massmail a {
-	background-image: url('email_go.png');
+    background-image: url('email_go.png');
 }
 
 .clearboth {
-	clear: both;
+    clear: both;
 }
 
 .footer {
-	margin-top: 15px;
-	margin-bottom: 10px;
-	
-	padding-left: 20px;
-	padding-right: 20px;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	
-	font-size: 11px;
-	color: #00314D;
-	
-	background-color: #E6F4FC;
-	border-radius: 7px;
+    margin-top: 15px;
+    margin-bottom: 10px;
+
+    padding: 10px 20px;
+
+    font-size: 11px;
+    color: #00314D;
+
+    background-color: #E6F4FC;
+    border-radius: 7px;
 }
 
 .bottomtext {
-	margin: 0;
-	padding: 0;
-	
-	font-weight: bold;
+    margin: 0;
+    padding: 0;
+
+    font-weight: bold;
     color: black;
     background: none;
 }
 
 .copyright {
-	float: right;
-	color: #999999;
+    float: right;
+    color: #999999;
+}
+
+.errormessage {
+    border: 1px solid #8b0000;
+    background-color: #ffe6e6;
+    padding: 0 1em;
 }

@@ -1,9 +1,10 @@
-from userman2.model import alias
 from django.shortcuts import render_to_response
 from django.http import Http404, HttpResponseRedirect
 from django.views.decorators.cache import cache_control
 from django.conf import settings
 
+from userman2.model.ldapconn import LDAPError
+from userman2.model import alias
 from userman2.forms.alias import *
 
 
@@ -50,23 +51,23 @@ def rmuser(request, cn, user):
 def adduser(request, cn):
     try:
         aliasObj = alias.fromCN(cn)
-    except Exception, e:
+    except Exception:
         raise Http404
 
     if request.method == 'POST':
         form = AddUserForm(request.POST)
-        # TODO: catch TYPE_OR_VALUE_EXISTS: {'info': 'modify/add:
-        # rfc822MailMember: value #0 already exists', 'desc': 'Type or value
-        # exists'}
         if form.is_valid():
-            aliasObj.connectRoot()
-            if form.cleaned_data['uid']:
-                aliasObj.addMember(str(form.cleaned_data['uid']))
-            elif form.cleaned_data['alias']:
-                aliasObj.addMember(str(form.cleaned_data['alias']))
-            elif form.cleaned_data['email']:
-                aliasObj.addMember(str(form.cleaned_data['email']))
-            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/aliases/' + aliasObj.cn + '/')
+            try:
+                aliasObj.connectRoot()
+                if form.cleaned_data['uid']:
+                    aliasObj.addMember(str(form.cleaned_data['uid']))
+                elif form.cleaned_data['alias']:
+                    aliasObj.addMember(str(form.cleaned_data['alias']))
+                elif form.cleaned_data['email']:
+                    aliasObj.addMember(str(form.cleaned_data['email']))
+                return HttpResponseRedirect(settings.USERMAN_PREFIX + '/aliases/' + aliasObj.cn + '/')
+            except LDAPError as e:
+                return render_to_response('error.html', {'msg': e.message})
     else:
         form = AddUserForm()
 
