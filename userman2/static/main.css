@@ -180,6 +180,15 @@ img {
     background: none;
 }
 
+.bottomtext a {
+    color: blue;
+    text-decoration: none;
+}
+
+.bottomtext a:hover {
+    color: darkblue;
+}
+
 .copyright {
     float: right;
     color: #999999;
