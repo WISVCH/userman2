@@ -2,7 +2,7 @@ localHostname = "ch.chnet"
 adminMail = 'pccom@ch.tudelft.nl'
 
 # LDAP Settings
-ldapServername = "ldaps://joost.chnet"
+ldapServername = "ldaps://ank.chnet"
 ldapUsername = "cn=admin,dc=ank,dc=chnet"
 f = open("/etc/ldap.secret")
 ldapPass = f.read().strip()

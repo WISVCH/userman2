@@ -14,7 +14,7 @@ STATIC_ROOT = '/…/static/'
 STATIC_URL = '/userman2/static/'
 
 # LDAP Settings
-LDAP_HOST = "ldaps://joost.chnet"
+LDAP_HOST = "ldaps://ank.chnet"
 LDAP_USER = "cn=admin,dc=ank,dc=chnet"
 f = open("/etc/ldap.secret")
 LDAP_PASSWORD = f.read().strip()
