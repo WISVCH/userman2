@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import smtplib
+import os
 from email.MIMEText import MIMEText
 
 
@@ -17,7 +18,9 @@ def mailAdmin(subject, message):
     msg['From'] = email
     msg['To'] = email
 
-    s = smtplib.SMTP()
-    s.connect()
-    s.sendmail(email, [email], msg.as_string())
-    s.close()
+    sendmail_location = "/usr/sbin/sendmail" # sendmail location
+    p = os.popen("%s -t" % sendmail_location, "w")
+    p.write(msg.as_string())
+    status = p.close()
+    if status != None:
+           print "Sendmail exit status ", status
