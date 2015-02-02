@@ -22,9 +22,9 @@ class ChwarnRmForm(forms.Form):
 
 class ChprivForm(forms.Form):
     server = forms.ChoiceField(
-        choices=(("rob", "rob"), ("hendrik", "hendrik"), ("ank", "ank"), ("frans", "frans")))
+        choices=(("rob", "rob"), ("hendrik", "hendrik"), ("ank", "ank"), ("frans", "frans"), ("fw-01", "fw-01")))
     service = forms.ChoiceField(
-        choices=(("sshd", "sshd"), ("samba", "samba"), ("cron", "cron")))
+        choices=(("sshd", "sshd"), ("samba", "samba"), ("cron", "cron"), ("vpn", "vpn")))
 
 
 class ChshForm(forms.Form):
