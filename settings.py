@@ -57,12 +57,10 @@ TEMPLATE_LOADERS = (
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django_request_logger.middleware.StoreRequestMiddleware'
 )
 
-ROOT_URLCONF = 'userman.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -81,6 +79,10 @@ INSTALLED_APPS = (
     'django_request_logger',
     'userman2',
 )
+
+ALLOWED_HOSTS = [
+    'frans.chnet',
+]
 
 ROOT_PATH = os.path.dirname(__file__)
 

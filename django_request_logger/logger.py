@@ -31,7 +31,12 @@ class AddDjangoRequestFilter(object):
         if request is not None:
             record.client_ip = get_client_ip(request)
             record.absolute_url = request.build_absolute_uri()
-            record.raw_post_data = request.raw_post_data
+
+            try:
+                record.raw_post_data = request.body
+            except Exception as e:
+                 record.raw_post_data = '<ERROR: %s>' % e.message
+
             if 'AUTHENTICATE_UID' in request.META:
                 record.username = request.META['AUTHENTICATE_UID']
             else:

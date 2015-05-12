@@ -76,17 +76,17 @@
     <tr class='{% cycle rowcolor %}'>
         <td>&nbsp;</td>
         <td><a href='/userman2/groups?uid={{ user.uid }}'>Groups</a></td>
-        <td>{% for group in user.getSecondaryGroups %}<a href='{% url userman2.views.groups.displayGroup group %}'>{{ group }}</a> {% endfor %}</td>
+        <td>{% for group in user.getSecondaryGroups %}<a href='{% url 'userman2.views.groups.displayGroup' group %}'>{{ group }}</a> {% endfor %}</td>
     </tr>
     <tr class='{% cycle rowcolor %}'>
         <td>&nbsp;</td>
         <td><a href='/userman2/aliases?uid={{ user.uid }}'>Aliases</a></td>
-        <td>{% for alias in user.getDirectAliases %}<a href='{% url userman2.views.aliases.displayAlias alias %}'>{{ alias }}</a> {% endfor %}</td>
+        <td>{% for alias in user.getDirectAliases %}<a href='{% url 'userman2.views.aliases.displayAlias' alias %}'>{{ alias }}</a> {% endfor %}</td>
     </tr>
     <tr class='{% cycle rowcolor %}'>
         <td>&nbsp;</td>
         <td><a href='/userman2/aliases?uid={{ user.uid }}'>Indirect Aliases</a></td>
-        <td>{% for alias in user.getIndirectAliases %}<a href='{% url userman2.views.aliases.displayAlias alias %}'>{{ alias }}</a> {% endfor %}</td>
+        <td>{% for alias in user.getIndirectAliases %}<a href='{% url 'userman2.views.aliases.displayAlias' alias %}'>{{ alias }}</a> {% endfor %}</td>
     </tr>
     <tr class='title'>
         <td colspan='3'>
