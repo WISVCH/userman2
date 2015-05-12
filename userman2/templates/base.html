@@ -10,13 +10,13 @@
 	<div class='navigation'>
 		<span>CH User Manager</span>
 		<ul>
-		   <li class='users-add'><a href="{% url userman2.views.users.addUser %}">Add User</a></li>
-		   <li class='users-display'><a href="{% url userman2.views.users.displayUsers %}">Manage Users</a></li>
-		   <li class='computers-add'><a href="{% url userman2.views.computers.addComputer %}">Add Computer Account</a></li>
-		   <li class='computers-display'><a href="{% url userman2.views.computers.displayComputers %}">Manage Computer Accounts</a></li>
-		   <li class='groups'><a href="{% url userman2.views.groups.displayGroups %}">Manage Groups</a></li>
-		   <li class='aliases'><a href="{% url userman2.views.aliases.displayAliases %}">Manage Aliases</a></li>
-		   <li class='massmail'><a href="{% url userman2.views.massmail.selectUsers %}">Send Mass Mail</a></li>
+		   <li class='users-add'><a href="{% url 'userman2.views.users.addUser' %}">Add User</a></li>
+		   <li class='users-display'><a href="{% url 'userman2.views.users.displayUsers' %}">Manage Users</a></li>
+		   <li class='computers-add'><a href="{% url 'userman2.views.computers.addComputer' %}">Add Computer Account</a></li>
+		   <li class='computers-display'><a href="{% url 'userman2.views.computers.displayComputers' %}">Manage Computer Accounts</a></li>
+		   <li class='groups'><a href="{% url 'userman2.views.groups.displayGroups' %}">Manage Groups</a></li>
+		   <li class='aliases'><a href="{% url 'userman2.views.aliases.displayAliases' %}">Manage Aliases</a></li>
+		   <li class='massmail'><a href="{% url 'userman2.views.massmail.selectUsers' %}">Send Mass Mail</a></li>
 		</ul>
 		<div class='clearboth'></div>
 	</div>

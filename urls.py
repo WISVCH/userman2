@@ -1,10 +1,8 @@
-from django.conf.urls.defaults import *
-from django.conf import settings
+from django.conf.urls import patterns
+from django.views.generic import TemplateView
 
-#from userman2.views import users
 urlpatterns = patterns('django.views.generic.simple',
-                       (r'^$', 'direct_to_template', {
-                        'template': 'index.html'}),
+                       (r'^$', TemplateView.as_view(template_name='index.html'))
                        )
 
 urlpatterns += patterns('userman2.views.users',
