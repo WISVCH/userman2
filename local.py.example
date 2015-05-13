@@ -1,5 +1,5 @@
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '^(h^15l!5nyk+(-r1dgxfj%l=jz#!6=_j35lc(-6eo_*vvok6h'
+SECRET_KEY = 'CHANGEME'
 
 TEMPLATE_DEBUG = DEBUG = True
 
@@ -43,7 +43,7 @@ USERMAN_PREFIX='/userman2'
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': True,
+    'disable_existing_loggers': False,
     'formatters': {
         'audit': {
             'format':

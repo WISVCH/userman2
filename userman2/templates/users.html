@@ -1,49 +1,60 @@
 {% extends "base.html" %}
+{% load userman_tags %}
 {% block title %}CH User Manager — Manage Users{% endblock %}
 {% load static %}
 {% block content %}
-<form action='' method='get'>
-<table>
-    <tr class='title'>
-        <td>&nbsp;</td>
-        <td>UID</td>
-        <td>Common Name</td>
-        <td>UIDNumber</td>
-        <td>Deletion Mark</td>
-        <td>CH L</td>
-        <td>Ank L</td>
-        <td>Ank S</td>
-    </tr>
-    <tr class='title'>
-        <td><input type='image' src='{% get_static_prefix %}filter.png' alt='Filter' /></td>
-        <td>{{ form.uid }}</td>
-        <td>{{ form.cn }}</td>
-        <td>{{ form.uidnumber }}</td>
-        <td>{{ form.deleted }}</td>
-        <td>{{ form.chlocal }}{{ form.nochlocal }}</td>
-        <td>{{ form.anklocal }}{{ form.noanklocal }}</td>
-        <td>{{ form.anksamba }}{{ form.noanksamba }}</td>
-    </tr>
-    {% for user in users %}
-    <tr class='{% cycle odd,even %}'>
-        <td><a href='{{ user.uid }}/'><img src='{% get_static_prefix %}edit.png'alt='Edit' /></a></td>
-        <td>{{ user.uid }}</td>
-        <td>{{ user.gecos.full_name|default:"&nbsp;" }}</td>
-        <td>{{ user.uidNumber }}</td>
-        <td>{% for rmWarnUser in rmWarnUsers %} {% ifequal user.uid rmWarnUser %} {{ user.toBeDeleted|date:"F d Y - H i"|default:"Never" }} {% endifequal %} {% endfor %}</td>
-        <td>{% if user.chLocal %}+{% endif %}</td>
-        <td>{% if user.ankLocal %}+{% endif %}</td>
-        <td>{% if user.ankSamba %}+{% endif %}</td>
-    </tr>
-    {% endfor %}
-    <tr class='total'>
-        <td colspan='2'>Total:</td>
-        <td colspan='2'>{{ count.total }}</td>
-        <td>{{ count.del }}</td>
-        <td>{{ count.chlocal }}</td>
-        <td>{{ count.anklocal }}</td>
-        <td>{{ count.anksamba }}</td>
-    </tr>
-</table>
-</form>
+    <form action='' method='get'>
+        <table>
+            <thead>
+            <tr class='title'>
+                <th>&nbsp;</th>
+                <th>UID</th>
+                <th>Common Name</th>
+                <th>UIDNumber</th>
+                <th>Dienst2</th>
+                <th>Deletion Mark</th>
+                <th>CH L</th>
+                <th>Ank L</th>
+                <th>Ank S</th>
+            </tr>
+            <tr class='title'>
+                <td><input type='image' src='{% get_static_prefix %}filter.png' alt='Filter'/></td>
+                <td>{{ form.uid }}</td>
+                <td>{{ form.cn }}</td>
+                <td>{{ form.uidnumber }}</td>
+                <td></td>
+                <td>{{ form.deleted }}</td>
+                <td>{{ form.chlocal }}{{ form.nochlocal }}</td>
+                <td>{{ form.anklocal }}{{ form.noanklocal }}</td>
+                <td>{{ form.anksamba }}{{ form.noanksamba }}</td>
+            </tr>
+            </thead>
+            <tbody>
+            {% for user in users %}
+                <tr class='{% cycle odd,even %}'>
+                    <td><a href='{{ user.uid }}/'><img src='{% get_static_prefix %}edit.png' alt='Edit'/></a></td>
+                    <td>{{ user.uid }}</td>
+                    <td>{{ user.gecos.full_name|default:"&nbsp;" }}</td>
+                    <td>{{ user.uidNumber }}</td>
+                    <td>{{ user.dienst2Status|dienst2render }}</td>
+                    <td>{% for rmWarnUser in rmWarnUsers %} {% ifequal user.uid rmWarnUser %}
+                        {{ user.toBeDeleted|date:"F d Y - H i"|default:"Never" }} {% endifequal %} {% endfor %}</td>
+                    <td>{% if user.chLocal %}+{% endif %}</td>
+                    <td>{% if user.ankLocal %}+{% endif %}</td>
+                    <td>{% if user.ankSamba %}+{% endif %}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            <tfoot>
+            <tr class='total'>
+                <td colspan='2'>Total:</td>
+                <td colspan='3'>{{ count.total }}</td>
+                <td>{{ count.del }}</td>
+                <td>{{ count.chlocal }}</td>
+                <td>{{ count.anklocal }}</td>
+                <td>{{ count.anksamba }}</td>
+            </tr>
+            </tfoot>
+        </table>
+    </form>
 {% endblock %}

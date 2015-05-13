@@ -254,6 +254,8 @@ class User (LDAPConn):
         if retcode != 0:
             raise Exception, "Child failed"
 
+    dienst2Status = {}
+
     def __str__(self):
         return "User: [ dn:'" + self.dn + ", uid:'" + self.uid + "', cn:'" + self.cn + "' ]"
 
