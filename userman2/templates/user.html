@@ -75,6 +75,11 @@
     </tr>
     <tr class='{% cycle rowcolor %}'>
         <td>&nbsp;</td>
+        <td>Dienst2</td>
+        <td>{{ dienst2Status|dienst2render }}</td>
+    </tr>
+    <tr class='{% cycle rowcolor %}'>
+        <td>&nbsp;</td>
         <td><a href='/userman2/groups?uid={{ user.uid }}'>Groups</a></td>
         <td>{% for group in user.getSecondaryGroups %}<a href='{% url 'userman2.views.groups.displayGroup' group %}'>{{ group }}</a> {% endfor %}</td>
     </tr>

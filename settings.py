@@ -83,6 +83,13 @@ ALLOWED_HOSTS = [
     'frans.chnet',
 ]
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
+
 ROOT_PATH = os.path.dirname(__file__)
 
 from local import *

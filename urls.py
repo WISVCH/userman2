@@ -54,3 +54,8 @@ urlpatterns += patterns('userman2.views.computers',
                         (r'^computers/$', 'displayComputers'),
                         (r'^computers/([a-zA-Z][a-zA-Z\-_\d.]+\$)/rm/$', 'rmComputer'),
                         )
+
+
+urlpatterns += patterns('userman2.views.dienst2',
+                        (r'^dienst2/([a-zA-Z][a-zA-Z\d\-_]+)$', 'lookupUser'),
+                        )

@@ -1,10 +1,16 @@
-from userman2.model import user
-from userman2.model import action
+from random import randint
+from datetime import datetime
+
 from django.shortcuts import render_to_response
 from django.http import Http404, HttpResponseRedirect
 from django.views.decorators.cache import cache_control
 from django.conf import settings
+import requests
+from django.core.cache import cache
 
+from settings import DIENST2_APIKEY
+from userman2.model import user
+from userman2.model import action
 from userman2.forms.user import *
 
 
@@ -22,6 +28,9 @@ def displayUsers(request):
 
     rmWarnUsers = [user.User(curaction.affectedDN)
                    .uid for curaction in action.GetAllActions({"actionName": "warnRemove"})]
+
+    session = requests.Session()
+
     count = {"total": 0, "del": 0, "chlocal": 0, "anklocal": 0, "anksamba": 0}
     for u in users:
             count["total"] += 1
@@ -34,6 +43,7 @@ def displayUsers(request):
                 count["anklocal"] += 1
             if u.ankSamba:
                 count["anksamba"] += 1
+            u.dienst2Status = dienst2_cached(u.uid, session)
 
     return render_to_response('users.html', {'users': users, 'form': form, 'count': count, 'rmWarnUsers': rmWarnUsers})
 
@@ -44,7 +54,8 @@ def displayUser(request, uid):
         userObj = user.FromUID(uid)
     except Exception, e:
         raise Http404
-    return render_to_response('user.html', {'user': userObj})
+    dienst2Status = dienst2(uid, requests.session())
+    return render_to_response('user.html', {'user': userObj, 'dienst2Status': dienst2Status})
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -291,3 +302,32 @@ def chPassword(request, uid):
         form = ChpassForm()
 
     return render_to_response('form.html', {'form': form, 'user': userObj})
+
+
+def dienst2(username, session):
+    headers = {'Authorization': 'ApiKey ' + DIENST2_APIKEY}
+    url = 'https://frans.chnet/dienst2/ldb/api/v2/person/'
+    link_prefix = 'https://frans.chnet/dienst2/ldb/#/person/%d'
+    try:
+        r = session.get(url, params={'ldap_username': username}, headers=headers)
+    except requests.exceptions.RequestException:
+        return {}
+    json = r.json()
+    n = len(json['objects'])
+    if n is 0:
+        ret = {'status': 'warning', 'message': 'Not found'}
+    elif n > 1:
+        ret = {'status': 'error', 'message': 'Error: %d records matched' % n}
+    else:
+        ret = {'status': 'success', 'message': 'Found one matching record', 'href': link_prefix % json['objects'][0]['id']}
+
+    ret['message'] += ' [updated %s]' % datetime.now()
+    cache.set('dienst2status_' + username, ret, randint(3600, 86400))
+    return ret
+
+
+def dienst2_cached(username, session):
+    ret = cache.get('dienst2status_' + username)
+    if ret is None:
+        ret = dienst2(username, session)
+    return ret
