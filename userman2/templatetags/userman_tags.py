@@ -31,8 +31,8 @@ def aliaslink(value):
 
 @register.filter
 def dienst2render(dienst2Status):
-    if not dienst2Status:
-        ret = '<img src="%scircle_blue.png" title="Connection error" width="16" height="16" />' % STATIC_URL
+    if 'error' in dienst2Status:
+        ret = '<img src="%scircle_blue.png" title="Error: %s" width="16" height="16" />' % (STATIC_URL, dienst2Status['error'])
     else:
         ret = '<img src="%s%s.png" title="%s" width="16" height="16" />' % (
         STATIC_URL, dienst2Status['status'], dienst2Status['message'])
