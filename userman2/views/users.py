@@ -310,8 +310,8 @@ def dienst2(username, session):
     link_prefix = 'https://frans.chnet/dienst2/ldb/#/person/%d'
     try:
         r = session.get(url, params={'ldap_username': username}, headers=headers)
-    except requests.exceptions.RequestException:
-        return {}
+    except requests.exceptions.RequestException as e:
+        return {'error': str(e)}
     json = r.json()
     n = len(json['objects'])
     if n is 0:
