@@ -13,6 +13,8 @@ STATIC_ROOT = '/…/static/'
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/userman2/static/'
 
+DIENST2_APIKEY='CHANGEME'
+
 # LDAP Settings
 LDAP_HOST = "ldaps://ank.chnet"
 LDAP_USER = "cn=admin,dc=ank,dc=chnet"
