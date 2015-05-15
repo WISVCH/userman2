@@ -2,8 +2,11 @@ from random import randint
 from datetime import datetime
 
 from django.shortcuts import render_to_response
+
 from django.http import Http404, HttpResponseRedirect
+
 from django.views.decorators.cache import cache_control
+
 from django.conf import settings
 import requests
 
@@ -322,15 +325,41 @@ def dienst2(username, session):
     json = r.json()
     n = len(json['objects'])
     if n is 0:
-        ret = {'status': 'warning', 'message': 'Not found'}
+        ret = {'status': 'error', 'message': 'Username not found'}
     elif n > 1:
         ret = {'status': 'error', 'message': 'Error: %d records matched' % n}
     else:
-        ret = {'status': 'success', 'message': 'Found one matching record', 'href': link_prefix % json['objects'][0]['id']}
+        if json['objects'][0]['deceased'] is True:
+            ret = {'status': 'warning', 'message': 'Deceased'}
+        else:
+            ret = dienst2_check_membership(json['objects'][0]['member'], headers, session)
+            if 'error' in ret:
+                return ret
+        ret['href'] = link_prefix % json['objects'][0]['id']
 
     ret['updated'] = str(datetime.now())
     cache.set('dienst2status_' + username, ret, randint(3600, 86400))
     return ret
+
+
+def dienst2_check_membership(member_resource, headers, session):
+    if member_resource is None:
+        return {'status': 'error', 'message': 'Member record not found'}
+
+    url = 'https://frans.chnet' + member_resource
+    try:
+        r = session.get(url, headers=headers)
+    except requests.exceptions.RequestException as e:
+        return {'error': str(e)}
+    if r.status_code is not 200:
+        return {'error': "Status code %d" % r.status_code}
+
+    json = r.json()
+    if (json['date_from'] is not None and json['date_to'] is None) \
+            or json['merit_date_from'] is not None or json['honorary_date_from'] is not None:
+        return {'status': 'success', 'message': 'Member'}
+    else:
+        return {'status': 'warning', 'message': 'Not a member'}
 
 
 def dienst2_cached(username, session):
