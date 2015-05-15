@@ -2,33 +2,33 @@
 {% block title %}CH User Manager — Manage Aliases{% endblock %}
 {% load static %}
 {% block content %}
-<form action='' method='get'>
-<table class='groupfilter'>
-    <tr class='title'>
-        <td><input type='image' src='{% get_static_prefix %}filter.png' alt='Filter' /></td>
-        <td>memberUid: {{ form.uid }}</td>
-        <td>CN: {{ form.cn }}</td>
-    </tr>
-</table>
-</form>
-{% for groupou in groups.items reversed %}
-<table class='group'>
-    <tr class='title'>
-        <td colspan='2'>
-        <h3>
-            {{ groupou.0 }}
-            {% if not form.uid.value %}
-                (<a href='/userman2/add{% if alias %}alias{% else %}group{%endif%}/{{ groupou.0 }}'>+</a>)
-            {% endif %}
-        </h3>
-        </td>
-    </tr>
-    {% for group in groupou.1 %}
-    <tr class='{% cycle odd,even %}'>
-        <td><a href='{{ group.cn }}/'><img src='{% get_static_prefix %}edit.png' alt='Edit' /></a></td>
-        <td>{{ group.cn }}</td>
-    </tr>
+    <form action='' method='get'>
+        <table class='groupfilter'>
+            <tr class='title'>
+                <td><input type='image' src='{% get_static_prefix %}filter.png' alt='Filter'/></td>
+                <td>memberUid: {{ form.uid }}</td>
+                <td>CN: {{ form.cn }}</td>
+            </tr>
+        </table>
+    </form>
+    {% for groupou in groups.items reversed %}
+        <table class='group'>
+            <tr class='title'>
+                <td colspan='2'>
+                    <h3>
+                        {{ groupou.0 }}
+                        {% if not form.uid.value %}
+                            (<a href='/userman2/add{% if alias %}alias{% else %}group{% endif %}/{{ groupou.0 }}'>+</a>)
+                        {% endif %}
+                    </h3>
+                </td>
+            </tr>
+            {% for group in groupou.1 %}
+                <tr class='{% cycle odd,even %}'>
+                    <td><a href='{{ group.cn }}/'><img src='{% get_static_prefix %}edit.png' alt='Edit'/></a></td>
+                    <td>{{ group.cn }}</td>
+                </tr>
+            {% endfor %}
+        </table>
     {% endfor %}
-</table>
-{% endfor %}
 {% endblock %}

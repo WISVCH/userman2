@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
-<ul>
-   <li><a href="{% url 'userman2.views.users.addUser' %}">Add User Account</a></li>
-   <li><a href="{% url 'userman2.views.users.displayUsers' %}">Manage Existing User Accounts</a></li>
-   <li><a href="{% url 'userman2.views.computers.addComputer' %}">Add Computer Account</a></li>
-   <li><a href="{% url 'userman2.views.computers.displayComputers' %}">Manage Existing Computer Accounts</a></li>
-   <li><a href="{% url 'userman2.views.groups.displayGroups' %}">Manage Groups</a></li>
-   <li><a href="{% url 'userman2.views.aliases.displayAliases' %}">Manage Aliases</a></li>
-   <li><a href="{% url 'userman2.views.massmail.selectUsers' %}">Send Mass Mail/Mass Removal Notice</a></li>
-</ul>
+    <ul>
+        <li><a href="{% url 'userman2.views.users.addUser' %}">Add User Account</a></li>
+        <li><a href="{% url 'userman2.views.users.displayUsers' %}">Manage Existing User Accounts</a></li>
+        <li><a href="{% url 'userman2.views.computers.addComputer' %}">Add Computer Account</a></li>
+        <li><a href="{% url 'userman2.views.computers.displayComputers' %}">Manage Existing Computer Accounts</a></li>
+        <li><a href="{% url 'userman2.views.groups.displayGroups' %}">Manage Groups</a></li>
+        <li><a href="{% url 'userman2.views.aliases.displayAliases' %}">Manage Aliases</a></li>
+        <li><a href="{% url 'userman2.views.massmail.selectUsers' %}">Send Mass Mail/Mass Removal Notice</a></li>
+    </ul>
 {% endblock %}

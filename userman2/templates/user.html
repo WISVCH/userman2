@@ -3,115 +3,133 @@
 {% block title %}CH User Manager — Editing {{ user.uid }}{% endblock %}
 {% load static %}
 {% block content %}
-<table>
-    <tr class='title'>
-        <td colspan='3'>
-        <h3>General Information:</h3>
-        </td>
-    </tr>
-    <tr class='{% cycle odd,even as rowcolor %}'>
-        <td><a href='chuid'><img src='{% get_static_prefix %}edit.png'
-            alt='Edit' /></a></td>
-        <td>UID</td>
-        <td>{{ user.uid }}</td>
-    </tr>
-    <tr class='{% cycle rowcolor %}'>
-        <td>&nbsp;</td>
-        <td>UID Number</td>
-        <td>{{ user.uidNumber }}</td>
-    </tr>
-    <tr class='{% cycle rowcolor %}'>
-        <td rowspan='4'><a href='chfn'><img
-            src='{% get_static_prefix %}edit.png' alt='Edit' /></a></td>
-        <td>Full Name</td>
-        <td>{{ user.gecos.full_name }}</td>
-    </tr>
-    <tr>
-        <td>Room Number</td>
-        <td>{{ user.gecos.room_number }}</td>
-    </tr>
-    <tr>
-        <td>Work Phone</td>
-        <td>{{ user.gecos.work_phone }}</td>
-    </tr>
-    <tr>
-        <td>Home Phone</td>
-        <td>{{ user.gecos.home_phone }}</td>
-    </tr>
-    <tr class='{% cycle rowcolor %}'>
-        <td><a href='chdesc'><img src='{% get_static_prefix %}edit.png'
-            alt='Edit' /></a></td>
-        <td>Description</td>
-        <td>{{ user.description }}</td>
-    </tr>
-    <tr class='{% cycle rowcolor %}'>
-        <td><a href='chwarnrm'><img src='{% get_static_prefix %}edit.png'
-            alt='Edit' /></a></td>
-        <td>Removal date</td>
-        <td>{{ user.toBeDeleted }}</td>
-    </tr>
-    <tr class='{% cycle rowcolor %}'>
-        <td><a href='chsh'><img src='{% get_static_prefix %}edit.png' alt='Edit' /></a></td>
-        <td>Login Shell</td>
-        <td>{{ user.loginShell }}</td>
-    </tr>
-    <tr class='{% cycle rowcolor %}'>
-        <td><a href='chhomeank'><img src='{% get_static_prefix %}edit.png'
-            alt='Edit' /></a></td>
-        <td>Home Directory</td>
-        <td>{{ user.homeDirectoryAnk }}</td>
-    </tr>
-    <tr class='{% cycle rowcolor %}'>
-        <td><a href='chhomech'><img src='{% get_static_prefix %}edit.png'
-            alt='Edit' /></a></td>
-        <td>Home Directory (CH)</td>
-        <td>{{ user.homeDirectoryCH }}</td>
-    </tr>
-    <tr class='{% cycle rowcolor %}'>
-        <td><a href='chgroup'><img src='{% get_static_prefix %}edit.png'
-            alt='Edit' /></a></td>
-        <td>Primary Group ID</td>
-        <td>{{ user.gidNumber }} (<a href='/userman2/groups/{{user.gidNumber|groupname}}'>{{user.gidNumber|groupname}}</a>)</td>
-    </tr>
-    <tr class='{% cycle rowcolor %}'>
-        <td>&nbsp;</td>
-        <td>Dienst2</td>
-        <td>{{ dienst2Status|dienst2render }}</td>
-    </tr>
-    <tr class='{% cycle rowcolor %}'>
-        <td>&nbsp;</td>
-        <td><a href='/userman2/groups?uid={{ user.uid }}'>Groups</a></td>
-        <td>{% for group in user.getSecondaryGroups %}<a href='{% url 'userman2.views.groups.displayGroup' group %}'>{{ group }}</a> {% endfor %}</td>
-    </tr>
-    <tr class='{% cycle rowcolor %}'>
-        <td>&nbsp;</td>
-        <td><a href='/userman2/aliases?uid={{ user.uid }}'>Aliases</a></td>
-        <td>{% for alias in user.getDirectAliases %}<a href='{% url 'userman2.views.aliases.displayAlias' alias %}'>{{ alias }}</a> {% endfor %}</td>
-    </tr>
-    <tr class='{% cycle rowcolor %}'>
-        <td>&nbsp;</td>
-        <td><a href='/userman2/aliases?uid={{ user.uid }}'>Indirect Aliases</a></td>
-        <td>{% for alias in user.getIndirectAliases %}<a href='{% url 'userman2.views.aliases.displayAlias' alias %}'>{{ alias }}</a> {% endfor %}</td>
-    </tr>
-    <tr class='title'>
-        <td colspan='3'>
-        <h3>Authorized Services: <a href='chpriv'><img
-            src='{% get_static_prefix %}edit.png' alt='Edit' /></a></h3>
-        </td>
-    </tr>
-    {% for service in user.authorizedServices %}
-    <tr class='{% cycle rowcolor %}'>
-        <td></td>
-        <td>Service</td>
-        <td>{{ service }}</td>
-    </tr>
-    {%endfor%}
-</table>
+    <table>
+        <tr class='title'>
+            <td colspan='3'>
+                <h3>General Information:</h3>
+            </td>
+        </tr>
+        <tr class='{% cycle odd,even as rowcolor %}'>
+            <td><a href='chuid'><img src='{% get_static_prefix %}edit.png'
+                                     alt='Edit'/></a></td>
+            <td>UID</td>
+            <td>{{ user.uid }}</td>
+        </tr>
+        <tr class='{% cycle rowcolor %}'>
+            <td>&nbsp;</td>
+            <td>UID Number</td>
+            <td>{{ user.uidNumber }}</td>
+        </tr>
+        <tr class='{% cycle rowcolor %}'>
+            <td rowspan='4'><a href='chfn'><img
+                    src='{% get_static_prefix %}edit.png' alt='Edit'/></a></td>
+            <td>Full Name</td>
+            <td>{{ user.gecos.full_name }}</td>
+        </tr>
+        <tr>
+            <td>Room Number</td>
+            <td>{{ user.gecos.room_number }}</td>
+        </tr>
+        <tr>
+            <td>Work Phone</td>
+            <td>{{ user.gecos.work_phone }}</td>
+        </tr>
+        <tr>
+            <td>Home Phone</td>
+            <td>{{ user.gecos.home_phone }}</td>
+        </tr>
+        <tr class='{% cycle rowcolor %}'>
+            <td><a href='chdesc'><img src='{% get_static_prefix %}edit.png'
+                                      alt='Edit'/></a></td>
+            <td>Description</td>
+            <td>{{ user.description }}</td>
+        </tr>
+        <tr class='{% cycle rowcolor %}'>
+            <td><a href='chwarnrm'><img src='{% get_static_prefix %}edit.png'
+                                        alt='Edit'/></a></td>
+            <td>Removal date</td>
+            <td>{{ user.toBeDeleted }}</td>
+        </tr>
+        <tr class='{% cycle rowcolor %}'>
+            <td><a href='chsh'><img src='{% get_static_prefix %}edit.png' alt='Edit'/></a></td>
+            <td>Login Shell</td>
+            <td>{{ user.loginShell }}</td>
+        </tr>
+        <tr class='{% cycle rowcolor %}'>
+            <td><a href='chhomeank'><img src='{% get_static_prefix %}edit.png'
+                                         alt='Edit'/></a></td>
+            <td>Home Directory</td>
+            <td>{{ user.homeDirectoryAnk }}</td>
+        </tr>
+        <tr class='{% cycle rowcolor %}'>
+            <td><a href='chhomech'><img src='{% get_static_prefix %}edit.png'
+                                        alt='Edit'/></a></td>
+            <td>Home Directory (CH)</td>
+            <td>{{ user.homeDirectoryCH }}</td>
+        </tr>
+        <tr class='{% cycle rowcolor %}'>
+            <td><a href='chgroup'><img src='{% get_static_prefix %}edit.png'
+                                       alt='Edit'/></a></td>
+            <td>Primary Group ID</td>
+            <td>{{ user.gidNumber }} (<a
+                    href='/userman2/groups/{{ user.gidNumber|groupname }}'>{{ user.gidNumber|groupname }}</a>)
+            </td>
+        </tr>
+        <tr class='{% cycle rowcolor %}'>
+            <td>&nbsp;</td>
+            <td>Dienst2</td>
+            <td>{{ dienst2Status|dienst2render }}</td>
+        </tr>
+        <tr class='{% cycle rowcolor %}'>
+            <td>&nbsp;</td>
+            <td><a href='/userman2/groups?uid={{ user.uid }}'>Groups</a></td>
+            <td>{% for group in user.getSecondaryGroups %}
+                <a href='{% url 'userman2.views.groups.displayGroup' group %}'>{{ group }}</a> {% endfor %}</td>
+        </tr>
+        <tr class='{% cycle rowcolor %}'>
+            <td>&nbsp;</td>
+            <td><a href='/userman2/aliases?uid={{ user.uid }}'>Aliases</a></td>
+            <td>{% for alias in user.getDirectAliases %}
+                <a href='{% url 'userman2.views.aliases.displayAlias' alias %}'>{{ alias }}</a> {% endfor %}</td>
+        </tr>
+        <tr class='{% cycle rowcolor %}'>
+            <td>&nbsp;</td>
+            <td><a href='/userman2/aliases?uid={{ user.uid }}'>Indirect Aliases</a></td>
+            <td>{% for alias in user.getIndirectAliases %}
+                <a href='{% url 'userman2.views.aliases.displayAlias' alias %}'>{{ alias }}</a> {% endfor %}</td>
+        </tr>
+        <tr class='title'>
+            <td colspan='3'>
+                <h3>Authorized Services: <a href='chpriv'><img
+                        src='{% get_static_prefix %}edit.png' alt='Edit'/></a></h3>
+            </td>
+        </tr>
+        {% for service in user.authorizedServices %}
+            <tr class='{% cycle rowcolor %}'>
+                <td></td>
+                <td>Service</td>
+                <td>{{ service }}</td>
+            </tr>
+        {% endfor %}
+    </table>
 
-<p><ul><li><a href='showldif'>Display an LDIF for this user</a></ul></p>
-<p><ul><li><a href='chpasswd/'>Change user's password</a>
-<li><a href='resetpasswd/' onclick="return confirm('Reset password for {{ user.uid }}?')">Reset user's password</a></ul></p>
-<p><ul><li><a href='removeprofile/' onclick="return confirm('Remove profile for {{ user.uid }}?')">Remove user's profile</a>
-<li><a href='/userman2/massmail/writemail/?users={{ user.uid }}&fromaddress=beheer%40ch.tudelft.nl'>Send Removal Warning</a>
-<li><a href='rm/' onclick="return confirm('Are you very sure you really want to delete {{ user.uid }}?')">Remove user</a></ul>
+    <p>
+    <ul>
+        <li><a href='showldif'>Display an LDIF for this user</a>
+    </ul></p>
+    <p>
+    <ul>
+        <li><a href='chpasswd/'>Change user's password</a>
+        <li><a href='resetpasswd/' onclick="return confirm('Reset password for {{ user.uid }}?')">Reset user's
+            password</a>
+    </ul></p>
+    <p>
+    <ul>
+        <li><a href='removeprofile/' onclick="return confirm('Remove profile for {{ user.uid }}?')">Remove user's
+            profile</a>
+        <li><a href='/userman2/massmail/writemail/?users={{ user.uid }}&fromaddress=beheer%40ch.tudelft.nl'>Send Removal
+            Warning</a>
+        <li><a href='rm/' onclick="return confirm('Are you very sure you really want to delete {{ user.uid }}?')">Remove
+            user</a>
+    </ul>
 {% endblock %}

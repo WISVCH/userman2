@@ -3,29 +3,33 @@
 <html lang='en'>
 <head>
     <title>{% block title %}CH User Manager{% endblock %}</title>
-    <link rel='stylesheet' type='text/css' href='{% get_static_prefix %}main.css' />
-	<link rel="shortcut icon" type="image/vnd.microsoft.icon" href="{% get_static_prefix %}favicon.ico" />
+    <link rel='stylesheet' type='text/css' href='{% get_static_prefix %}main.css'/>
+    <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="{% get_static_prefix %}favicon.ico"/>
 </head>
 <body>
-	<div class='navigation'>
-		<span>CH User Manager</span>
-		<ul>
-		   <li class='users-add'><a href="{% url 'userman2.views.users.addUser' %}">Add User</a></li>
-		   <li class='users-display'><a href="{% url 'userman2.views.users.displayUsers' %}">Manage Users</a></li>
-		   <li class='computers-add'><a href="{% url 'userman2.views.computers.addComputer' %}">Add Computer Account</a></li>
-		   <li class='computers-display'><a href="{% url 'userman2.views.computers.displayComputers' %}">Manage Computer Accounts</a></li>
-		   <li class='groups'><a href="{% url 'userman2.views.groups.displayGroups' %}">Manage Groups</a></li>
-		   <li class='aliases'><a href="{% url 'userman2.views.aliases.displayAliases' %}">Manage Aliases</a></li>
-		   <li class='massmail'><a href="{% url 'userman2.views.massmail.selectUsers' %}">Send Mass Mail</a></li>
-		</ul>
-		<div class='clearboth'></div>
-	</div>
+<div class='navigation'>
+    <span>CH User Manager</span>
+    <ul>
+        <li class='users-add'><a href="{% url 'userman2.views.users.addUser' %}">Add User</a></li>
+        <li class='users-display'><a href="{% url 'userman2.views.users.displayUsers' %}">Manage Users</a></li>
+        <li class='computers-add'><a href="{% url 'userman2.views.computers.addComputer' %}">Add Computer Account</a>
+        </li>
+        <li class='computers-display'><a href="{% url 'userman2.views.computers.displayComputers' %}">Manage Computer
+            Accounts</a></li>
+        <li class='groups'><a href="{% url 'userman2.views.groups.displayGroups' %}">Manage Groups</a></li>
+        <li class='aliases'><a href="{% url 'userman2.views.aliases.displayAliases' %}">Manage Aliases</a></li>
+        <li class='massmail'><a href="{% url 'userman2.views.massmail.selectUsers' %}">Send Mass Mail</a></li>
+    </ul>
+    <div class='clearboth'></div>
+</div>
 
-    {% block content %}{% endblock %}
+{% block content %}{% endblock %}
 
-    <div class='footer clearboth'>
-		<div class='copyright'>&copy; 2004 – 2015 Beheer &amp; PC.COM</div>
-		<div class='bottomtext'>This system is in eternal beta. Things will go wrong: <a href="https://github.com/WISVCH/userman/issues">issues</a>.</div>
-	</div>
+<div class='footer clearboth'>
+    <div class='copyright'>&copy; 2004 – 2015 Beheer &amp; PC.COM</div>
+    <div class='bottomtext'>This system is in eternal beta. Things will go wrong: <a
+            href="https://github.com/WISVCH/userman/issues">issues</a>.
+    </div>
+</div>
 </body>
 </html>

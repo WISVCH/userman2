@@ -1,25 +1,25 @@
 {% extends "base.html" %}
 {% block title %}CH User Manager — Manage Users{% endblock %}
 {% block content %}
-<form action='sendmail/' method='post'>
-<table>
-    <tr class='title'>
-        <td>Recipients: {% for user in users %} {{ user }}, {% endfor %}
-    </tr>
-    <tr class='title'>
-        <td>From: {{ form.fromaddress }}</td>
-    </tr>
-    <tr class='title'>
-        <td>Subject: {{ form.subject }}</td>
-    </tr>
-    <tr class='title'>
-        <td>{{ form.body }}</td>
-    </tr>
-    <tr class='title'>
-        <td>Removal date (Optional) {{ form.removaldue }} {{ form.removalunits }}</td>
-    </tr>
-</table>
-{{ form.users }}
-<input type='submit' value='continue'/>    
-</form>
+    <form action='sendmail/' method='post'>
+        <table>
+            <tr class='title'>
+                <td>Recipients: {% for user in users %} {{ user }}, {% endfor %}
+            </tr>
+            <tr class='title'>
+                <td>From: {{ form.fromaddress }}</td>
+            </tr>
+            <tr class='title'>
+                <td>Subject: {{ form.subject }}</td>
+            </tr>
+            <tr class='title'>
+                <td>{{ form.body }}</td>
+            </tr>
+            <tr class='title'>
+                <td>Removal date (Optional) {{ form.removaldue }} {{ form.removalunits }}</td>
+            </tr>
+        </table>
+        {{ form.users }}
+        <input type='submit' value='continue'/>
+    </form>
 {% endblock %}
