@@ -29,6 +29,8 @@ def aliaslink(value):
 def dienst2icon(dienst2Status):
     if 'error' in dienst2Status:
         ret = '<img src="%scircle_blue.png" title="Error: %s" width="16" height="16" />' % (STATIC_URL, dienst2Status['error'])
+    elif dienst2Status['status'] is 'whitelisted':
+        ret = ''
     else:
         ret = '<img src="%s%s.png" title="%s [updated %s]" width="16" height="16" />' % (
         STATIC_URL, dienst2Status['status'], dienst2Status['message'], dienst2Status['updated'])

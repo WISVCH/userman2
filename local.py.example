@@ -16,6 +16,7 @@ STATIC_ROOT = '/…/static/'
 STATIC_URL = '/userman2/static/'
 
 DIENST2_APIKEY='CHANGEME'
+DIENST2_WHITELIST=['root','nobody']
 os.environ['REQUESTS_CA_BUNDLE'] = '/etc/ssl/certs/wisvch.pem'
 
 # LDAP Settings
