@@ -84,6 +84,8 @@ ALLOWED_HOSTS = [
     'frans.chnet',
 ]
 
+EMAIL_BACKEND = 'django_sendmail_backend.backends.EmailBackend'
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
