@@ -2,8 +2,8 @@
 {% load userman_tags %}
 {% block title %}CH User Manager — Editing {{ user.uid }}{% endblock %}
 {% block content %}
-<h3>LDIF for {{ user.uid }}</h3></td>
-<pre>
+    <h3>LDIF for {{ user.uid }}</h3></td>
+    <pre>
 {{ user.ldif }}
 </pre>
 {% endblock %}
