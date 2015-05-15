@@ -36,7 +36,7 @@
                     <td>{{ user.uid }}</td>
                     <td>{{ user.gecos.full_name|default:"&nbsp;" }}</td>
                     <td>{{ user.uidNumber }}</td>
-                    <td>{{ user.dienst2Status|dienst2render }}</td>
+                    <td>{{ user.dienst2Status|dienst2icon }}</td>
                     <td>{% for rmWarnUser in rmWarnUsers %} {% ifequal user.uid rmWarnUser %}
                         {{ user.toBeDeleted|date:"F d Y - H i"|default:"Never" }} {% endifequal %} {% endfor %}</td>
                     <td>{% if user.chLocal %}+{% endif %}</td>

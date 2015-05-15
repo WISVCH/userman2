@@ -312,6 +312,9 @@ def dienst2(username, session):
         r = session.get(url, params={'ldap_username': username}, headers=headers)
     except requests.exceptions.RequestException as e:
         return {'error': str(e)}
+    if r.status_code is not 200:
+        return {'error': "Status code %d" % r.status_code}
+
     json = r.json()
     n = len(json['objects'])
     if n is 0:
@@ -321,7 +324,7 @@ def dienst2(username, session):
     else:
         ret = {'status': 'success', 'message': 'Found one matching record', 'href': link_prefix % json['objects'][0]['id']}
 
-    ret['message'] += ' [updated %s]' % datetime.now()
+    ret['updated'] = str(datetime.now())
     cache.set('dienst2status_' + username, ret, randint(3600, 86400))
     return ret
 

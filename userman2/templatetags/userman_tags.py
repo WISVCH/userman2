@@ -1,15 +1,11 @@
 from django import template
-
 from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe
 
 from settings import STATIC_URL
-
 from userman2.model import group
-
 from userman2.model import alias
 from userman2.model import user
-
 
 register = template.Library()
 
@@ -30,14 +26,23 @@ def aliaslink(value):
 
 
 @register.filter
-def dienst2render(dienst2Status):
+def dienst2icon(dienst2Status):
     if 'error' in dienst2Status:
         ret = '<img src="%scircle_blue.png" title="Error: %s" width="16" height="16" />' % (STATIC_URL, dienst2Status['error'])
     else:
-        ret = '<img src="%s%s.png" title="%s" width="16" height="16" />' % (
-        STATIC_URL, dienst2Status['status'], dienst2Status['message'])
+        ret = '<img src="%s%s.png" title="%s [updated %s]" width="16" height="16" />' % (
+        STATIC_URL, dienst2Status['status'], dienst2Status['message'], dienst2Status['updated'])
         if 'href' in dienst2Status:
             ret = '<a href="%s">%s</a>' % (dienst2Status['href'], ret)
 
     return mark_safe(ret)
 
+
+@register.filter
+def dienst2message(dienst2Status):
+    if 'error' in dienst2Status:
+        return dienst2Status['error']
+    elif 'message' in dienst2Status:
+        return dienst2Status['message']
+    else:
+        return ""
