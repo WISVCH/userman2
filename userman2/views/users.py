@@ -6,9 +6,10 @@ from django.http import Http404, HttpResponseRedirect
 from django.views.decorators.cache import cache_control
 from django.conf import settings
 import requests
+
 from django.core.cache import cache
 
-from settings import DIENST2_APIKEY
+from settings import DIENST2_WHITELIST, DIENST2_APIKEY
 from userman2.model import user
 from userman2.model import action
 from userman2.forms.user import *
@@ -305,6 +306,9 @@ def chPassword(request, uid):
 
 
 def dienst2(username, session):
+    if username in DIENST2_WHITELIST:
+        return {'status': 'whitelisted', 'message': 'Whitelisted'}
+
     headers = {'Authorization': 'ApiKey ' + DIENST2_APIKEY}
     url = 'https://frans.chnet/dienst2/ldb/api/v2/person/'
     link_prefix = 'https://frans.chnet/dienst2/ldb/#/person/%d'
