@@ -2,17 +2,13 @@ from random import randint
 from datetime import datetime
 
 from django.shortcuts import render_to_response
-
 from django.http import Http404, HttpResponseRedirect
-
 from django.views.decorators.cache import cache_control
-
 from django.conf import settings
 import requests
-
 from django.core.cache import cache
 
-from settings import DIENST2_WHITELIST, DIENST2_APIKEY
+from settings import DIENST2_WHITELIST, DIENST2_APITOKEN
 from userman2.model import user
 from userman2.model import action
 from userman2.forms.user import *
@@ -312,8 +308,8 @@ def dienst2(username, session):
     if username in DIENST2_WHITELIST:
         return {'status': 'whitelisted', 'message': 'Whitelisted'}
 
-    headers = {'Authorization': 'ApiKey ' + DIENST2_APIKEY}
-    url = 'https://frans.chnet/dienst2/ldb/api/v2/person/'
+    headers = {'Authorization': 'Token ' + DIENST2_APITOKEN}
+    url = 'https://frans.chnet/dienst2/ldb/api/v3/people/'
     link_prefix = 'https://frans.chnet/dienst2/ldb/#/person/%d'
     try:
         r = session.get(url, params={'ldap_username': username}, headers=headers)
@@ -323,43 +319,25 @@ def dienst2(username, session):
         return {'error': "Status code %d" % r.status_code}
 
     json = r.json()
-    n = len(json['objects'])
+    n = len(json['results'])
     if n is 0:
         ret = {'status': 'error', 'message': 'Username not found'}
     elif n > 1:
         ret = {'status': 'error', 'message': 'Error: %d records matched' % n}
     else:
-        if json['objects'][0]['deceased'] is True:
+        if json['results'][0]['deceased'] is True:
             ret = {'status': 'warning', 'message': 'Deceased'}
+        elif json['results'][0]['member'] is None:
+            ret = {'status': 'error', 'message': 'Member record not found'}
+        elif json['results'][0]['member']['current_member']:
+            ret = {'status': 'success', 'message': 'Member'}
         else:
-            ret = dienst2_check_membership(json['objects'][0]['member'], headers, session)
-            if 'error' in ret:
-                return ret
-        ret['href'] = link_prefix % json['objects'][0]['id']
+            ret = {'status': 'warning', 'message': 'Not a member'}
+        ret['href'] = link_prefix % json['results'][0]['id']
 
     ret['updated'] = str(datetime.now())
     cache.set('dienst2status_' + username, ret, randint(3600, 86400))
     return ret
-
-
-def dienst2_check_membership(member_resource, headers, session):
-    if member_resource is None:
-        return {'status': 'error', 'message': 'Member record not found'}
-
-    url = 'https://frans.chnet' + member_resource
-    try:
-        r = session.get(url, headers=headers)
-    except requests.exceptions.RequestException as e:
-        return {'error': str(e)}
-    if r.status_code is not 200:
-        return {'error': "Status code %d" % r.status_code}
-
-    json = r.json()
-    if (json['date_from'] is not None and json['date_to'] is None) \
-            or json['merit_date_from'] is not None or json['honorary_date_from'] is not None:
-        return {'status': 'success', 'message': 'Member'}
-    else:
-        return {'status': 'warning', 'message': 'Not a member'}
 
 
 def dienst2_cached(username, session):
