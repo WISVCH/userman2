@@ -22,9 +22,11 @@ class ChwarnRmForm(forms.Form):
 
 class ChprivForm(forms.Form):
     server = forms.ChoiceField(
-        choices=(("rob", "rob"), ("hendrik", "hendrik"), ("ank", "ank"), ("frans", "frans"), ("fw-01", "fw-01"), ("gadgetlab", "gadgetlab")))
+        choices=(("rob", "rob"), ("hendrik", "hendrik"), ("ank", "ank"), ("frans", "frans"), ("fw-01", "fw-01"),
+                 ("gadgetlab", "gadgetlab")))
     service = forms.ChoiceField(
-        choices=(("sshd", "sshd"), ("samba", "samba"), ("sudo", "sudo"), ("cron", "cron"), ("vpn", "vpn")))
+        choices=(("sshd", "sshd"), ("samba", "samba"), ("systemd-user", "systemd-user"), ("sudo", "sudo"),
+                 ("cron", "cron"), ("vpn", "vpn")))
 
 
 class ChshForm(forms.Form):
@@ -61,7 +63,8 @@ class AddUserForm(forms.Form):
     full_name = forms.RegexField(
         regex="^[^:^,]+$", error_message="Full name entry may not contain : or ,")
     access = forms.MultipleChoiceField(initial=('samba@ank',),
-                                       choices=(('samba@ank', 'samba@ank'), ('sshd@rob', 'sshd@rob')))
+                                       choices=(('samba@ank', 'samba@ank'), ('sshd@rob', 'sshd@rob'),
+                                                ('systemd-user@rob', 'systemd-user@rob')))
 
 
 class ChpassForm(forms.Form):
