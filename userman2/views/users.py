@@ -1,17 +1,16 @@
-from random import randint
 from datetime import datetime
+from random import randint
 
-from django.shortcuts import render_to_response
-from django.http import Http404, HttpResponseRedirect
-from django.views.decorators.cache import cache_control
-from django.conf import settings
 import requests
+from django.conf import settings
 from django.core.cache import cache
+from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import render_to_response
+from django.views.decorators.cache import cache_control
 
-from settings import DIENST2_WHITELIST, DIENST2_APITOKEN
-from userman2.model import user
-from userman2.model import action
 from userman2.forms.user import *
+from userman2.model import action
+from userman2.model import user
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -27,23 +26,23 @@ def displayUsers(request):
         users = user.GetAllUsers()
 
     rmWarnUsers = [user.User(curaction.affectedDN)
-                   .uid for curaction in action.GetAllActions({"actionName": "warnRemove"})]
+                       .uid for curaction in action.GetAllActions({"actionName": "warnRemove"})]
 
     session = requests.Session()
 
     count = {"total": 0, "del": 0, "chlocal": 0, "anklocal": 0, "anksamba": 0}
     for u in users:
-            count["total"] += 1
-            # Disabled because it will make an LDAP request for every user
-            # if u.toBeDeleted:
-            #    count["del"] += 1
-            if u.chLocal:
-                count["chlocal"] += 1
-            if u.ankLocal:
-                count["anklocal"] += 1
-            if u.ankSamba:
-                count["anksamba"] += 1
-            u.dienst2Status = dienst2_cached(u.uid, session)
+        count["total"] += 1
+        # Disabled because it will make an LDAP request for every user
+        # if u.toBeDeleted:
+        #    count["del"] += 1
+        if u.chLocal:
+            count["chlocal"] += 1
+        if u.ankLocal:
+            count["anklocal"] += 1
+        if u.ankSamba:
+            count["anksamba"] += 1
+        u.dienst2Status = dienst2_cached(u.uid, session)
 
     return render_to_response('users.html', {'users': users, 'form': form, 'count': count, 'rmWarnUsers': rmWarnUsers})
 
@@ -71,7 +70,7 @@ def userChfn(request, uid):
             userObj.gecos = form.cleaned_data
             return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid + '/')
     else:
-            form = ChfnForm(initial=userObj.gecos)
+        form = ChfnForm(initial=userObj.gecos)
 
     return render_to_response('form.html', {'form': form, 'uid': userObj.uid})
 
@@ -89,7 +88,7 @@ def userChdesc(request, uid):
             userObj.description = str(form.cleaned_data["description"])
             return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid + '/')
     else:
-            form = ChdescForm(initial={"description": userObj.description})
+        form = ChdescForm(initial={"description": userObj.description})
 
     return render_to_response('form.html', {'form': form, 'uid': userObj.uid})
 
@@ -107,7 +106,7 @@ def userChwarnRm(request, uid):
             userObj.toBeDeleted = form.cleaned_data["toBeDeleted"]
             return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid + '/')
     else:
-            form = ChwarnRmForm(initial={"toBeDeleted": userObj.toBeDeleted})
+        form = ChwarnRmForm(initial={"toBeDeleted": userObj.toBeDeleted})
 
     return render_to_response('form.html', {'form': form, 'uid': userObj.uid})
 
@@ -125,7 +124,7 @@ def userChsh(request, uid):
             userObj.loginShell = str(form.cleaned_data["login_shell"])
             return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid + '/')
     else:
-            form = ChshForm(initial={"login_shell": userObj.loginShell})
+        form = ChshForm(initial={"login_shell": userObj.loginShell})
 
     return render_to_response('form.html', {'form': form, 'uid': userObj.uid})
 
@@ -143,7 +142,7 @@ def userChgroup(request, uid):
             userObj.gidNumber = str(form.cleaned_data["gid_number"])
             return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid + '/')
     else:
-            form = ChgroupForm(initial={"gid_number": userObj.gidNumber})
+        form = ChgroupForm(initial={"gid_number": userObj.gidNumber})
 
     return render_to_response('form.html', {'form': form, 'uid': userObj.uid})
 
@@ -201,7 +200,7 @@ def userChpriv(request, uid):
                     form.cleaned_data["service"]) + "@" + str(form.cleaned_data["server"]))
                 return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid + '/chpriv/')
     else:
-            form = ChprivForm()
+        form = ChprivForm()
 
     return render_to_response('userpriv.html', {'form': form, 'user': userObj})
 
@@ -243,7 +242,7 @@ def addUser(request):
 
             for access in form.cleaned_data['access']:
                 newUser.addAuthorizedService(str(access))
-#            newUser.createSambaEntry()
+            # newUser.createSambaEntry()
 
             return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + form.cleaned_data['uid'] + '/')
     else:
@@ -305,10 +304,10 @@ def chPassword(request, uid):
 
 
 def dienst2(username, session):
-    if username in DIENST2_WHITELIST:
+    if username in settings.DIENST2_WHITELIST:
         return {'status': 'whitelisted', 'message': 'Whitelisted'}
 
-    headers = {'Authorization': 'Token ' + DIENST2_APITOKEN}
+    headers = {'Authorization': 'Token ' + settings.DIENST2_APITOKEN}
     url = 'https://frans.chnet/dienst2/ldb/api/v3/people/'
     link_prefix = 'https://frans.chnet/dienst2/ldb/people/%d/'
     try:
