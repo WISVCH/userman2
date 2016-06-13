@@ -1,10 +1,8 @@
 .DS_Store
 ._*
-cron/config.py
 *.pyc
-local.py
+cron/config.py
+userman2/local.py
 /static
-.userman-env
-.userman2-env
-.idea
+.idea/
 *.iml
