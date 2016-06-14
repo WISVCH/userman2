@@ -58,13 +58,16 @@ class Group(LDAPConn):
         self.addEntries({'memberUid': member})
 
     def remove(self):
-        removeAction = action.Add(
-            'removeGroup', 'frans.chnet', self.dn, 'Remove group entry in LDAP for ' + self.dn)
-        if not self.parent == "None" and not self.parent == "Besturen":
-            removeAnkGroupDirAction = self.removeGroupDir(
-                'ank.chnet', removeAction)
+        if self.parent == "None" or self.parent == "Besturen":
+            ld = LDAPConn()
+            ld.connectRoot()
+            ld.l.delete_s(self.dn)
+        else:
+            removeAction = action.Add('removeGroup', 'frans.chnet', self.dn,
+                                      'Remove group entry in LDAP for ' + self.dn)
+            removeAnkGroupDirAction = self.removeGroupDir('ank.chnet', removeAction)
             removeAnkGroupDirAction.locked = False
-        removeAction.locked = False
+            removeAction.locked = False
 
     def getPrimaryMembers(self):
         from userman2.model import user
@@ -148,10 +151,11 @@ def GetParents():
     ld.connectAnon()
 
     filter_string = "(objectClass=organizationalUnit)"
-    res = ld.l.search_s(
-        settings.LDAP_GROUPDN, ldap.SCOPE_ONELEVEL, filter_string)
+    res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_ONELEVEL, filter_string)
+    res = [attribs['ou'][0] for (_, attribs) in res]
+    res.append('None')
     res.sort()
-    return [attribs['ou'][0] for (_, attribs) in res]
+    return res
 
 
 def Exists(cn):
@@ -180,11 +184,12 @@ def Add(parent, cn):
     ld = LDAPConn()
     ld.connectRoot()
 
-    dn = 'cn=' + cn + ',ou=' + parent + ',' + settings.LDAP_GROUPDN
+    ou = '' if parent == 'None' else ',ou=' + parent
+    dn = 'cn=' + cn + ou + ',' + settings.LDAP_GROUPDN
     gidNumber = GetFreeGIDNumber()
     ld.addObject(dn, {'objectClass': 'posixGroup', 'cn': cn, 'gidNumber': str(gidNumber)})
     retcode = subprocess.call('sudo ' + os.path.join(
         settings.ROOT_PATH, 'scripts/addgroupmapping') + ' ' + re.escape(cn) + ' ' + re.escape(cn), shell=True)
     if retcode != 0:
-        raise Exception, "Child failed"
+        raise Exception("Child failed")
     return FromCN(cn)
