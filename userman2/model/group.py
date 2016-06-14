@@ -1,16 +1,17 @@
 #!/usr/bin/env python
-import ldap
+import os
 import re
 import subprocess
-import os
-from ldapconn import LDAPConn
-from ldap.cidict import cidict
+
+import ldap
 from django.conf import settings
+from ldap.cidict import cidict
+
+from ldapconn import LDAPConn
 from userman2.model import action
 
 
-class Group (LDAPConn):
-
+class Group(LDAPConn):
     def __init__(self, dn, attrs=False):
         LDAPConn.__init__(self)
         self.dn = dn
@@ -27,6 +28,7 @@ class Group (LDAPConn):
 
     def _get_cn(self):
         return self.__attrs["cn"][0]
+
     cn = property(_get_cn)
 
     def _get_parent(self):
@@ -34,16 +36,19 @@ class Group (LDAPConn):
         if parent == "Group":
             return "None"
         return parent
+
     parent = property(_get_parent)
 
     def _get_gidNumber(self):
         return int(self.__attrs["gidNumber"][0])
+
     gidNumber = property(_get_gidNumber)
 
     def _get_members(self):
         if 'memberuid' in self.__attrs:
             return self.__attrs["memberUid"]
         return []
+
     members = property(_get_members)
 
     def removeMember(self, member):
@@ -159,13 +164,12 @@ def Exists(cn):
 def GetFreeGIDNumber():
     ld = LDAPConn()
     ld.connectAnon()
-    for i in range(settings.MIN_GROUP_ID, settings.MAX_GROUP_ID):
-        res = ld.l.search_s(
-            settings.LDAP_GROUPDN, ldap.SCOPE_SUBTREE, "gidNumber=" + str(i))
-        if len(res) == 0:
-            return i
+    for i in reversed(range(settings.MIN_GROUP_ID, settings.MAX_GROUP_ID)):
+        res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_SUBTREE, "gidNumber=" + str(i))
+        if len(res) > 0 and i < settings.MAX_GROUP_ID:
+            return i + 1
 
-    raise Exception, "No more free group IDs"
+    raise Exception("No more free group IDs")
 
 
 def Add(parent, cn):
@@ -174,8 +178,7 @@ def Add(parent, cn):
 
     dn = 'cn=' + cn + ',ou=' + parent + ',' + settings.LDAP_GROUPDN
     gidNumber = GetFreeGIDNumber()
-    ld.addObject(
-        dn, {'objectClass': 'posixGroup', 'cn': cn, 'gidNumber': str(gidNumber)})
+    ld.addObject(dn, {'objectClass': 'posixGroup', 'cn': cn, 'gidNumber': str(gidNumber)})
     retcode = subprocess.call('sudo ' + os.path.join(
         settings.ROOT_PATH, 'scripts/addgroupmapping') + ' ' + re.escape(cn) + ' ' + re.escape(cn), shell=True)
     if retcode != 0:
