@@ -120,8 +120,13 @@
     <p>
     <ul>
         <li><a href='chpasswd/'>Change user's password</a>
-        <li><a href='resetpasswd/' onclick="return confirm('Reset password for {{ user.uid }}?')">Reset user's
-            password</a>
+        <li>
+            {% if password %}
+                <span style="color: #BD0000">New password: <code>{{ password }}</code></span>
+            {% else %}
+                <a href='resetpasswd/' onclick="return confirm('Reset password for {{ user.uid }}?')">
+                    Reset user's password</a>
+            {% endif %}
     </ul></p>
     <p>
     <ul>
