@@ -1,16 +1,17 @@
 #!/usr/bin/env python
-import ldap
+import os
 import re
 import subprocess
-import os
-from ldapconn import LDAPConn
-from ldap.cidict import cidict
+
+import ldap
 from django.conf import settings
+from ldap.cidict import cidict
+
+from ldapconn import LDAPConn
 from userman2.model import action
 
 
-class Group (LDAPConn):
-
+class Group(LDAPConn):
     def __init__(self, dn, attrs=False):
         LDAPConn.__init__(self)
         self.dn = dn
@@ -27,6 +28,7 @@ class Group (LDAPConn):
 
     def _get_cn(self):
         return self.__attrs["cn"][0]
+
     cn = property(_get_cn)
 
     def _get_parent(self):
@@ -34,16 +36,19 @@ class Group (LDAPConn):
         if parent == "Group":
             return "None"
         return parent
+
     parent = property(_get_parent)
 
     def _get_gidNumber(self):
         return int(self.__attrs["gidNumber"][0])
+
     gidNumber = property(_get_gidNumber)
 
     def _get_members(self):
         if 'memberuid' in self.__attrs:
             return self.__attrs["memberUid"]
         return []
+
     members = property(_get_members)
 
     def removeMember(self, member):
@@ -53,13 +58,16 @@ class Group (LDAPConn):
         self.addEntries({'memberUid': member})
 
     def remove(self):
-        removeAction = action.Add(
-            'removeGroup', 'frans.chnet', self.dn, 'Remove group entry in LDAP for ' + self.dn)
-        if not self.parent == "None" and not self.parent == "Besturen":
-            removeAnkGroupDirAction = self.removeGroupDir(
-                'ank.chnet', removeAction)
+        if self.parent == "None" or self.parent == "Besturen":
+            ld = LDAPConn()
+            ld.connectRoot()
+            ld.l.delete_s(self.dn)
+        else:
+            removeAction = action.Add('removeGroup', 'frans.chnet', self.dn,
+                                      'Remove group entry in LDAP for ' + self.dn)
+            removeAnkGroupDirAction = self.removeGroupDir('ank.chnet', removeAction)
             removeAnkGroupDirAction.locked = False
-        removeAction.locked = False
+            removeAction.locked = False
 
     def getPrimaryMembers(self):
         from userman2.model import user
@@ -143,10 +151,11 @@ def GetParents():
     ld.connectAnon()
 
     filter_string = "(objectClass=organizationalUnit)"
-    res = ld.l.search_s(
-        settings.LDAP_GROUPDN, ldap.SCOPE_ONELEVEL, filter_string)
+    res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_ONELEVEL, filter_string)
+    res = [attribs['ou'][0] for (_, attribs) in res]
+    res.append('None')
     res.sort()
-    return [attribs['ou'][0] for (_, attribs) in res]
+    return res
 
 
 def Exists(cn):
@@ -159,25 +168,28 @@ def Exists(cn):
 def GetFreeGIDNumber():
     ld = LDAPConn()
     ld.connectAnon()
-    for i in range(settings.MIN_GROUP_ID, settings.MAX_GROUP_ID):
-        res = ld.l.search_s(
-            settings.LDAP_GROUPDN, ldap.SCOPE_SUBTREE, "gidNumber=" + str(i))
-        if len(res) == 0:
-            return i
+    for i in reversed(range(settings.MIN_GROUP_ID, settings.MAX_GROUP_ID + 1)):
+        res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_SUBTREE, "gidNumber=" + str(i))
+        if len(res) > 0:
+            if i == settings.MAX_GROUP_ID:
+                raise Exception("No more free group IDs")
+            else:
+                return i + 1
 
-    raise Exception, "No more free group IDs"
+    # This should never happen: if MAX_GROUP_ID is not taken we should have a free GID
+    raise AssertionError("Failure in finding free group ID")
 
 
 def Add(parent, cn):
     ld = LDAPConn()
     ld.connectRoot()
 
-    dn = 'cn=' + cn + ',ou=' + parent + ',' + settings.LDAP_GROUPDN
+    ou = '' if parent == 'None' else ',ou=' + parent
+    dn = 'cn=' + cn + ou + ',' + settings.LDAP_GROUPDN
     gidNumber = GetFreeGIDNumber()
-    ld.addObject(
-        dn, {'objectClass': 'posixGroup', 'cn': cn, 'gidNumber': str(gidNumber)})
+    ld.addObject(dn, {'objectClass': 'posixGroup', 'cn': cn, 'gidNumber': str(gidNumber)})
     retcode = subprocess.call('sudo ' + os.path.join(
         settings.ROOT_PATH, 'scripts/addgroupmapping') + ' ' + re.escape(cn) + ' ' + re.escape(cn), shell=True)
     if retcode != 0:
-        raise Exception, "Child failed"
+        raise Exception("Child failed")
     return FromCN(cn)
