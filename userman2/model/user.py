@@ -1,25 +1,28 @@
 #!/usr/bin/env python
+import datetime
+import os
+import random
+import re
+import string
+import subprocess
+import time
+from StringIO import StringIO
+
 import ldap
 import ldif
-from StringIO import StringIO
-from ldapconn import LDAPConn
-from ldap.cidict import cidict
 from django.conf import settings
-from userman2.model import group
-from userman2.model import alias
-from userman2.model import action
+from ldap.cidict import cidict
+from pyasn1.codec.ber import decoder
+from pyasn1.type import univ, namedtype, tag
+
 from cron.mail import mailAdmin
-import random
-import string
-import os
-import time
-import re
-import subprocess
-import datetime
+from ldapconn import LDAPConn
+from userman2.model import action
+from userman2.model import alias
+from userman2.model import group
 
 
-class User (LDAPConn):
-
+class User(LDAPConn):
     """Represents a user in the ldap tree."""
 
     def __init__(self, dn, attrs=False):
@@ -37,10 +40,12 @@ class User (LDAPConn):
 
     def _get_uid(self):
         return self.__attrs["uid"][0]
+
     uid = property(_get_uid)
 
     def _get_uidNumber(self):
         return int(self.__attrs["uidNumber"][0])
+
     uidNumber = property(_get_uidNumber)
 
     # gecos, cn, displayName attributes
@@ -108,20 +113,24 @@ class User (LDAPConn):
     # login permissions
     def get_chLocal(self):
         return "sshd@ch" in self.authorizedServices
+
     chLocal = property(get_chLocal)
 
     def get_ankLocal(self):
         return "sshd@ank" in self.authorizedServices
+
     ankLocal = property(get_ankLocal)
 
     def get_ankSamba(self):
         return "samba@ank" in self.authorizedServices
+
     ankSamba = property(get_ankSamba)
 
     def _get_authorizedServices(self):
         if 'authorizedservice' in self.__attrs:
             return self.__attrs["authorizedService"]
         return []
+
     authorizedServices = property(_get_authorizedServices)
 
     def addAuthorizedService(self, service):
@@ -139,6 +148,7 @@ class User (LDAPConn):
         newAction.arguments = self.homeDirectoryCH
         self.modifyEntries({'homeDirectoryCH': newHomeDir})
         newAction.locked = False
+
     homeDirectoryCH = property(_get_homeDirCH, _set_homeDirCH)
 
     def _get_homeDir(self):
@@ -158,7 +168,7 @@ class User (LDAPConn):
             {'actionName': 'warnRemove', 'affectedDN': self.dn}, self)
         if actions:
             newdate = datetime.datetime(
-                *(time.strptime(actions[0].arguments,  "%Y-%m-%d %H:%M:%S")[0:6]))
+                *(time.strptime(actions[0].arguments, "%Y-%m-%d %H:%M:%S")[0:6]))
             return newdate
         return False
 
@@ -186,12 +196,13 @@ class User (LDAPConn):
         return action.Add('removeMailbox', host, self.dn, 'Remove mailbox on ' + host + ' for ' + self.uid, parent)
 
     def removeHomedir(self, host, parent):
-        return action.Add('removeHomeDir', host, self.dn, 'Remove home directory on ' + host + ' for ' + self.uid, parent)
+        return action.Add('removeHomeDir', host, self.dn, 'Remove home directory on ' + host + ' for ' + self.uid,
+                          parent)
 
     def removeProfile(self, host, parent=False):
         return action.Add('removeProfile', host, self.dn, 'Remove profile on ' + host + ' for ' + self.uid, parent)
 
-    # def generateLogonScript(self, host):
+        # def generateLogonScript(self, host):
         # return action.Add('generateLogonScript', host, self.dn, 'Generate
         # logonscript on ' + host + ' for ' + self.uid)
 
@@ -200,6 +211,7 @@ class User (LDAPConn):
         ldif_out = ldif.LDIFWriter(out)
         ldif_out.unparse(self.dn, dict(self.__attrs))
         return out.getvalue()
+
     ldif = property(get_ldif)
 
     def remove(self):
@@ -240,24 +252,35 @@ class User (LDAPConn):
         return alias.getIndirectCnForUid(self.uid, ld=self)
 
     def resetPassword(self):
-        password = GeneratePassword()
-        retcode = subprocess.call('sudo ' + os.path.join(settings.ROOT_PATH, 'scripts/changesambapasswd')
-                                  + ' ' + re.escape(self.uid) + ' ' + re.escape(password), shell=True)
-        if retcode != 0:
-            raise Exception, "Child failed"
-        mailAdmin('Password reset: ' + self.uid,
-                  'A new password was created for ' + self.uid + ' with password ' + password)
+        res = self.l.passwd_s(self.dn, None, None)
+        if res != (None, None):
+            password = str(decoder.decode(res[1], asn1Spec=PasswordModifySeq())[0].getComponentByName('password'))
+            mailAdmin('Password reset: ' + self.uid,
+                      'A new password was created for ' + self.uid + ': ' + password)
+            return password
+        else:
+            raise Exception("Unexpected response from modify password request")
 
     def changePassword(self, password):
-        retcode = subprocess.call('sudo ' + os.path.join(settings.ROOT_PATH, 'scripts/changesambapasswd')
-                                  + ' ' + re.escape(self.uid) + ' ' + re.escape(password), shell=True)
-        if retcode != 0:
-            raise Exception, "Child failed"
+        res = self.l.passwd_s(self.dn, None, password)
+        if res != (None, None):
+            raise Exception("Unexpected response from modify password request")
 
     dienst2Status = {}
 
     def __str__(self):
         return "User: [ dn:'" + self.dn + ", uid:'" + self.uid + "', cn:'" + self.cn + "' ]"
+
+
+class PasswordModifySeq(univ.Sequence):
+    componentType = namedtype.NamedTypes(
+        namedtype.NamedType(
+            'password',
+            univ.OctetString().subtype(
+                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0)
+            )
+        )
+    )
 
 
 def FromUID(uid):

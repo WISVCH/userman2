@@ -281,8 +281,9 @@ def resetPassword(request, uid):
     except Exception, e:
         raise Http404
 
-    userObj.resetPassword()
-    return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid + '/')
+    dienst2Status = dienst2(uid, requests.session())
+    password = userObj.resetPassword()
+    return render_to_response('user.html', {'user': userObj, 'dienst2Status': dienst2Status, 'password': password})
 
 
 @cache_control(no_cache=True, must_revalidate=True)
