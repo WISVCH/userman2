@@ -309,8 +309,8 @@ def dienst2(username, session):
         return {'status': 'whitelisted', 'message': 'Whitelisted'}
 
     headers = {'Authorization': 'Token ' + settings.DIENST2_APITOKEN}
-    url = 'https://frans.chnet/dienst2/ldb/api/v3/people/'
-    link_prefix = 'https://frans.chnet/dienst2/ldb/people/%d/'
+    url = 'https://dienst2.chnet/ldb/api/v3/people/'
+    link_prefix = 'https://dienst2.chnet/ldb/people/%d/'
     try:
         r = session.get(url, params={'ldap_username': username}, headers=headers)
     except requests.exceptions.RequestException as e:
