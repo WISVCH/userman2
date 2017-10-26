@@ -1,19 +1,10 @@
 #!/bin/bash
-# Usage: $0 <username> <password>
+set -euo pipefail
 
-# Check paramaters
-if [ "$1" == "" ] ; then
-    echo "Usage: $0 <username> <password>"
-    exit 1
-fi
-if [ "$2" == "" ] ; then
-    echo "Usage: $0 <username> <password>"
-    exit 1
-fi
-if [ "$3" != "" ] ; then
-    echo "Too many parameters!"
+if [ "$#" -ne 1 ]; then
     echo "Usage: $0 <username> <password>"
     exit 1
 fi
 
-echo -e "$2\n$2" |pdbedit -t -a -u $1
+newpw=`pwgen 20 1`
+echo -e "$newpw\n$newpw" | pdbedit -t -a -u $1

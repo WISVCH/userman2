@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 import datetime
-import random
-import string
+import logging
 import subprocess
 import time
 from StringIO import StringIO
@@ -9,7 +8,6 @@ from StringIO import StringIO
 import ldap
 import ldif
 import os
-import re
 from django.conf import settings
 from ldap.cidict import cidict
 from pyasn1.codec.ber import decoder
@@ -20,6 +18,8 @@ from ldapconn import LDAPConn
 from userman2.model import action
 from userman2.model import alias
 from userman2.model import group
+
+auditlog = logging.getLogger("userman2.audit")
 
 
 class User(LDAPConn):
@@ -252,16 +252,16 @@ class User(LDAPConn):
         return alias.getIndirectCnForUid(self.uid, ld=self)
 
     def resetPassword(self):
+        auditlog.info("Reset password for dn '%s'", self.dn)
         res = self.l.passwd_s(self.dn, None, None)
         if res != (None, None):
             password = str(decoder.decode(res[1], asn1Spec=PasswordModifySeq())[0].getComponentByName('password'))
-            mailAdmin('Password reset: ' + self.uid,
-                      'A new password was created for ' + self.uid + ': ' + password)
             return password
         else:
             raise Exception("Unexpected response from modify password request")
 
     def changePassword(self, password):
+        auditlog.info("Change password for dn '%s'", self.dn)
         res = self.l.passwd_s(self.dn, None, password)
         if res != (None, None):
             raise Exception("Unexpected response from modify password request")
@@ -362,41 +362,22 @@ def GetFreeUIDNumber():
     raise AssertionError("Failure in finding free user ID")
 
 
-def GeneratePassword(length=10):
-    chars = string.letters + string.letters + string.digits
-    return ''.join([random.choice(chars) for i in range(length)])
-
-
 def Add(uid, fullname):
     ld = LDAPConn()
     ld.connectRoot()
 
-    password = GeneratePassword()
-
     dn = 'uid=' + uid + ',' + settings.LDAP_USERDN
-    entry = {'uid': uid}
-    entry['objectClass'] = ['account', 'chbakAccount']
-    entry['uidNumber'] = str(GetFreeUIDNumber())
-    entry['userPassword'] = '!disabled'
-    entry['cn'] = fullname
-    entry['displayName'] = fullname
-    entry['gecos'] = fullname + ",,,"
-    entry['gidNumber'] = str(settings.USER_GIDNUMBER)
-    entry['homeDirectory'] = settings.ANK_HOME_BASE + uid
-    entry['homeDirectoryCH'] = settings.CH_HOME_BASE + uid
-    entry['loginShell'] = settings.DEFAULT_SHELL
-    entry['shadowLastChange'] = str(int(time.time() / 86400))
-    entry['shadowMax'] = str(99999)
-    entry['shadowWarning'] = str(7)
-
+    entry = {'uid': uid, 'objectClass': ['account', 'chbakAccount'], 'uidNumber': str(GetFreeUIDNumber()),
+             'userPassword': '!disabled', 'cn': fullname, 'displayName': fullname, 'gecos': fullname + ",,,",
+             'gidNumber': str(settings.USER_GIDNUMBER), 'homeDirectory': settings.ANK_HOME_BASE + uid,
+             'homeDirectoryCH': settings.CH_HOME_BASE + uid, 'loginShell': settings.DEFAULT_SHELL,
+             'shadowLastChange': str(int(time.time() / 86400)), 'shadowMax': str(99999), 'shadowWarning': str(7)}
     ld.addObject(dn, entry)
 
-    retcode = subprocess.call('sudo ' + os.path.join(settings.ROOT_PATH, 'scripts/createsambauser')
-                              + ' ' + re.escape(uid) + ' ' + re.escape(password), shell=True)
+    retcode = subprocess.call(['sudo', os.path.join(settings.ROOT_PATH, 'scripts/createsambauser'), uid])
     if retcode != 0:
-        raise Exception, "Child failed"
+        raise Exception("scripts/createsambauser failed")
 
-    mailAdmin('Account created: ' + uid, 'A new account was created for ' +
-              uid + ' (' + entry['displayName'] + ') with password ' + password)
+    mailAdmin('Account created: %s' % uid, 'A new account was created for %s (%s)' % (uid, fullname))
 
-    return FromUID(entry['uid'])
+    return FromUID(uid)
