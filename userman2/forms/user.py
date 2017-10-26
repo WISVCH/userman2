@@ -22,17 +22,34 @@ class ChwarnRmForm(forms.Form):
 
 class ChprivForm(forms.Form):
     server = forms.ChoiceField(
-        choices=(("rob", "rob"), ("hendrik", "hendrik"), ("ank", "ank"), ("frans", "frans"), ("fw-01", "fw-01"),
-                 ("gadgetlab", "gadgetlab"), ("teamcity", "teamcity")))
+        choices=(
+            ("rob", "rob"),
+            ("hendrik", "hendrik"),
+            ("ank", "ank"),
+            ("frans", "frans"),
+            ("fw-01", "fw-01")
+        )
+    )
     service = forms.ChoiceField(
-        choices=(("sshd", "sshd"), ("samba", "samba"), ("systemd-user", "systemd-user"), ("sudo", "sudo"),
-                 ("cron", "cron"), ("vpn", "vpn"), ("teamcity", "teamcity")))
+        choices=(
+            ("sshd", "sshd"),
+            ("samba", "samba"),
+            ("systemd-user", "systemd-user"),
+            ("sudo", "sudo"),
+            ("cron", "cron"),
+            ("vpn", "vpn")
+        )
+    )
 
 
 class ChshForm(forms.Form):
     login_shell = forms.ChoiceField(
-        choices=(('/bin/bash', '/bin/bash'), ("/bin/zsh", "/bin/zsh"), ("/usr/bin/tcsh", "/usr/bin/tcsh"),
-                 ("/bin/false", "/bin/false")))
+        choices=(
+            ('/bin/bash', '/bin/bash'),
+            ("/bin/zsh", "/bin/zsh"),
+            ("/bin/false", "/bin/false")
+        )
+    )
 
 
 class ChgroupForm(forms.Form):
