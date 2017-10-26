@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 import datetime
-import os
 import random
-import re
 import string
 import subprocess
 import time
@@ -10,6 +8,8 @@ from StringIO import StringIO
 
 import ldap
 import ldif
+import os
+import re
 from django.conf import settings
 from ldap.cidict import cidict
 from pyasn1.codec.ber import decoder
@@ -350,13 +350,16 @@ def Exists(uid):
 def GetFreeUIDNumber():
     ld = LDAPConn()
     ld.connectAnon()
-    for i in range(settings.MIN_USER_ID, settings.MAX_USER_ID):
-        res = ld.l.search_s(
-            settings.LDAP_USERDN, ldap.SCOPE_SUBTREE, "uidNumber=" + str(i))
-        if len(res) == 0:
-            return i
+    for i in reversed(range(settings.MIN_USER_ID, settings.MAX_USER_ID + 1)):
+        res = ld.l.search_s(settings.LDAP_USERDN, ldap.SCOPE_SUBTREE, "uidNumber=" + str(i))
+        if len(res) > 0:
+            if i == settings.MAX_USER_ID:
+                raise Exception("No more free user IDs")
+            else:
+                return i + 1
 
-    raise Exception, "No more free user IDs"
+    # This should never happen: if MAX_USER_ID is not taken we should have a free UID
+    raise AssertionError("Failure in finding free user ID")
 
 
 def GeneratePassword(length=10):
@@ -379,8 +382,8 @@ def Add(uid, fullname):
     entry['displayName'] = fullname
     entry['gecos'] = fullname + ",,,"
     entry['gidNumber'] = str(settings.USER_GIDNUMBER)
-    entry['homeDirectory'] = settings.ANK_HOME_BASE + entry['uid']
-    entry['homeDirectoryCH'] = settings.CH_HOME_BASE + entry['uid']
+    entry['homeDirectory'] = settings.ANK_HOME_BASE + uid
+    entry['homeDirectoryCH'] = settings.CH_HOME_BASE + uid
     entry['loginShell'] = settings.DEFAULT_SHELL
     entry['shadowLastChange'] = str(int(time.time() / 86400))
     entry['shadowMax'] = str(99999)
