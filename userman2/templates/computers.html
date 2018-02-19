@@ -5,12 +5,11 @@
     <table>
         <tr class='title'>
             <td></td>
-            <td>UID</td>
+            <td>Name</td>
         </tr>
         {% for computer in computers %}
             <tr class='{% cycle odd,even %}'>
-                <td><a href='/userman2/computers/{{ computer.uid }}/rm'><img src='{% get_static_prefix %}delete.png'
-                                                                             alt='Delete'/></a></td>
+                <td><a href='{{ computer.uid }}/rm'><img src='{% get_static_prefix %}delete.png' alt='Delete'/></a></td>
                 <td>{{ computer.uid }}</td>
             </tr>
         {% endfor %}
