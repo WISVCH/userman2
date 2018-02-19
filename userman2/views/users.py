@@ -323,11 +323,7 @@ def dienst2(username, session):
     elif n > 1:
         ret = {'status': 'error', 'message': 'Error: %d records matched' % n}
     else:
-        if json['results'][0]['deceased'] is True:
-            ret = {'status': 'warning', 'message': 'Deceased'}
-        elif json['results'][0]['member'] is None:
-            ret = {'status': 'error', 'message': 'Member record not found'}
-        elif json['results'][0]['member']['current_member']:
+        if json['results'][0]['membership_status'] >= 30:
             ret = {'status': 'success', 'message': 'Member'}
         else:
             ret = {'status': 'warning', 'message': 'Not a member'}
