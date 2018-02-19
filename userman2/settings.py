@@ -33,6 +33,12 @@ MEDIA_ROOT = ''
 # Example: "http://media.lawrence.com"
 MEDIA_URL = ''
 
+# Absolute path to the directory static files should be collected to.
+STATIC_ROOT = os.path.join(os.path.dirname(__file__), '../static/')
+
+# URL prefix for static files.
+STATIC_URL = '/static/'
+
 # Additional locations of static files
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
@@ -56,6 +62,7 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django_request_logger.middleware.StoreRequestMiddleware'
 )
@@ -74,6 +81,7 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
     'django_extensions',
     'django_request_logger',
