@@ -4,3 +4,4 @@ requests==2.7.0
 python-memcached==1.54
 django_extensions==1.5.5
 pyasn1==0.1.9
+paramiko

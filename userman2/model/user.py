@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 import datetime
 import logging
-import subprocess
 import time
 from StringIO import StringIO
 
 import ldap
 import ldif
-import os
 from django.conf import settings
 from ldap.cidict import cidict
 from pyasn1.codec.ber import decoder
@@ -18,6 +16,7 @@ from ldapconn import LDAPConn
 from userman2.model import action
 from userman2.model import alias
 from userman2.model import group
+from userman2.scripts import execute_script
 
 auditlog = logging.getLogger("userman2.audit")
 
@@ -374,9 +373,7 @@ def Add(uid, fullname):
              'shadowLastChange': str(int(time.time() / 86400)), 'shadowMax': str(99999), 'shadowWarning': str(7)}
     ld.addObject(dn, entry)
 
-    retcode = subprocess.call(['sudo', os.path.join(settings.ROOT_PATH, 'scripts/createsambauser'), uid])
-    if retcode != 0:
-        raise Exception("scripts/createsambauser failed")
+    execute_script("sudo /usr/local/userman/scripts/createsambauser %s" % uid)
 
     mailAdmin('Account created: %s' % uid, 'A new account was created for %s (%s)' % (uid, fullname))
 

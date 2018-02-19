@@ -1,13 +1,14 @@
-import ldap
-from ldapconn import LDAPConn
-from ldap.cidict import cidict
-from django.conf import settings
 import re
-import subprocess
-import os
+
+import ldap
+from django.conf import settings
+from ldap.cidict import cidict
+
+from ldapconn import LDAPConn
+from userman2.scripts import execute_script
 
 
-class Computer (LDAPConn):
+class Computer(LDAPConn):
 
     def __init__(self, dn, attrs=False):
         LDAPConn.__init__(self)
@@ -25,10 +26,12 @@ class Computer (LDAPConn):
 
     def _get_uid(self):
         return self.__attrs["uid"][0]
+
     uid = property(_get_uid)
 
     def _get_uidNumber(self):
         return int(self.__attrs["uidNumber"][0])
+
     uidNumber = property(_get_uidNumber)
 
     def remove(self):
@@ -65,25 +68,21 @@ def GetFreeUIDNumber():
     raise Exception, "No more free user IDs"
 
 
-def Add(uid):
+def Add(computer_name):
     ld = LDAPConn()
     ld.connectRoot()
 
-    dn = 'uid=' + uid + ',' + settings.LDAP_COMPUTERDN
-    entry = {'uid': uid}
-    entry['objectClass'] = ['account', 'chbakAccount']
-    entry['uidNumber'] = str(GetFreeUIDNumber())
-    entry['cn'] = "Machine Account " + uid
-    entry['gidNumber'] = str(settings.MACHINE_GIDNUMBER)
-    entry['homeDirectory'] = "/dev/null"
-    entry['authorizedService'] = "samba@ank"
-
+    dn = 'uid=' + computer_name + ',' + settings.LDAP_COMPUTERDN
+    entry = {'uid': computer_name,
+             'objectClass': ['account', 'chbakAccount'],
+             'uidNumber': str(GetFreeUIDNumber()),
+             'cn': "Machine Account " + computer_name,
+             'gidNumber': str(settings.MACHINE_GIDNUMBER),
+             'homeDirectory': "/dev/null",
+             'authorizedService': "samba@ank"}
     ld.addObject(dn, entry)
 
-    retcode = subprocess.call('sudo ' + os.path.join(
-        settings.ROOT_PATH, 'scripts/createsambamachine') + ' ' + re.escape(uid), shell=True)
-    if retcode != 0:
-        raise Exception, "Child failed"
+    execute_script("sudo /usr/local/userman/scripts/createsambamachine %s" % re.escape(computer_name))
 
 
 def Exists(uid):

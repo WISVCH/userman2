@@ -1,7 +1,5 @@
 #!/usr/bin/env python
-import os
 import re
-import subprocess
 
 import ldap
 from django.conf import settings
@@ -9,6 +7,7 @@ from ldap.cidict import cidict
 
 from ldapconn import LDAPConn
 from userman2.model import action
+from userman2.scripts import execute_script
 
 
 class Group(LDAPConn):
@@ -188,8 +187,5 @@ def Add(parent, cn):
     dn = 'cn=' + cn + ou + ',' + settings.LDAP_GROUPDN
     gidNumber = GetFreeGIDNumber()
     ld.addObject(dn, {'objectClass': 'posixGroup', 'cn': cn, 'gidNumber': str(gidNumber)})
-    retcode = subprocess.call('sudo ' + os.path.join(
-        settings.ROOT_PATH, 'scripts/addgroupmapping') + ' ' + re.escape(cn) + ' ' + re.escape(cn), shell=True)
-    if retcode != 0:
-        raise Exception("Child failed")
+    execute_script("sudo /usr/local/userman/scripts/createsambauser %s" % re.escape(cn))
     return FromCN(cn)

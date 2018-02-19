@@ -88,6 +88,8 @@ EMAIL_HOST = 'ch.tudelft.nl'
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
+SSH_ANK_HOSTKEY = "AAAAC3NzaC1lZDI1NTE5AAAAIM6VQmPhRQAwOn1CpW8QMGnQI/UmLtTjh4Y8/aF1hngs"
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
