@@ -39,6 +39,8 @@ class AddDjangoRequestFilter(object):
 
             if 'AUTHENTICATE_UID' in request.META:
                 record.username = request.META['AUTHENTICATE_UID']
+            elif 'HTTP_X_AUTH_SUBJECT' in request.META:
+                record.username = request.META['HTTP_X_AUTH_SUBJECT']
             else:
                 record.username = '_'
 
