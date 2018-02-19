@@ -62,7 +62,7 @@ class Group(LDAPConn):
             ld.connectRoot()
             ld.l.delete_s(self.dn)
         else:
-            removeAction = action.Add('removeGroup', 'frans.chnet', self.dn,
+            removeAction = action.Add('removeGroup', 'ank.chnet', self.dn,
                                       'Remove group entry in LDAP for ' + self.dn)
             removeAnkGroupDirAction = self.removeGroupDir('ank.chnet', removeAction)
             removeAnkGroupDirAction.locked = False

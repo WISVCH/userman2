@@ -227,8 +227,7 @@ class User(LDAPConn):
             curAlias.removeMember(self.uid)
 
         # Create removal tree
-        removeAction = action.Add(
-            'removeUser', 'frans.chnet', self.dn, 'Remove user ' + self.uid)
+        removeAction = action.Add('removeUser', 'ank.chnet', self.dn, 'Remove user ' + self.uid)
         removeHomedirAnk = self.removeHomedir('ank.chnet', removeAction)
         removeProfileAnk = self.removeProfile('ank.chnet', removeHomedirAnk)
         removeHomedirRob = self.removeHomedir('rob.chnet', removeAction)
