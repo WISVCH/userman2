@@ -193,11 +193,9 @@ def userChpriv(request, uid):
     if request.method == 'POST':
         form = ChprivForm(request.POST)
         if form.is_valid():
-            serviceStr = str(form.cleaned_data["service"]) + "@" + str(
-                form.cleaned_data["server"])
-            if not serviceStr in userObj.authorizedServices:
-                userObj.addAuthorizedService(str(
-                    form.cleaned_data["service"]) + "@" + str(form.cleaned_data["server"]))
+            serviceStr = str(form.cleaned_data["service"])
+            if serviceStr not in userObj.authorizedServices:
+                userObj.addAuthorizedService(serviceStr)
                 return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid + '/chpriv/')
     else:
         form = ChprivForm()

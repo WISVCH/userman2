@@ -11,8 +11,7 @@
             </tr>
             {% for service in user.authorizedServices %}
                 <tr>
-                    <td><a href='rm/{{ service }}'><img
-                            src='{% get_static_prefix %}delete.png' alt='Delete'></a></td>
+                    <td><a href='rm/{{ service }}'><img src='{% get_static_prefix %}delete.png' alt='Delete'></a></td>
                     <td colspan='2'>{{ service }}</td>
                 </tr>
             {% endfor %}
@@ -23,7 +22,9 @@
             </tr>
             <tr>
                 <td></td>
-                <td>{{ form.service }}@{{ form.server }}<br/>
+                <td>
+                    {{ form.service }}
+                    <br/>
                     <small>Note: always add systemd-user@host in addition to sshd@host access.</small>
                 </td>
             </tr>
