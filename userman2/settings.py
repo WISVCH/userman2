@@ -84,7 +84,9 @@ ALLOWED_HOSTS = [
     'frans.chnet',
 ]
 
-EMAIL_BACKEND = 'django_sendmail_backend.backends.EmailBackend'
+EMAIL_HOST = 'ch.tudelft.nl'
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 CACHES = {
     'default': {
