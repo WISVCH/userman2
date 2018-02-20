@@ -9,7 +9,8 @@
         </tr>
         {% for computer in computers %}
             <tr class='{% cycle odd,even %}'>
-                <td><a href='{{ computer.uid }}/rm'><img src='{% get_static_prefix %}delete.png' alt='Delete'/></a></td>
+                <td><a href='{{ computer.uid|urlencode }}/rm'><img src='{% get_static_prefix %}delete.png'
+                                                                   alt='Delete'/></a></td>
                 <td>{{ computer.uid }}</td>
             </tr>
         {% endfor %}
