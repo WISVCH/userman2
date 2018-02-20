@@ -1,12 +1,9 @@
-from userman2.model import group
-from userman2.model import action
-
-from django.shortcuts import render_to_response
 from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import render_to_response
 from django.views.decorators.cache import cache_control
-from django.conf import settings
 
 from userman2.forms.group import *
+from userman2.model import group
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -45,7 +42,7 @@ def rmuser(request, cn, user):
 
     groupObj.connectRoot()
     groupObj.removeMember(user)
-    return HttpResponseRedirect(settings.USERMAN_PREFIX + '/groups/' + groupObj.cn + '/')
+    return HttpResponseRedirect('/groups/' + groupObj.cn + '/')
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -60,7 +57,7 @@ def adduser(request, cn):
         if form.is_valid():
             groupObj.connectRoot()
             groupObj.addMember(str(form.cleaned_data["user"]))
-            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/groups/' + groupObj.cn + '/')
+            return HttpResponseRedirect('/groups/' + groupObj.cn + '/')
     else:
         form = AddUserForm()
 
@@ -81,7 +78,7 @@ def addGroup(request, parent):
             if not newGroup.parent == "None" and not newGroup.parent == "Besturen":
                 newAction = newGroup.createGroupDir('ank.chnet')
                 newAction.locked = False
-            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/groups/' + form.cleaned_data['common_name'] + '/')
+            return HttpResponseRedirect('/groups/' + form.cleaned_data['common_name'] + '/')
     else:
         form = AddGroupForm()
 
@@ -97,4 +94,4 @@ def rmGroup(request, cn):
 
     groupObj.remove()
 
-    return HttpResponseRedirect(settings.USERMAN_PREFIX + '/groups/')
+    return HttpResponseRedirect('/groups/')

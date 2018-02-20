@@ -1,14 +1,12 @@
-from userman2.model import user
-from userman2.model import group
-from django.shortcuts import render_to_response
-from django.http import Http404, HttpResponseRedirect
-from django.views.decorators.cache import cache_control
-from django.conf import settings
-
 import datetime
-from userman2.forms.massmail import *
-from email.MIMEText import MIMEText
 import smtplib
+
+from django.http import HttpResponseRedirect
+from django.shortcuts import render_to_response
+from django.views.decorators.cache import cache_control
+from email.MIMEText import MIMEText
+
+from userman2.forms.massmail import *
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -50,7 +48,7 @@ def writeMail(request):
         form = WriteMailForm(request.GET)
         if form.is_valid():
             if not form.cleaned_data["users"]:
-                return HttpResponseRedirect('/userman2/massmail/')
+                return HttpResponseRedirect('/massmail/')
             usernames = form.cleaned_data["users"]
 
     return render_to_response('massmail2.html', {'form': form, 'users': usernames})
@@ -87,7 +85,7 @@ def sendMail(request):
                     if removaldate:
                         userObj = user.FromUID(username)
                         userObj.toBeDeleted = removaldate
-                return HttpResponseRedirect('/userman2/massmail/')
+                return HttpResponseRedirect('/massmail/')
             return render_to_response('massmail3.html', {'form': form, 'users': usernames, 'fromaddress': form.cleaned_data['fromaddress'], 'subject': form.cleaned_data['subject'], 'body': form.cleaned_data['body'], 'removaldue': form.cleaned_data['removaldue'], 'removalunits': form.cleaned_data['removalunits']})
 
-    return HttpResponseRedirect('/userman2/massmail/')
+    return HttpResponseRedirect('/massmail/')

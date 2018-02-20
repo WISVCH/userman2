@@ -1,10 +1,9 @@
-from userman2.model import computer
-from django.shortcuts import render_to_response
 from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import render_to_response
 from django.views.decorators.cache import cache_control
-from django.conf import settings
 
 from userman2.forms.computer import *
+from userman2.model import computer
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -27,7 +26,7 @@ def addComputer(request):
                 raise Http404
             newComputer = computer.Add(uid)
 
-            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/computers/')
+            return HttpResponseRedirect('/computers/')
     else:
         form = AddComputerForm()
 
@@ -43,4 +42,4 @@ def rmComputer(request, cn):
 
     computerObj.connectRoot()
     computerObj.remove()
-    return HttpResponseRedirect(settings.USERMAN_PREFIX + '/computers/')
+    return HttpResponseRedirect('/computers/')

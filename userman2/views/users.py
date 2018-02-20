@@ -60,7 +60,7 @@ def userChfn(request, uid):
         form = ChfnForm(request.POST)
         if form.is_valid():
             userObj.gecos = form.cleaned_data
-            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid + '/')
+            return HttpResponseRedirect('/users/' + userObj.uid + '/')
     else:
         form = ChfnForm(initial=userObj.gecos)
 
@@ -78,7 +78,7 @@ def userChdesc(request, uid):
         form = ChdescForm(request.POST)
         if form.is_valid():
             userObj.description = str(form.cleaned_data["description"])
-            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid + '/')
+            return HttpResponseRedirect('/users/' + userObj.uid + '/')
     else:
         form = ChdescForm(initial={"description": userObj.description})
 
@@ -96,7 +96,7 @@ def userChwarnRm(request, uid):
         form = ChwarnRmForm(request.POST)
         if form.is_valid():
             userObj.toBeDeleted = form.cleaned_data["toBeDeleted"]
-            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid + '/')
+            return HttpResponseRedirect('/users/' + userObj.uid + '/')
     else:
         form = ChwarnRmForm(initial={"toBeDeleted": userObj.toBeDeleted})
 
@@ -114,7 +114,7 @@ def userChsh(request, uid):
         form = ChshForm(request.POST)
         if form.is_valid():
             userObj.loginShell = str(form.cleaned_data["login_shell"])
-            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid + '/')
+            return HttpResponseRedirect('/users/' + userObj.uid + '/')
     else:
         form = ChshForm(initial={"login_shell": userObj.loginShell})
 
@@ -132,7 +132,7 @@ def userChgroup(request, uid):
         form = ChgroupForm(request.POST)
         if form.is_valid():
             userObj.gidNumber = str(form.cleaned_data["gid_number"])
-            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid + '/')
+            return HttpResponseRedirect('/users/' + userObj.uid + '/')
     else:
         form = ChgroupForm(initial={"gid_number": userObj.gidNumber})
 
@@ -150,7 +150,7 @@ def chHomeCH(request, uid):
         form = ChHomeForm(request.POST)
         if form.is_valid():
             userObj.homeDirectoryCH = str(form.cleaned_data["new_directory"])
-            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid + '/')
+            return HttpResponseRedirect('/users/' + userObj.uid + '/')
     else:
         form = ChHomeForm(initial={"new_directory": userObj.description})
 
@@ -168,7 +168,7 @@ def chHomeAnk(request, uid):
         form = ChHomeForm(request.POST)
         if form.is_valid():
             userObj.homeDirectoryAnk = str(form.cleaned_data["new_directory"])
-            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid + '/')
+            return HttpResponseRedirect('/users/' + userObj.uid + '/')
     else:
         form = ChHomeForm(initial={"new_directory": userObj.description})
 
@@ -188,7 +188,7 @@ def userChpriv(request, uid):
             serviceStr = str(form.cleaned_data["service"])
             if serviceStr not in userObj.authorizedServices:
                 userObj.addAuthorizedService(serviceStr)
-                return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid + '/chpriv/')
+                return HttpResponseRedirect('/users/' + userObj.uid + '/chpriv/')
     else:
         form = ChprivForm()
 
@@ -205,7 +205,7 @@ def userRmpriv(request, uid, service, server):
     if not serviceStr in userObj.authorizedServices:
         raise Http404
     userObj.removeAuthorizedService(serviceStr)
-    return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid + '/chpriv/')
+    return HttpResponseRedirect('/users/' + userObj.uid + '/chpriv/')
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -234,7 +234,7 @@ def addUser(request):
                 newUser.addAuthorizedService(str(access))
             # newUser.createSambaEntry()
 
-            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + form.cleaned_data['uid'] + '/')
+            return HttpResponseRedirect('/users/' + form.cleaned_data['uid'] + '/')
     else:
         form = AddUserForm()
 
@@ -249,7 +249,7 @@ def rmUser(request, uid):
         raise Http404
 
     userObj.remove()
-    return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/')
+    return HttpResponseRedirect('/users/')
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -261,7 +261,7 @@ def removeProfile(request, uid):
 
     newAction = userObj.removeProfile('ank.chnet')
     newAction.locked = False
-    return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid + '/')
+    return HttpResponseRedirect('/users/' + userObj.uid + '/')
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -287,7 +287,7 @@ def chPassword(request, uid):
         form = ChpassForm(request.POST)
         if form.is_valid():
             userObj.changePassword(form.cleaned_data['password'])
-            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/users/' + userObj.uid + '/')
+            return HttpResponseRedirect('/users/' + userObj.uid + '/')
     else:
         form = ChpassForm()
 

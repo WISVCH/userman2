@@ -1,11 +1,9 @@
-from django.shortcuts import render_to_response
 from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import render_to_response
 from django.views.decorators.cache import cache_control
-from django.conf import settings
 
-from userman2.model.ldapconn import LDAPError
-from userman2.model import alias
 from userman2.forms.alias import *
+from userman2.model.ldapconn import LDAPError
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -44,7 +42,7 @@ def rmuser(request, cn, user):
 
     aliasObj.connectRoot()
     aliasObj.removeMember(user)
-    return HttpResponseRedirect(settings.USERMAN_PREFIX + '/aliases/' + aliasObj.cn + '/')
+    return HttpResponseRedirect('/aliases/' + aliasObj.cn + '/')
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -65,7 +63,7 @@ def adduser(request, cn):
                     aliasObj.addMember(str(form.cleaned_data['alias']))
                 elif form.cleaned_data['email']:
                     aliasObj.addMember(str(form.cleaned_data['email']))
-                return HttpResponseRedirect(settings.USERMAN_PREFIX + '/aliases/' + aliasObj.cn + '/')
+                return HttpResponseRedirect('/aliases/' + aliasObj.cn + '/')
             except LDAPError as e:
                 return render_to_response('error.html', {'msg': e.message})
     else:
@@ -85,7 +83,7 @@ def addAlias(request, parent):
             if alias.Exists(form.cleaned_data['common_name']):
                 raise Http404
             alias.Add(parent, str(form.cleaned_data['common_name']))
-            return HttpResponseRedirect(settings.USERMAN_PREFIX + '/aliases/' + form.cleaned_data['common_name'] + '/')
+            return HttpResponseRedirect('/aliases/' + form.cleaned_data['common_name'] + '/')
     else:
         form = AddAliasForm()
 
@@ -101,4 +99,4 @@ def rmAlias(request, cn):
 
     aliasObj.connectRoot()
     aliasObj.remove()
-    return HttpResponseRedirect(settings.USERMAN_PREFIX + '/aliases/')
+    return HttpResponseRedirect('/aliases/')
