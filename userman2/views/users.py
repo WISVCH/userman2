@@ -13,7 +13,7 @@ from userman2.model import user
 
 @cache_control(no_cache=True, must_revalidate=True)
 def displayUsers(request):
-    if (request.GET):
+    if request.GET:
         form = UsersForm(request.GET)
         if form.is_valid():
             users = user.GetAllUsers(form.cleaned_data)
@@ -26,12 +26,9 @@ def displayUsers(request):
     rmWarnUsers = [user.User(curaction.affectedDN)
                        .uid for curaction in action.GetAllActions({"actionName": "warnRemove"})]
 
-    count = {"total": 0, "del": 0, "chlocal": 0, "anklocal": 0, "anksamba": 0}
+    count = {"total": 0, "del": len(rmWarnUsers), "chlocal": 0, "anklocal": 0, "anksamba": 0}
     for u in users:
         count["total"] += 1
-        # Disabled because it will make an LDAP request for every user
-        # if u.toBeDeleted:
-        #    count["del"] += 1
         if u.chLocal:
             count["chlocal"] += 1
         if u.ankLocal:
