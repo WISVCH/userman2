@@ -1,5 +1,6 @@
 # Django settings for userman2 project.
 import os
+import time
 
 ADMINS = (
     ('Beheer', 'beheer@ch.tudelft.nl'),
@@ -89,7 +90,7 @@ INSTALLED_APPS = (
 )
 
 ALLOWED_HOSTS = [
-    'frans.chnet',
+    '127.0.0.1',
 ]
 
 EMAIL_HOST = 'ch.tudelft.nl'
@@ -98,13 +99,28 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 SSH_ANK_HOSTKEY = "AAAAC3NzaC1lZDI1NTE5AAAAIM6VQmPhRQAwOn1CpW8QMGnQI/UmLtTjh4Y8/aF1hngs"
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
-        'KEY_PREFIX': 'userman2',
-    }
-}
+LDAP_HOST = "ldaps://ank.chnet"
+LDAP_USER = "cn=admin,dc=ank,dc=chnet"
+LDAP_BASE = 'dc=ank,dc=chnet'
+LDAP_ACTIONDN = 'ou=Actions,' + LDAP_BASE
+LDAP_USERDN = 'ou=People,' + LDAP_BASE
+LDAP_GROUPDN = 'ou=Group,' + LDAP_BASE
+LDAP_COMPUTERDN = 'ou=Computers,' + LDAP_BASE
+LDAP_ALIASDN = 'ou=Aliases,' + LDAP_BASE
+MIN_GROUP_ID = 1000
+MAX_GROUP_ID = 1500
+MIN_COMPUTER_ID = 5000
+MAX_COMPUTER_ID = 5500
+MIN_USER_ID = 1500
+MAX_USER_ID = 2500
+MACHINE_GIDNUMBER = 1102
+USER_GIDNUMBER = 100
+
+ANK_HOME_BASE = '/export/gebruikers/' + time.strftime('%Y') + '/'
+CH_HOME_BASE = '/home/' + time.strftime('%Y') + '/'
+DEFAULT_SHELL = '/bin/bash'
+GRAVEYARD_DIR = '/var/local/graveyard/'
+ADMIN_MAIL = 'pccom@ch.tudelft.nl'
 
 ROOT_PATH = os.path.dirname(__file__)
 

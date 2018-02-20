@@ -11,7 +11,6 @@
                 <th>UID</th>
                 <th>Common Name</th>
                 <th>UIDNumber</th>
-                <th>Dienst2</th>
                 <th>Deletion Mark</th>
                 <th>CH L</th>
                 <th>Ank L</th>
@@ -22,7 +21,6 @@
                 <td>{{ form.uid }}</td>
                 <td>{{ form.cn }}</td>
                 <td>{{ form.uidnumber }}</td>
-                <td></td>
                 <td>{{ form.deleted }}</td>
                 <td>{{ form.chlocal }}{{ form.nochlocal }}</td>
                 <td>{{ form.anklocal }}{{ form.noanklocal }}</td>
@@ -36,7 +34,6 @@
                     <td>{{ user.uid }}</td>
                     <td>{{ user.gecos.full_name|default:"&nbsp;" }}</td>
                     <td>{{ user.uidNumber }}</td>
-                    <td>{{ user.dienst2Status|dienst2icon }}</td>
                     <td>{% for rmWarnUser in rmWarnUsers %} {% ifequal user.uid rmWarnUser %}
                         {{ user.toBeDeleted|date:"F d Y - H i"|default:"Never" }} {% endifequal %} {% endfor %}</td>
                     <td>{% if user.chLocal %}+{% endif %}</td>
@@ -48,7 +45,7 @@
             <tfoot>
             <tr class='total'>
                 <td colspan='2'>Total:</td>
-                <td colspan='3'>{{ count.total }}</td>
+                <td colspan='2'>{{ count.total }}</td>
                 <td>{{ count.del }}</td>
                 <td>{{ count.chlocal }}</td>
                 <td>{{ count.anklocal }}</td>

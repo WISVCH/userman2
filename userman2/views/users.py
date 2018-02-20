@@ -42,7 +42,6 @@ def displayUsers(request):
             count["anklocal"] += 1
         if u.ankSamba:
             count["anksamba"] += 1
-        u.dienst2Status = dienst2_cached(u.uid, session)
 
     return render_to_response('users.html', {'users': users, 'form': form, 'count': count, 'rmWarnUsers': rmWarnUsers})
 
@@ -307,7 +306,7 @@ def dienst2(username, session):
         return {'status': 'whitelisted', 'message': 'Whitelisted'}
 
     headers = {'Authorization': 'Token ' + settings.DIENST2_APITOKEN}
-    url = 'https://dienst2.chnet/ldb/api/v3/people/'
+    url = settings.DIENST2_BASEURL + '/ldb/api/v3/people/'
     link_prefix = 'https://dienst2.chnet/ldb/people/%d/'
     try:
         r = session.get(url, params={'ldap_username': username}, headers=headers)
@@ -331,11 +330,4 @@ def dienst2(username, session):
 
     ret['updated'] = str(datetime.now())
     cache.set('dienst2status_' + username, ret, randint(3600, 86400))
-    return ret
-
-
-def dienst2_cached(username, session):
-    ret = cache.get('dienst2status_' + username)
-    if ret is None:
-        ret = dienst2(username, session)
     return ret
