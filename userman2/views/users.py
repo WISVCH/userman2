@@ -1,9 +1,7 @@
 from datetime import datetime
-from random import randint
 
 import requests
 from django.conf import settings
-from django.core.cache import cache
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.views.decorators.cache import cache_control
@@ -28,8 +26,6 @@ def displayUsers(request):
     rmWarnUsers = [user.User(curaction.affectedDN)
                        .uid for curaction in action.GetAllActions({"actionName": "warnRemove"})]
 
-    session = requests.Session()
-
     count = {"total": 0, "del": 0, "chlocal": 0, "anklocal": 0, "anksamba": 0}
     for u in users:
         count["total"] += 1
@@ -52,7 +48,7 @@ def displayUser(request, uid):
         userObj = user.FromUID(uid)
     except Exception, e:
         raise Http404
-    dienst2Status = dienst2(uid, requests.session())
+    dienst2Status = dienst2(uid)
     return render_to_response('user.html', {'user': userObj, 'dienst2Status': dienst2Status})
 
 
@@ -278,7 +274,7 @@ def resetPassword(request, uid):
     except Exception, e:
         raise Http404
 
-    dienst2Status = dienst2(uid, requests.session())
+    dienst2Status = dienst2(uid)
     password = userObj.resetPassword()
     return render_to_response('user.html', {'user': userObj, 'dienst2Status': dienst2Status, 'password': password})
 
@@ -301,7 +297,7 @@ def chPassword(request, uid):
     return render_to_response('form.html', {'form': form, 'user': userObj})
 
 
-def dienst2(username, session):
+def dienst2(username):
     if username in settings.DIENST2_WHITELIST:
         return {'status': 'whitelisted', 'message': 'Whitelisted'}
 
@@ -309,7 +305,7 @@ def dienst2(username, session):
     url = settings.DIENST2_BASEURL + '/ldb/api/v3/people/'
     link_prefix = 'https://dienst2.chnet/ldb/people/%d/'
     try:
-        r = session.get(url, params={'ldap_username': username}, headers=headers)
+        r = requests.get(url, params={'ldap_username': username}, headers=headers, timeout=5)
     except requests.exceptions.RequestException as e:
         return {'error': str(e)}
     if r.status_code is not 200:
@@ -329,5 +325,4 @@ def dienst2(username, session):
         ret['href'] = link_prefix % json['results'][0]['id']
 
     ret['updated'] = str(datetime.now())
-    cache.set('dienst2status_' + username, ret, randint(3600, 86400))
     return ret

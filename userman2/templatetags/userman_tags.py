@@ -44,9 +44,12 @@ def dienst2icon(dienst2Status):
 
 @register.filter
 def dienst2message(dienst2Status):
+    ret = ''
     if 'error' in dienst2Status:
-        return dienst2Status['error']
+        ret = dienst2Status['error']
     elif 'message' in dienst2Status:
-        return dienst2Status['message']
-    else:
-        return ""
+        ret = dienst2Status['message']
+    if 'href' in dienst2Status:
+        ret = '<a href="%s">%s</a>' % (dienst2Status['href'], ret)
+
+    return mark_safe(ret)
