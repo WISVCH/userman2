@@ -9,7 +9,7 @@ def mailAdmin(subject, message):
         from django.conf import settings
         from django.core.mail import send_mail
         email = settings.ADMIN_MAIL
-        send_mail(userman_subject, message, email, email)
+        send_mail(userman_subject, message, email, [email])
 
     except ImportError:
         import config
