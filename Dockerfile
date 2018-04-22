@@ -21,7 +21,7 @@ RUN export DEBIAN_FRONTEND="noninteractive" && \
     ln -s /config/local.py userman2/local.py
 
 RUN groupadd -r userman2 --gid=999 && useradd --no-log-init -r -g userman2 --uid=999 userman2
-USER userman2
+USER 999
 
 ENTRYPOINT ["/srv/docker-entrypoint.sh"]
 CMD ["gunicorn"]
