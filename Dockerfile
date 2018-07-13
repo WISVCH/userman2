@@ -12,7 +12,7 @@ COPY . /srv
 RUN export DEBIAN_FRONTEND="noninteractive" && \
     apt-get update && \
     apt-get install -y --no-install-recommends libldap2-dev libsasl2-dev && \
-    pip install --no-cache-dir -r requirements.txt gunicorn && \
+    pip install --no-cache-dir -r requirements.txt ddtrace gunicorn && \
     cp userman2/local.py.example userman2/local.py && \
     ./manage.py collectstatic --noinput && \
     apt-get purge -y libldap2-dev libsasl2-dev && \
