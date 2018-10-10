@@ -25,6 +25,8 @@ class ChprivForm(forms.Form):
         choices=(
             ("sshd@rob", "sshd@rob"),
             ("systemd-user@rob", "systemd-user@rob"),
+            ("sshd@hendrik", "sshd@hendrik"),
+            ("systemd-user@hendrik", "systemd-user@hendrik"),
             ("samba@ank", "samba@ank"),
             ("vpn@fw-01", "vpn@fw-01")
         )
