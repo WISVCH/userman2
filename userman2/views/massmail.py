@@ -2,7 +2,7 @@ import datetime
 import smtplib
 
 from django.http import HttpResponseRedirect
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.views.decorators.cache import cache_control
 from email.MIMEText import MIMEText
 
@@ -39,7 +39,7 @@ def selectUsers(request):
 
     count = {"total": len(users)}
 
-    return render_to_response('massmail.html', {'users': users, 'form': form, 'count': count})
+    return render(request, 'massmail.html', {'users': users, 'form': form, 'count': count})
 
 
 def writeMail(request):
@@ -51,7 +51,7 @@ def writeMail(request):
                 return HttpResponseRedirect('/massmail/')
             usernames = form.cleaned_data["users"]
 
-    return render_to_response('massmail2.html', {'form': form, 'users': usernames})
+    return render(request, 'massmail2.html', {'form': form, 'users': usernames})
 
 
 def sendMail(request):
@@ -86,6 +86,6 @@ def sendMail(request):
                         userObj = user.FromUID(username)
                         userObj.toBeDeleted = removaldate
                 return HttpResponseRedirect('/massmail/')
-            return render_to_response('massmail3.html', {'form': form, 'users': usernames, 'fromaddress': form.cleaned_data['fromaddress'], 'subject': form.cleaned_data['subject'], 'body': form.cleaned_data['body'], 'removaldue': form.cleaned_data['removaldue'], 'removalunits': form.cleaned_data['removalunits']})
+            return render(request, 'massmail3.html', {'form': form, 'users': usernames, 'fromaddress': form.cleaned_data['fromaddress'], 'subject': form.cleaned_data['subject'], 'body': form.cleaned_data['body'], 'removaldue': form.cleaned_data['removaldue'], 'removalunits': form.cleaned_data['removalunits']})
 
     return HttpResponseRedirect('/massmail/')

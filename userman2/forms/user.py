@@ -51,19 +51,6 @@ class ChHomeForm(forms.Form):
     new_directory = forms.RegexField(regex="^[a-zA-Z\d\/\-\_]+$")
 
 
-class UsersForm(forms.Form):
-    uid = forms.RegexField(regex="^[a-zA-Z\d \-\$]+$", required=False)
-    cn = forms.RegexField(regex="^[^:^,]+$", required=False)
-    uidnumber = forms.IntegerField(required=False)
-    deleted = forms.BooleanField(required=False, initial=False)
-    chlocal = forms.BooleanField(required=False, initial=False)
-    anklocal = forms.BooleanField(required=False, initial=False)
-    anksamba = forms.BooleanField(required=False, initial=False)
-    nochlocal = forms.BooleanField(required=False, initial=False)
-    noanklocal = forms.BooleanField(required=False, initial=False)
-    noanksamba = forms.BooleanField(required=False, initial=False)
-
-
 class AddUserForm(forms.Form):
     uid = forms.RegexField(
         regex="^[a-z][a-z\d\-$_]+$",

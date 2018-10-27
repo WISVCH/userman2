@@ -1,9 +1,8 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang='en'>
-<meta charset="utf-8">
-
 <head>
+    <meta charset="utf-8">
     <title>{% block title %}Userman2{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="{% get_static_prefix %}favicon.ico" />
@@ -11,6 +10,11 @@
     <link rel="stylesheet" type="text/css" href="{% static 'lib/@fortawesome/fontawesome-free/css/all.min.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'lib/@fortawesome/fontawesome-free/css/fontawesome.min.css' %}" />
     <link rel='stylesheet' type='text/css' href='{% get_static_prefix %}main.css' />
+    {% if debug %}
+        <script src="{% static 'lib/vue/dist/vue.js' %}"></script>
+    {% else %}
+        <script src="{% static 'lib/vue/dist/vue.min.js' %}"></script>
+    {% endif %}
 </head>
 
 <body>

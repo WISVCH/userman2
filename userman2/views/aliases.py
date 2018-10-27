@@ -1,5 +1,5 @@
 from django.http import Http404, HttpResponseRedirect
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.views.decorators.cache import cache_control
 
 from userman2.forms.alias import *
@@ -18,7 +18,7 @@ def displayAliases(request):
         form = AliasForm()
         aliases = alias.getAllAliases()
 
-    return render_to_response('groupsaliases.html', {'alias': True, 'groups': aliases, 'form': form})
+    return render(request, 'groupsaliases.html', {'alias': True, 'groups': aliases, 'form': form})
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -27,7 +27,7 @@ def displayAlias(request, cn):
         aliasObj = alias.fromCN(cn)
     except Exception, e:
         raise Http404
-    return render_to_response('groupalias.html', {'group': aliasObj})
+    return render(request, 'groupalias.html', {'group': aliasObj})
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -65,11 +65,11 @@ def adduser(request, cn):
                     aliasObj.addMember(str(form.cleaned_data['email']))
                 return HttpResponseRedirect('/aliases/' + aliasObj.cn + '/')
             except LDAPError as e:
-                return render_to_response('error.html', {'msg': e.message})
+                return render(request, 'error.html', {'msg': e.message})
     else:
         form = AddUserForm()
 
-    return render_to_response('form.html', {'form': form, 'uid': aliasObj.cn})
+    return render(request, 'form.html', {'form': form, 'uid': aliasObj.cn})
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -87,7 +87,7 @@ def addAlias(request, parent):
     else:
         form = AddAliasForm()
 
-    return render_to_response('form.html', {'form': form, 'uid': "aliases"})
+    return render(request, 'form.html', {'form': form, 'uid': "aliases"})
 
 
 @cache_control(no_cache=True, must_revalidate=True)

@@ -1,5 +1,5 @@
 from django.http import Http404, HttpResponseRedirect
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.views.decorators.cache import cache_control
 
 from userman2.forms.computer import *
@@ -13,7 +13,7 @@ def displayComputers(request):
     for c in computers:
         count += 1
 
-    return render_to_response('computers.html', {'computers': computers, 'count': count})
+    return render(request, 'computers.html', {'computers': computers, 'count': count})
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -30,7 +30,7 @@ def addComputer(request):
     else:
         form = AddComputerForm()
 
-    return render_to_response('form.html', {'form': form, 'uid': "computers"})
+    return render(request, 'form.html', {'form': form, 'uid': "computers"})
 
 
 @cache_control(no_cache=True, must_revalidate=True)

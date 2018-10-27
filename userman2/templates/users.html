@@ -3,55 +3,75 @@
 {% block title %}Userman2 — Manage Users{% endblock %}
 {% load static %}
 {% block content %}
-    <form action='' method='get'>
-        <table class="table table-striped">
-            <thead>
-            <tr class='title'>
-                <th>&nbsp;</th>
+
+{% verbatim %}
+<div id="app">
+    <table class="table table-striped">
+        <thead>
+            <tr>    
+                <th style="width: 32px;">&nbsp;</th>
+                <th>Username</th>
+                <th>Full Name</th>
                 <th>UID</th>
-                <th>Common Name</th>
-                <th>UIDNumber</th>
-                <th>Deletion Mark</th>
-                <th>CH L</th>
-                <th>Ank L</th>
-                <th>Ank S</th>
+                <th style="width: 18em;">
+                    Dienst2 Status
+                    <a v-if="showSyncIcon" href="#" v-on:click.prevent="fetchDienst2Status"><i class="fas fa-sync-alt"></i></a>
+                </th>
             </tr>
-            <tr class='title'>
-                <td style="width: 32px;"><button class="fas fa-search"></button></td>
-                <td>{{ form.uid }}</td>
-                <td>{{ form.cn }}</td>
-                <td>{{ form.uidnumber }}</td>
-                <td>{{ form.deleted }}</td>
-                <td>{{ form.chlocal }}{{ form.nochlocal }}</td>
-                <td>{{ form.anklocal }}{{ form.noanklocal }}</td>
-                <td>{{ form.anksamba }}{{ form.noanksamba }}</td>
+        </thead>
+        <tbody>
+            <tr v-for="user in users">
+                <td><a v-bind:href="user.name + '/'"><i class="far fa-edit"></i></span></a></td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.full_name }}</td>
+                <td>{{ user.uid }}</td>
+                <td v-if="user.dienst2status">
+                    <span v-if="user.dienst2status.error">
+                        <small>{{ user.dienst2status.error }}</small>
+                    </span>
+                    <span v-if="user.dienst2status.status == 'error'">
+                        <i class="fas fa-times-circle" style="color: red;"></i>
+                        <a v-bind:href="'https://dienst2.chnet/ldb/index/#' + user.full_name">{{ user.dienst2status.message }}</a>
+                    </span>
+                    <span v-if="user.dienst2status.status == 'warning'">
+                        <i class="fas fa-exclamation-circle" style="color: orange"></i>
+                        <a v-bind:href="user.dienst2status.href">{{ user.dienst2status.message }}</a>
+                    </span>
+                    <span v-if="user.dienst2status.status == 'success'">
+                        <i class="fas fa-check-circle" style="color: green;"></i>
+                        <a v-bind:href="user.dienst2status.href">{{ user.dienst2status.message }}</a>
+                    </span>
+                </td>
+                <td v-else></td>
             </tr>
-            </thead>
-            <tbody>
-            {% for user in users %}
-                <tr class='{% cycle odd,even %}'>
-                    <td><a href='{{ user.uid }}/'><i class="far fa-edit"></i></span></a></td>
-                    <td>{{ user.uid }}</td>
-                    <td>{{ user.gecos.full_name|default:"&nbsp;" }}</td>
-                    <td>{{ user.uidNumber }}</td>
-                    <td>{% for rmWarnUser in rmWarnUsers %} {% ifequal user.uid rmWarnUser %}
-                        {{ user.toBeDeleted|date:"F d Y - H i"|default:"Never" }} {% endifequal %} {% endfor %}</td>
-                    <td>{% if user.chLocal %}+{% endif %}</td>
-                    <td>{% if user.ankLocal %}+{% endif %}</td>
-                    <td>{% if user.ankSamba %}+{% endif %}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-            <tfoot>
-            <tr class='total'>
-                <td colspan='2'>Total:</td>
-                <td colspan='2'>{{ count.total }}</td>
-                <td>{{ count.del }}</td>
-                <td>{{ count.chlocal }}</td>
-                <td>{{ count.anklocal }}</td>
-                <td>{{ count.anksamba }}</td>
-            </tr>
-            </tfoot>
-        </table>
-    </form>
+        </tbody>
+    </table>
+</div>
+{% endverbatim %}
+
+<script type="text/javascript">
+    const app = new Vue({
+        el: '#app',
+        data: {
+            users: [],
+            showSyncIcon: true,
+        },
+        async created() {
+            const response = await fetch('../users.json');
+            const users = await response.json();
+            this.users = users;
+        },
+        methods: {
+            fetchDienst2Status() {
+                this.showSyncIcon = false;
+                for (const [i, user] of this.users.entries()) {
+                    fetch(user.name + '/dienst2status.json')
+                        .then(response => response.json())
+                        .then(json => this.$set(this.users[i], 'dienst2status', json));
+                }
+            }
+        }
+    })
+</script>
+
 {% endblock %}

@@ -28,16 +28,15 @@ def aliaslink(value):
 
 @register.filter
 def dienst2icon(dienst2Status):
-    if 'error' in dienst2Status:
-        ret = '<img src="%scircle_blue.png" title="Error: %s" width="16" height="16" />' % (
-            settings.STATIC_URL, dienst2Status['error'])
-    elif dienst2Status['status'] is 'whitelisted':
-        ret = ''
-    else:
-        ret = '<img src="%s%s.png" title="%s [updated %s]" width="16" height="16" />' % (
-            settings.STATIC_URL, dienst2Status['status'], dienst2Status['message'], dienst2Status['updated'])
-        if 'href' in dienst2Status:
-            ret = '<a href="%s">%s</a>' % (dienst2Status['href'], ret)
+    ret = ''
+    if dienst2Status['status'] == 'error':
+        ret = '<i class="fas fa-times-circle" style="color: red;"></i>'
+    elif dienst2Status['status'] == 'warning':
+        ret = '<i class="fas fa-exclamation-circle" style="color: orange"></i>'
+    elif dienst2Status['status'] == 'success':
+        ret = '<i class="fas fa-check-circle" style="color: green;"></i>'
+    if 'href' in dienst2Status:
+        ret = ' <a href="%s">%s</a>' % (dienst2Status['href'], ret)
 
     return mark_safe(ret)
 

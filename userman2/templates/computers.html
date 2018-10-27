@@ -16,7 +16,7 @@
         </tr>
     </thead>
     {% for computer in computers %}
-    <tr class='{% cycle odd,even %}'>
+    <tr>
         <td style="width: 32px;"><a href='{{ computer.uid|urlencode }}/rm'><i class="far fa-minus-square"></i></td>
         <td>{{ computer.uid }}</td>
     </tr>

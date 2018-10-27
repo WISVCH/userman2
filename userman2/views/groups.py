@@ -1,5 +1,5 @@
 from django.http import Http404, HttpResponseRedirect
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.views.decorators.cache import cache_control
 
 from userman2.forms.group import *
@@ -18,7 +18,7 @@ def displayGroups(request):
         form = GroupsForm()
         groups = group.GetAllGroups()
 
-    return render_to_response('groupsaliases.html', {'groups': groups, 'form': form})
+    return render(request, 'groupsaliases.html', {'groups': groups, 'form': form})
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -27,7 +27,7 @@ def displayGroup(request, cn):
         groupObj = group.FromCN(cn)
     except Exception, e:
         raise Http404
-    return render_to_response('groupalias.html', {'group': groupObj})
+    return render(request, 'groupalias.html', {'group': groupObj})
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -61,7 +61,7 @@ def adduser(request, cn):
     else:
         form = AddUserForm()
 
-    return render_to_response('form.html', {'form': form, 'uid': groupObj.cn})
+    return render(request, 'form.html', {'form': form, 'uid': groupObj.cn})
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -82,7 +82,7 @@ def addGroup(request, parent):
     else:
         form = AddGroupForm()
 
-    return render_to_response('form.html', {'form': form, 'uid': "groups"})
+    return render(request, 'form.html', {'form': form, 'uid': "groups"})
 
 
 @cache_control(no_cache=True, must_revalidate=True)

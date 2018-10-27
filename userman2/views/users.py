@@ -2,8 +2,8 @@ from datetime import datetime
 
 import requests
 from django.conf import settings
-from django.http import Http404, HttpResponseRedirect
-from django.shortcuts import render_to_response
+from django.http import Http404, HttpResponseRedirect, JsonResponse
+from django.shortcuts import render
 from django.views.decorators.cache import cache_control
 
 from userman2.forms.user import *
@@ -11,32 +11,23 @@ from userman2.model import action
 from userman2.model import user
 
 
-@cache_control(no_cache=True, must_revalidate=True)
+def getUsersJson(request):
+    users = user.GetAllUsers()
+    usersDict = [dict(name=u.uid, uid=u.uidNumber, full_name=u.gecos['full_name']) for u in users]
+    return JsonResponse(usersDict, safe=False)
+
+
+def getUserDienst2Status(request, uid):
+    try:
+        userObj = user.FromUID(uid)
+    except Exception, e:
+        raise Http404
+    dienst2Status = dienst2(uid)
+    return JsonResponse(dienst2Status)
+
+
 def displayUsers(request):
-    if request.GET:
-        form = UsersForm(request.GET)
-        if form.is_valid():
-            users = user.GetAllUsers(form.cleaned_data)
-        else:
-            users = user.GetAllUsers()
-    else:
-        form = UsersForm()
-        users = user.GetAllUsers()
-
-    rmWarnUsers = [user.User(curaction.affectedDN)
-                       .uid for curaction in action.GetAllActions({"actionName": "warnRemove"})]
-
-    count = {"total": 0, "del": len(rmWarnUsers), "chlocal": 0, "anklocal": 0, "anksamba": 0}
-    for u in users:
-        count["total"] += 1
-        if u.chLocal:
-            count["chlocal"] += 1
-        if u.ankLocal:
-            count["anklocal"] += 1
-        if u.ankSamba:
-            count["anksamba"] += 1
-
-    return render_to_response('users.html', {'users': users, 'form': form, 'count': count, 'rmWarnUsers': rmWarnUsers})
+    return render(request, 'users.html')
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -46,7 +37,7 @@ def displayUser(request, uid):
     except Exception, e:
         raise Http404
     dienst2Status = dienst2(uid)
-    return render_to_response('user.html', {'user': userObj, 'dienst2Status': dienst2Status})
+    return render(request, 'user.html', {'user': userObj, 'dienst2Status': dienst2Status})
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -64,7 +55,7 @@ def userChfn(request, uid):
     else:
         form = ChfnForm(initial=userObj.gecos)
 
-    return render_to_response('form.html', {'form': form, 'uid': userObj.uid})
+    return render(request, 'form.html', {'form': form, 'uid': userObj.uid})
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -82,7 +73,7 @@ def userChdesc(request, uid):
     else:
         form = ChdescForm(initial={"description": userObj.description})
 
-    return render_to_response('form.html', {'form': form, 'uid': userObj.uid})
+    return render(request, 'form.html', {'form': form, 'uid': userObj.uid})
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -100,7 +91,7 @@ def userChwarnRm(request, uid):
     else:
         form = ChwarnRmForm(initial={"toBeDeleted": userObj.toBeDeleted})
 
-    return render_to_response('form.html', {'form': form, 'uid': userObj.uid})
+    return render(request, 'form.html', {'form': form, 'uid': userObj.uid})
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -118,7 +109,7 @@ def userChsh(request, uid):
     else:
         form = ChshForm(initial={"login_shell": userObj.loginShell})
 
-    return render_to_response('form.html', {'form': form, 'uid': userObj.uid})
+    return render(request, 'form.html', {'form': form, 'uid': userObj.uid})
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -136,7 +127,7 @@ def userChgroup(request, uid):
     else:
         form = ChgroupForm(initial={"gid_number": userObj.gidNumber})
 
-    return render_to_response('form.html', {'form': form, 'uid': userObj.uid})
+    return render(request, 'form.html', {'form': form, 'uid': userObj.uid})
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -154,7 +145,7 @@ def chHomeCH(request, uid):
     else:
         form = ChHomeForm(initial={"new_directory": userObj.description})
 
-    return render_to_response('form.html', {'form': form, 'uid': userObj.uid})
+    return render(request, 'form.html', {'form': form, 'uid': userObj.uid})
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -172,7 +163,7 @@ def chHomeAnk(request, uid):
     else:
         form = ChHomeForm(initial={"new_directory": userObj.description})
 
-    return render_to_response('form.html', {'form': form, 'uid': userObj.uid})
+    return render(request, 'form.html', {'form': form, 'uid': userObj.uid})
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -192,7 +183,7 @@ def userChpriv(request, uid):
     else:
         form = ChprivForm()
 
-    return render_to_response('userpriv.html', {'form': form, 'user': userObj})
+    return render(request, 'userpriv.html', {'form': form, 'user': userObj})
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -217,7 +208,7 @@ def userShowldif(request, uid):
 
     print userObj.ldif
 
-    return render_to_response('usershowldif.html', {'user': userObj})
+    return render(request, 'usershowldif.html', {'user': userObj})
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -238,7 +229,7 @@ def addUser(request):
     else:
         form = AddUserForm()
 
-    return render_to_response('form.html', {'form': form, 'uid': "users"})
+    return render(request, 'form.html', {'form': form, 'uid': "users"})
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -273,7 +264,7 @@ def resetPassword(request, uid):
 
     dienst2Status = dienst2(uid)
     password = userObj.resetPassword()
-    return render_to_response('user.html', {'user': userObj, 'dienst2Status': dienst2Status, 'password': password})
+    return render(request, 'user.html', {'user': userObj, 'dienst2Status': dienst2Status, 'password': password})
 
 
 @cache_control(no_cache=True, must_revalidate=True)
@@ -291,7 +282,7 @@ def chPassword(request, uid):
     else:
         form = ChpassForm()
 
-    return render_to_response('form.html', {'form': form, 'user': userObj})
+    return render(request, 'form.html', {'form': form, 'user': userObj})
 
 
 def dienst2(username):
@@ -311,15 +302,14 @@ def dienst2(username):
     json = r.json()
     n = len(json['results'])
     if n is 0:
-        ret = {'status': 'error', 'message': 'Username not found'}
+        ret = {'status': 'error', 'message': 'Username not found in Dienst2'}
     elif n > 1:
         ret = {'status': 'error', 'message': 'Error: %d records matched' % n}
     else:
         if json['results'][0]['membership_status'] >= 30:
-            ret = {'status': 'success', 'message': 'Member'}
+            ret = {'status': 'success', 'message': 'Active member'}
         else:
-            ret = {'status': 'warning', 'message': 'Not a member'}
+            ret = {'status': 'warning', 'message': 'Not an active member'}
+        ret['id'] = json['results'][0]['id']
         ret['href'] = link_prefix % json['results'][0]['id']
-
-    ret['updated'] = str(datetime.now())
     return ret
