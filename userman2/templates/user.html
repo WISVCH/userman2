@@ -1,28 +1,27 @@
 {% extends "base.html" %}
 {% load userman_tags %}
-{% block title %}CH User Manager — Editing {{ user.uid }}{% endblock %}
+{% block title %}Userman2 — Editing {{ user.uid }}{% endblock %}
 {% load static %}
 {% block content %}
-    <table>
-        <tr class='title'>
-            <td colspan='3'>
-                <h3>General Information:</h3>
-            </td>
+<div>
+    <table class="table">
+        <thead>
+            <th colspan='3'>
+                General Information
+            </th>
         </tr>
-        <tr class='{% cycle odd,even as rowcolor %}'>
-            <td><a href='chuid'><img src='{% get_static_prefix %}edit.png'
-                                     alt='Edit'/></a></td>
-            <td>UID</td>
+        <tr>
+            <td style="width: 32px;"><a href='chuid'><i class="far fa-edit"></i></a></td>
+            <td style="width: 11em;">UID</td>
             <td>{{ user.uid }}</td>
         </tr>
-        <tr class='{% cycle rowcolor %}'>
+        <tr>
             <td>&nbsp;</td>
             <td>UID Number</td>
             <td>{{ user.uidNumber }}</td>
         </tr>
-        <tr class='{% cycle rowcolor %}'>
-            <td rowspan='4'><a href='chfn'><img
-                    src='{% get_static_prefix %}edit.png' alt='Edit'/></a></td>
+        <tr>
+            <td rowspan='4'><a href='chfn'><i class="far fa-edit"></i></a></td>
             <td>Full Name</td>
             <td>{{ user.gecos.full_name }}</td>
         </tr>
@@ -38,74 +37,68 @@
             <td>Home Phone</td>
             <td>{{ user.gecos.home_phone }}</td>
         </tr>
-        <tr class='{% cycle rowcolor %}'>
-            <td><a href='chdesc'><img src='{% get_static_prefix %}edit.png'
-                                      alt='Edit'/></a></td>
+        <tr>
+            <td><a href='chdesc'><i class="far fa-edit"></i></a></td>
             <td>Description</td>
             <td>{{ user.description }}</td>
         </tr>
-        <tr class='{% cycle rowcolor %}'>
-            <td><a href='chwarnrm'><img src='{% get_static_prefix %}edit.png'
-                                        alt='Edit'/></a></td>
+        <tr>
+            <td><a href='chwarnrm'><i class="far fa-edit"></i></a></td>
             <td>Removal date</td>
             <td>{{ user.toBeDeleted }}</td>
         </tr>
-        <tr class='{% cycle rowcolor %}'>
-            <td><a href='chsh'><img src='{% get_static_prefix %}edit.png' alt='Edit'/></a></td>
+        <tr>
+            <td><a href='chsh'><i class="far fa-edit"></i></a></td>
             <td>Login Shell</td>
             <td>{{ user.loginShell }}</td>
         </tr>
-        <tr class='{% cycle rowcolor %}'>
-            <td><a href='chhomeank'><img src='{% get_static_prefix %}edit.png'
-                                         alt='Edit'/></a></td>
+        <tr>
+            <td><a href='chhomeank'><i class="far fa-edit"></i></a></td>
             <td>Home Directory</td>
             <td>{{ user.homeDirectoryAnk }}</td>
         </tr>
-        <tr class='{% cycle rowcolor %}'>
-            <td><a href='chhomech'><img src='{% get_static_prefix %}edit.png'
-                                        alt='Edit'/></a></td>
+        <tr>
+            <td><a href='chhomech'><i class="far fa-edit"></i></a></td>
             <td>Home Directory (CH)</td>
             <td>{{ user.homeDirectoryCH }}</td>
         </tr>
-        <tr class='{% cycle rowcolor %}'>
-            <td><a href='chgroup'><img src='{% get_static_prefix %}edit.png'
-                                       alt='Edit'/></a></td>
+        <tr>
+            <td><a href='chgroup'><i class="far fa-edit"></i></a></td>
             <td>Primary Group ID</td>
             <td>{{ user.gidNumber }} (<a
                     href='/groups/{{ user.gidNumber|groupname }}'>{{ user.gidNumber|groupname }}</a>)
             </td>
         </tr>
-        <tr class='{% cycle rowcolor %}'>
+        <tr>
             <td>&nbsp;</td>
             <td>Dienst2</td>
             <td>{{ dienst2Status|dienst2icon }} {{ dienst2Status|dienst2message }}</td>
         </tr>
-        <tr class='{% cycle rowcolor %}'>
+        <tr>
             <td>&nbsp;</td>
             <td><a href='/groups?uid={{ user.uid }}'>Groups</a></td>
             <td>{% for group in user.getSecondaryGroups %}
                 <a href='{% url 'userman2.views.groups.displayGroup' group %}'>{{ group }}</a> {% endfor %}</td>
         </tr>
-        <tr class='{% cycle rowcolor %}'>
+        <tr>
             <td>&nbsp;</td>
             <td><a href='/aliases?uid={{ user.uid }}'>Aliases</a></td>
             <td>{% for alias in user.getDirectAliases %}
                 <a href='{% url 'userman2.views.aliases.displayAlias' alias %}'>{{ alias }}</a> {% endfor %}</td>
         </tr>
-        <tr class='{% cycle rowcolor %}'>
+        <tr>
             <td>&nbsp;</td>
             <td><a href='/aliases?uid={{ user.uid }}'>Indirect Aliases</a></td>
             <td>{% for alias in user.getIndirectAliases %}
                 <a href='{% url 'userman2.views.aliases.displayAlias' alias %}'>{{ alias }}</a> {% endfor %}</td>
         </tr>
-        <tr class='title'>
-            <td colspan='3'>
-                <h3>Authorized Services: <a href='chpriv'><img
-                        src='{% get_static_prefix %}edit.png' alt='Edit'/></a></h3>
-            </td>
+        <thead>
+            <th colspan='3'>
+                Authorized Services <a href='chpriv'><i class="far fa-edit"></i></a>
+            </th>
         </tr>
         {% for service in user.authorizedServices %}
-            <tr class='{% cycle rowcolor %}'>
+            <tr>
                 <td></td>
                 <td>Service</td>
                 <td>{{ service }}</td>
@@ -136,5 +129,5 @@
             Warning</a>
         <li><a href='rm/' onclick="return confirm('Are you very sure you really want to delete {{ user.uid }}?')">Remove
             user</a>
-    </ul>
+    </ul></div>
 {% endblock %}

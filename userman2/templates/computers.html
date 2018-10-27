@@ -1,22 +1,30 @@
 {% extends "base.html" %}
-{% block title %}CH User Manager — Manage Computers{% endblock %}
+{% block title %}Userman2 — Manage Computers{% endblock %}
 {% load static %}
 {% block content %}
-    <table>
-        <tr class='title'>
-            <td></td>
-            <td>Name</td>
+<div class="col-xs-4">
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>
+                Computer
+                <a href="{% url 'userman2.views.computers.addComputer' %}">
+                    <i class="far fa-plus-square"></i>
+                </a>
+            </th>
         </tr>
-        {% for computer in computers %}
-            <tr class='{% cycle odd,even %}'>
-                <td><a href='{{ computer.uid|urlencode }}/rm'><img src='{% get_static_prefix %}delete.png'
-                                                                   alt='Delete'/></a></td>
-                <td>{{ computer.uid }}</td>
-            </tr>
-        {% endfor %}
-        <tr class='total'>
-            <td></td>
-            <td>{{ count }}</td>
-        </tr>
-    </table>
+    </thead>
+    {% for computer in computers %}
+    <tr class='{% cycle odd,even %}'>
+        <td style="width: 32px;"><a href='{{ computer.uid|urlencode }}/rm'><i class="far fa-minus-square"></i></td>
+        <td>{{ computer.uid }}</td>
+    </tr>
+    {% endfor %}
+    <tr class='total'>
+        <td></td>
+        <td>{{ count }}</td>
+    </tr>
+</table>
+</div>
 {% endblock %}

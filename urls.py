@@ -1,8 +1,9 @@
 from django.conf.urls import patterns
-from django.views.generic import TemplateView
+from django.views.generic import RedirectView
+from django.core.urlresolvers import reverse_lazy
 
 urlpatterns = patterns('django.views.generic.simple',
-                       (r'^$', TemplateView.as_view(template_name='index.html'))
+                       (r'^$', RedirectView.as_view(url=reverse_lazy('userman2.views.users.displayUsers'), permanent=True))
                        )
 
 urlpatterns += patterns('userman2.views.users',

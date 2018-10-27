@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% load userman_tags %}
-{% block title %}CH User Manager — Manage Users{% endblock %}
+{% block title %}Userman2 — Manage Users{% endblock %}
 {% load static %}
 {% block content %}
     <form action='' method='get'>
-        <table>
+        <table class="table table-striped">
             <thead>
             <tr class='title'>
                 <th>&nbsp;</th>
@@ -17,7 +17,7 @@
                 <th>Ank S</th>
             </tr>
             <tr class='title'>
-                <td><input type='image' src='{% get_static_prefix %}filter.png' alt='Filter'/></td>
+                <td style="width: 32px;"><button class="fas fa-search"></button></td>
                 <td>{{ form.uid }}</td>
                 <td>{{ form.cn }}</td>
                 <td>{{ form.uidnumber }}</td>
@@ -30,7 +30,7 @@
             <tbody>
             {% for user in users %}
                 <tr class='{% cycle odd,even %}'>
-                    <td><a href='{{ user.uid }}/'><img src='{% get_static_prefix %}edit.png' alt='Edit'/></a></td>
+                    <td><a href='{{ user.uid }}/'><i class="far fa-edit"></i></span></a></td>
                     <td>{{ user.uid }}</td>
                     <td>{{ user.gecos.full_name|default:"&nbsp;" }}</td>
                     <td>{{ user.uidNumber }}</td>

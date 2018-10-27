@@ -70,9 +70,14 @@ class AddUserForm(forms.Form):
         error_message="UID entry must consist of alphanumeric characters, and be lower case")
     full_name = forms.RegexField(
         regex="^[^:^,]+$", error_message="Full name entry may not contain : or ,")
-    access = forms.MultipleChoiceField(initial=('samba@ank',),
-                                       choices=(('samba@ank', 'samba@ank'), ('sshd@rob', 'sshd@rob'),
-                                                ('systemd-user@rob', 'systemd-user@rob')))
+    access = forms.MultipleChoiceField(
+        initial=('samba@ank',),
+        choices=(
+            ('samba@ank', 'samba@ank'),
+            ('sshd@rob', 'sshd@rob'),
+            ('systemd-user@rob', 'systemd-user@rob')
+        )
+    )
 
 
 class ChpassForm(forms.Form):

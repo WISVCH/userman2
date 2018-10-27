@@ -306,8 +306,7 @@ def GetAllUsers(filter_data=False):
         if filter_data['cn']:
             filter_string += "(cn=*" + filter_data['cn'] + "*)"
         if filter_data['uidnumber']:
-            filter_string += "(uidNumber=" + str(
-                filter_data['uidnumber']) + ")"
+            filter_string += "(uidNumber=" + str(filter_data['uidnumber']) + ")"
         if filter_data['chlocal']:
             filter_string += "(authorizedService=sshd@ch)"
         if filter_data['nochlocal']:

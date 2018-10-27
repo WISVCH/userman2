@@ -1,5 +1,10 @@
 .*
+!.yarnrc
 **/.DS_Store
 **/*.pyc
 **/__pycache__
+userman2/local.py
+userman2/static/lib
 static
+privkey
+wisvch.pem

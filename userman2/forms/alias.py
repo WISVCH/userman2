@@ -26,10 +26,8 @@ class AliasForm(forms.Form):
 
 
 class AddUserForm(forms.Form):
-    uid = choicefield.NoCacheChoiceField(
-        choices=PossibleUsers(), required=False)
-    alias = choicefield.NoCacheChoiceField(
-        choices=PossibleAliases(), required=False)
+    uid = choicefield.NoCacheChoiceField(choices=PossibleUsers(), required=False)
+    alias = choicefield.NoCacheChoiceField(choices=PossibleAliases(), required=False)
     email = forms.EmailField(required=False)
 
 

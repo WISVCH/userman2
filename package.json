@@ -1,0 +1,9 @@
+{
+  "name": "userman",
+  "private": true,
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.4.2",
+    "bootstrap": "^3",
+    "themestrap": "WISVCH/bootstrap-theme#gh-pages"
+  }
+}

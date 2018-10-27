@@ -1,31 +1,33 @@
 {% extends "base.html" %}
-{% block title %}CH User Manager — Manage Aliases{% endblock %}
+{% block title %}Userman2 — Manage Aliases{% endblock %}
 {% load static %}
 {% block content %}
     <form action='' method='get'>
         <table class='groupfilter'>
             <tr class='title'>
-                <td><input type='image' src='{% get_static_prefix %}filter.png' alt='Filter'/></td>
-                <td>memberUid: {{ form.uid }}</td>
+                <td style="width: 32px;"><button class="fas fa-search"></button></td>
+                <td style="padding-right: 1em;">memberUid: {{ form.uid }}</td>
                 <td>CN: {{ form.cn }}</td>
             </tr>
         </table>
     </form>
     {% for groupou in groups.items reversed %}
-        <table class='group'>
-            <tr class='title'>
-                <td colspan='2'>
-                    <h3>
+        <table class='group table'>
+            <thead>
+                <tr class='title'>
+                    <th colspan='2'>
                         {{ groupou.0 }}
                         {% if not form.uid.value %}
-                            (<a href='../add{% if alias %}alias{% else %}group{% endif %}/{{ groupou.0 }}'>+</a>)
+                        <a href='../add{% if alias %}alias{% else %}group{% endif %}/{{ groupou.0 }}'>
+                            <i class="far fa-plus-square"></i>
+                        </a>
                         {% endif %}
-                    </h3>
-                </td>
-            </tr>
+                    </th>
+                </tr>
+            </thead>
             {% for group in groupou.1 %}
                 <tr class='{% cycle odd,even %}'>
-                    <td><a href='{{ group.cn }}/'><img src='{% get_static_prefix %}edit.png' alt='Edit'/></a></td>
+                    <td><a href='{{ group.cn }}/'><i class="far fa-edit"></i></a></td>
                     <td>{{ group.cn }}</td>
                 </tr>
             {% endfor %}

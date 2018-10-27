@@ -1,14 +1,17 @@
 {% extends "base.html" %}
-{% block title %}CH User Manager — Change {{ uid }}{% endblock %}
+{% block title %}Userman2 — Change {{ uid }}{% endblock %}
 {% block content %}
-    <form method="post" action="">
-        <table>
-            <tr class='title'>
-                <td colspan='3'>
-                    <h3>Change {{ uid }}:</h3>
-                </td>
+<form method="post" action="">
+    <table class="table">
+        <thead>
+            <tr>
+                <th colspan='3'>
+                    Change {{ uid }}
+                </th>
             </tr>
-            {{ form.as_table }}
-        </table>
-        <input type="submit"/><input type="reset"/></form>
+        </thead>
+        {{ form.as_table }}
+    </table>
+    <button class="btn btn-primary">Submit</button>
+</form>
 {% endblock %}

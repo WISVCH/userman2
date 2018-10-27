@@ -5,4 +5,8 @@ cron/config.py
 userman2/local.py
 /static
 .idea/
+.vscode/
 *.iml
+userman2/static/lib
+privkey
+wisvch.pem

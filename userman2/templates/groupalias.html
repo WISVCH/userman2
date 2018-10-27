@@ -1,63 +1,77 @@
 {% extends "base.html" %}
-{% block title %}CH User Manager — Editing {{ group.cn }}{% endblock %}
+{% block title %}Userman2 — Editing {{ group.cn }}{% endblock %}
 {% load userman_tags %}
 {% load static %}
 {% block content %}
-    <table>
-        <tr class='title'>
-            <td colspan='3'>
-                <h3>Group</h3>
-            </td>
-        </tr>
-        <tr class={% cycle odd,even as rowcycle %}>
+<div class="col-xs-6">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th colspan='3'>
+                    {% if group.gidNumber %}
+                        Group
+                    {% else %}
+                        Alias
+                    {% endif %}
+                </th>
+            </tr>
+        </thead>
+        <tr>
             <td>&nbsp;</td>
             <td>CN:</td>
             <td>{{ group.cn }}</td>
         </tr>
         {% if group.gidNumber %}
-            <tr class={% cycle rowcycle %}>
-                <td>&nbsp;</td>
-                <td>GIDNumber:</td>
-                <td>{{ group.gidNumber }}</td>
-            </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>GIDNumber:</td>
+            <td>{{ group.gidNumber }}</td>
+        </tr>
         {% endif %}
-        <tr class={% cycle rowcycle %}>
+        <tr>
             <td>&nbsp;</td>
             <td>Type:</td>
             <td>{{ group.parent }}</td>
         </tr>
-        <tr class='title'>
-            <td colspan='3'>
-                <h3>Members (<a href='adduser/'>+</a>)</h3>
-            </td>
-        </tr>
+        <thead>
+            <tr>
+                <th colspan='3'>
+                    Members <a href='adduser/'><i class="fas fa-user-plus"></i></a>
+                </th>
+            </tr>
+        </thead>
         {% for member in group.members %}
-            <tr class={% cycle rowcycle %}>
-                <td>
-                    <a href='rmuser/{{ member }}/'
-                       onclick="return confirm('Really remove user {{ member }} from group {{ group.cn }}?')">
-                        <img src='{% get_static_prefix %}delete.png' alt='Remove'/>
-                    </a>
-                </td>
+        <tr>
+            <td style="width: 32px;">
                 {% if group.gidNumber %}
-                    <td colspan='2'><a href='{% url 'userman2.views.users.displayUser' member %}'>{{ member }}</a></td>
+                <a href='rmuser/{{ member }}/' title="Remove user from group" onclick="return confirm('Really remove user {{ member }} from group {{ group.cn }}?')">
                 {% else %}
-                    <td colspan='2'>{{ member|aliaslink }}</td>
+                <a href='rmuser/{{ member }}/' title="Remove user from alias" onclick="return confirm('Really remove user {{ member }} from alias {{ group.cn }}?')">
                 {% endif %}
-            </tr>
-        {% endfor %} {% if group.gidNumber %}
-        <tr class='title'>
-            <td colspan='3'>
-                <h3>Primary Members</h3>
+                   <i class="fas fa-user-minus"></i>
+                </a>
             </td>
+            {% if group.gidNumber %}
+            <td colspan='2'><a href='{% url 'userman2.views.users.displayUser' member %}'>{{ member }}</a></td>
+            {% else %}
+            <td colspan='2'>{{ member|aliaslink }}</td>
+            {% endif %}
         </tr>
-        {% for member in group.getPrimaryMembers %}
-            <tr class={% cycle rowcycle %}>
-                <td></td>
-                <td colspan='2'><a href='{% url 'userman2.views.users.displayUsers' %}'>{{ member }}</a></td>
+        {% endfor %} {% if group.gidNumber %}
+        <thead>
+            <tr>
+                <th colspan='3'>
+                    Primary Members
+                </th>
             </tr>
+        </thead>
+        {% for member in group.getPrimaryMembers %}
+        <tr>
+            <td></td>
+            <td colspan='2'><a href='{% url 'userman2.views.users.displayUsers' %}'>{{ member }}</a></td>
+        </tr>
         {% endfor %} {% endif %}
     </table>
-    <p><a href='rm/'
-          onclick="return confirm('Really remove {{ group.cn }}?')">Remove</a></p>
+    <p><a href='rm/' onclick="return confirm('Really remove {{ group.cn }}?')">Remove</a></p>
+</div>
 {% endblock %}

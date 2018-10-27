@@ -1,35 +1,52 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang='en'>
+<meta charset="utf-8">
+
 <head>
-    <title>{% block title %}CH User Manager{% endblock %}</title>
-    <link rel='stylesheet' type='text/css' href='{% get_static_prefix %}main.css'/>
-    <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="{% get_static_prefix %}favicon.ico"/>
+    <title>{% block title %}Userman2{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="{% get_static_prefix %}favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="{% static 'lib/themestrap/dist/css/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'lib/@fortawesome/fontawesome-free/css/all.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'lib/@fortawesome/fontawesome-free/css/fontawesome.min.css' %}" />
+    <link rel='stylesheet' type='text/css' href='{% get_static_prefix %}main.css' />
 </head>
+
 <body>
-<div class='navigation'>
-    <span>CH User Manager</span>
-    <ul>
-        <li class='users-add'><a href="{% url 'userman2.views.users.addUser' %}">Add User</a></li>
-        <li class='users-display'><a href="{% url 'userman2.views.users.displayUsers' %}">Manage Users</a></li>
-        <li class='computers-add'><a href="{% url 'userman2.views.computers.addComputer' %}">Add Computer Account</a>
-        </li>
-        <li class='computers-display'><a href="{% url 'userman2.views.computers.displayComputers' %}">Manage Computer
-            Accounts</a></li>
-        <li class='groups'><a href="{% url 'userman2.views.groups.displayGroups' %}">Manage Groups</a></li>
-        <li class='aliases'><a href="{% url 'userman2.views.aliases.displayAliases' %}">Manage Aliases</a></li>
-        <li class='massmail'><a href="{% url 'userman2.views.massmail.selectUsers' %}">Send Mass Mail</a></li>
-    </ul>
-    <div class='clearboth'></div>
-</div>
+    <nav class="navbar navbar-inverse navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{% url 'userman2.views.users.displayUsers' %}">Userman2</a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class='users-display'><a href="{% url 'userman2.views.users.displayUsers' %}">Users</a></li>
+                    <li class='users-add'><a href="{% url 'userman2.views.users.addUser' %}">Add User</a></li>
+                    <li class='computers-display'><a href="{% url 'userman2.views.computers.displayComputers' %}">Computers</a></li>
+                    <li class='groups'><a href="{% url 'userman2.views.groups.displayGroups' %}">Groups</a></li>
+                    <li class='aliases'><a href="{% url 'userman2.views.aliases.displayAliases' %}">Aliases</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-{% block content %}{% endblock %}
+    <main role="main" class="container">
+        {% block content %}{% endblock %}
+    </main>
 
-<div class='footer clearboth'>
-    <div class='copyright'>&copy; 2004 – 2018 Beheer &amp; PC.COM</div>
-    <div class='bottomtext'>This system is in eternal beta. Things will go wrong:
+    <footer class="footer">
+        This system is in eternal beta. Things will go wrong:
         <a href="https://github.com/WISVCH/userman2/issues">issues</a>.
-    </div>
-</div>
+        <div class='copyright'>&copy; 2004 – 2018 Beheer &amp; PC.COM</div>
+    </footer>
 </body>
+
 </html>
