@@ -3,13 +3,13 @@ from django import forms
 
 class ChfnForm(forms.Form):
     full_name = forms.RegexField(
-        regex="^[^:^,]+$", error_message="Gecos entries may not contain : or ,")
+        regex="^[^:^,]+$", error_messages={'invalid': "Gecos entries may not contain : or ,"})
     room_number = forms.RegexField(
-        regex="^[^:^,]+$", required=False, error_message="Gecos entries may not contain : or ,")
+        regex="^[^:^,]+$", required=False, error_messages={'invalid': "Gecos entries may not contain : or ,"})
     work_phone = forms.RegexField(
-        regex="^[\d\-]+$", required=False, error_message="Phone numbers may only contain digits and -.")
+        regex="^[\d\-]+$", required=False, error_messages={'invalid': "Phone numbers may only contain digits and -."})
     home_phone = forms.RegexField(
-        regex="^[\d\-]+$", required=False, error_message="Phone numbers may only contain digits and -.")
+        regex="^[\d\-]+$", required=False, error_messages={'invalid': "Phone numbers may only contain digits and -."})
 
 
 class ChdescForm(forms.Form):
@@ -54,9 +54,9 @@ class ChHomeForm(forms.Form):
 class AddUserForm(forms.Form):
     uid = forms.RegexField(
         regex="^[a-z][a-z\d\-$_]+$",
-        error_message="UID entry must consist of alphanumeric characters, and be lower case")
+        error_messages={'invalid': "UID entry must consist of alphanumeric characters, and be lower case"})
     full_name = forms.RegexField(
-        regex="^[^:^,]+$", error_message="Full name entry may not contain : or ,")
+        regex="^[^:^,]+$", error_messages={'invalid': "Full name entry may not contain : or ,"})
     access = forms.MultipleChoiceField(
         initial=('samba@ank',),
         choices=(

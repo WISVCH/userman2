@@ -52,7 +52,7 @@
                 </a>
             </td>
             {% if group.gidNumber %}
-            <td colspan='2'><a href='{% url 'userman2.views.users.displayUser' member %}'>{{ member }}</a></td>
+            <td colspan='2'><a href='{% url 'displayUser' member %}'>{{ member }}</a></td>
             {% else %}
             <td colspan='2'>{{ member|aliaslink }}</td>
             {% endif %}
@@ -68,7 +68,7 @@
         {% for member in group.getPrimaryMembers %}
         <tr>
             <td></td>
-            <td colspan='2'><a href='{% url 'userman2.views.users.displayUsers' %}'>{{ member }}</a></td>
+            <td colspan='2'><a href='{% url 'displayUsers' %}'>{{ member }}</a></td>
         </tr>
         {% endfor %} {% endif %}
     </table>
