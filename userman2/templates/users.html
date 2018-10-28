@@ -15,12 +15,27 @@
                 <th>UID</th>
                 <th style="width: 18em;">
                     Dienst2 Status
-                    <a v-if="showSyncIcon" href="#" v-on:click.prevent="fetchDienst2Status"><i class="fas fa-sync-alt"></i></a>
+                    <a v-if="showSyncIcon && !syncing" href="#" v-on:click.prevent="fetchDienst2Status"><i class="fas fa-sync-alt"></i></a>
+                    <i v-if="syncing" class="fas fa-sync-alt spinner"></i></a>
                 </th>
+            </tr>
+            <tr>
+                <td style="width: 32px; vertical-align: middle;"><i class="fas fa-search"></i></td>
+                <td><input type="search" class="form-control" placeholder="Filter by Username" v-model="filterUsername"></td>
+                <td><input type="search" class="form-control" placeholder="Filter by Full Name" v-model="filterFullname"></td>
+                <td><input type="search" class="form-control" placeholder="Filter by UID" v-model="filterUid"></td>
+                <td>
+                    <select v-model="filterDienst2status" class="form-control" v-bind:disabled="showSyncIcon">
+                        <option value="">Filter by Dienst2 Status</option>
+                        <option value="success">Active member</option>
+                        <option value="warning">Not an active member</option>
+                        <option value="error">Username not found in Dienst2</option>
+                    </select>
+                </td>
             </tr>
         </thead>
         <tbody>
-            <tr v-for="user in users">
+            <tr v-for="user in filterUsers">
                 <td><a v-bind:href="user.name + '/'"><i class="far fa-edit"></i></span></a></td>
                 <td>{{ user.name }}</td>
                 <td>{{ user.full_name }}</td>
@@ -54,22 +69,47 @@
         el: '#app',
         data: {
             users: [],
-            showSyncIcon: true,
+            syncing: false,
+            filterUsername: '',
+            filterFullname: '',
+            filterUid: '',
+            filterDienst2status: '',
         },
         async created() {
             const response = await fetch('../users.json');
             const users = await response.json();
             this.users = users;
         },
-        methods: {
-            fetchDienst2Status() {
-                this.showSyncIcon = false;
-                for (const [i, user] of this.users.entries()) {
-                    fetch(user.name + '/dienst2status.json')
-                        .then(response => response.json())
-                        .then(json => this.$set(this.users[i], 'dienst2status', json));
+        computed: {
+            filterUsers() {
+                return this.users.filter((user) =>
+                    (this.filterUsername == '' || user.name.toLowerCase().includes(this.filterUsername.toLowerCase())) &&
+                    (this.filterFullname == '' || user.full_name.toLowerCase().includes(this.filterFullname.toLowerCase())) &&
+                    (this.filterUid == '' || user.uid == this.filterUid) &&
+                    (this.filterDienst2status == '' || !user.dienst2status || user.dienst2status.status == this.filterDienst2status)
+                );
+            },
+            showSyncIcon() {
+                const show = !this.syncing && this.filterUsers.some((user) => !user.dienst2status);
+                if (show) {
+                    this.filterDienst2status = '';
                 }
-            }
+                return show;
+            },
+        },
+        methods: {
+            async fetchDienst2Status() {
+                this.syncing = true;
+                let users = this.filterUsers;
+                let promises = [];
+                for (const [i, user] of users.entries()) {
+                    promises.push(fetch(user.name + '/dienst2status.json')
+                        .then(response => response.json())
+                        .then(json => this.$set(users[i], 'dienst2status', json)));
+                }
+                await Promise.all(promises);
+                this.syncing = false;
+            },
         }
     })
 </script>
