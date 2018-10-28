@@ -4,7 +4,7 @@ import smtplib
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.decorators.cache import cache_control
-from email.MIMEText import MIMEText
+from email.mime.text import MIMEText
 
 from userman2.forms.massmail import *
 

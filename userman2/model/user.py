@@ -1,8 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import datetime
 import logging
 import time
-from StringIO import StringIO
+from io import StringIO
 
 import ldap
 import ldif
@@ -12,7 +12,7 @@ from pyasn1.codec.ber import decoder
 from pyasn1.type import univ, namedtype, tag
 
 from cron.mail import mailAdmin
-from ldapconn import LDAPConn
+from.ldapconn import LDAPConn
 from userman2.model import action
 from userman2.model import alias
 from userman2.model import group
@@ -38,7 +38,7 @@ class User(LDAPConn):
         self.__attrs = cidict(attrs)
 
     def _get_uid(self):
-        return self.__attrs["uid"][0]
+        return self.__attrs["uid"][0].decode()
 
     uid = property(_get_uid)
 
@@ -51,9 +51,9 @@ class User(LDAPConn):
     def _get_gecos(self):
         """Returns a dictionary describing the gecos attribute, consisting of full_name, room_number, work_phone, and home_phone"""
         if not 'gecos' in self.__attrs:
-            gecos = self.__atrs['cn'][0]
+            gecos = self.__attrs['cn'][0].decode()
         else:
-            gecos = self.__attrs["gecos"][0].split(',')
+            gecos = self.__attrs["gecos"][0].decode().split(',')
 
         if len(gecos) == 4:
             return {'full_name': gecos[0], 'room_number': gecos[1], 'work_phone': gecos[2], 'home_phone': gecos[3]}
@@ -127,7 +127,7 @@ class User(LDAPConn):
 
     def _get_authorizedServices(self):
         if 'authorizedservice' in self.__attrs:
-            return self.__attrs["authorizedService"]
+            return list(map(lambda b: b.decode(), self.__attrs["authorizedService"]))
         return []
 
     authorizedServices = property(_get_authorizedServices)
@@ -214,10 +214,6 @@ class User(LDAPConn):
     ldif = property(get_ldif)
 
     def remove(self):
-        file = open(settings.GRAVEYARD_DIR + '/' +
-                    self.uid + '_' + str(time.time()) + '.ldif', 'w')
-        file.write(self.ldif)
-
         # Remove self from aliases/groups
         for secGroupCN in self.getSecondaryGroups():
             curGroup = group.FromCN(secGroupCN)
@@ -284,8 +280,8 @@ class PasswordModifySeq(univ.Sequence):
 def FromUID(uid):
     try:
         return User("uid=" + uid + "," + settings.LDAP_USERDN)
-    except ldap.LDAPError, e:
-        raise Exception, "Error finding user " + uid
+    except ldap.LDAPError as e:
+        raise Exception("Error finding user " + uid)
 
 
 def GetAllUserNames():
@@ -293,7 +289,7 @@ def GetAllUserNames():
     ld.connectAnon()
     res = ld.l.search_s(settings.LDAP_USERDN, ldap.SCOPE_ONELEVEL)
     res.sort()
-    return [attrs['uid'][0] for (dn, attrs) in res]
+    return [attrs['uid'][0].decode() for (dn, attrs) in res]
 
 
 def GetAllUsers(filter_data=False):

@@ -1,8 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import ldap
 import re
 import random
-from ldapconn import LDAPConn
+from .ldapconn import LDAPConn
 from ldap.cidict import cidict
 from django.conf import settings
 
@@ -85,7 +85,7 @@ def FromCN(cn, ld=None):
         ld.connectAnon()
     res = ld.l.search_s(settings.LDAP_ACTIONDN, ldap.SCOPE_SUBTREE, "cn=" + cn)
     if not res:
-        raise Exception, "Error finding action " + cn
+        raise Exception("Error finding action " + cn)
 
     (dn, attrs) = res[0]
     return Action(dn, attrs)

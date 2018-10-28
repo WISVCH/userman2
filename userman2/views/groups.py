@@ -25,7 +25,7 @@ def displayGroups(request):
 def displayGroup(request, cn):
     try:
         groupObj = group.FromCN(cn)
-    except Exception, e:
+    except Exception as e:
         raise Http404
     return render(request, 'groupalias.html', {'group': groupObj})
 
@@ -34,7 +34,7 @@ def displayGroup(request, cn):
 def rmuser(request, cn, user):
     try:
         groupObj = group.FromCN(cn)
-    except Exception, e:
+    except Exception as e:
         raise Http404
 
     if not user in groupObj.members:
@@ -49,7 +49,7 @@ def rmuser(request, cn, user):
 def adduser(request, cn):
     try:
         groupObj = group.FromCN(cn)
-    except Exception, e:
+    except Exception as e:
         raise Http404
 
     if request.method == 'POST':
@@ -89,7 +89,7 @@ def addGroup(request, parent):
 def rmGroup(request, cn):
     try:
         groupObj = group.FromCN(cn)
-    except Exception, e:
+    except Exception as e:
         raise Http404
 
     groupObj.remove()

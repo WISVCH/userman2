@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 # lastlog, sourced from
 # http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/496768
 
@@ -29,15 +29,15 @@ if __name__ == '__main__':
     try:
         llfile = open("/var/log/lastlog", 'r')
     except:
-        print "Unable to open /var/log/lastlog"
+        print("Unable to open /var/log/lastlog")
         sys.exit(1)
 
     for user in pwd.getpwall():
         record = getrecord(llfile, user[2])
         if record and record[0] > 0:
-            print '%16s\t\t%s\t%s' % (user[0], time.ctime(record[0]), record[2])
+            print('%16s\t\t%s\t%s' % (user[0], time.ctime(record[0]), record[2]))
         elif record:
-            print '%16s\t\tNever logged in' % (user[0],)
+            print('%16s\t\tNever logged in' % (user[0],))
         else:
             pass
     llfile.close()

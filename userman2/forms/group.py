@@ -1,6 +1,9 @@
 from django import forms
 from userman2.model import user
-import choicefield
+
+class PossibleUsers:
+    def __iter__(self):
+        return iter([("", "")] + [(username, username) for username in user.GetAllUserNames()])
 
 
 class GroupsForm(forms.Form):
@@ -9,9 +12,11 @@ class GroupsForm(forms.Form):
 
 
 class AddUserForm(forms.Form):
-    possibleUsers = [(username, username)
-                     for username in user.GetAllUserNames()]
-    user = choicefield.NoCacheChoiceField(choices=possibleUsers)
+    user = forms.ChoiceField(choices=[])
+
+    def __init__(self, *args, **kwargs):
+        super(AddUserForm, self).__init__(*args, **kwargs)
+        self.fields['user'].choices = PossibleUsers()
 
 
 class AddGroupForm(forms.Form):

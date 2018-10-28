@@ -25,7 +25,7 @@ def displayAliases(request):
 def displayAlias(request, cn):
     try:
         aliasObj = alias.fromCN(cn)
-    except Exception, e:
+    except Exception as e:
         raise Http404
     return render(request, 'groupalias.html', {'group': aliasObj})
 
@@ -34,7 +34,7 @@ def displayAlias(request, cn):
 def rmuser(request, cn, user):
     try:
         aliasObj = alias.fromCN(cn)
-    except Exception, e:
+    except Exception as e:
         raise Http404
 
     if not user in aliasObj.members:
@@ -94,7 +94,7 @@ def addAlias(request, parent):
 def rmAlias(request, cn):
     try:
         aliasObj = alias.fromCN(cn)
-    except Exception, e:
+    except Exception as e:
         raise Http404
 
     aliasObj.connectRoot()

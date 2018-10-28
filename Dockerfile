@@ -4,7 +4,7 @@ WORKDIR /src
 COPY . .
 RUN yarn install --flat
 
-FROM python:2.7-stretch
+FROM python:3.6-stretch
 
 # CH CA certificate for LDAP connections
 RUN curl -so /usr/local/share/ca-certificates/wisvch.crt https://ch.tudelft.nl/certs/wisvch.crt && \

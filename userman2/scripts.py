@@ -1,10 +1,9 @@
 import paramiko
-from paramiko import Ed25519Key
-from paramiko.py3compat import decodebytes
+import base64
 
 from userman2.settings import SSH_ANK_PRIVKEY_FILE, SSH_ANK_HOSTKEY
 
-hostkey = Ed25519Key(data=decodebytes(SSH_ANK_HOSTKEY))
+hostkey = paramiko.Ed25519Key(data=base64.b64decode(SSH_ANK_HOSTKEY))
 privkey = paramiko.Ed25519Key.from_private_key_file(SSH_ANK_PRIVKEY_FILE)
 client = paramiko.SSHClient()
 client.get_host_keys().add("ank.chnet", "ssh-ed25519", hostkey)

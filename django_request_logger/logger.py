@@ -1,11 +1,12 @@
 import logging
 
-import middleware
+from . import middleware
 
 
 def add_filter_to_all_handlers():
     filter = AddDjangoRequestFilter()
     for handler in logging._handlers.values():
+        print("handler", handler)
         handler.addFilter(filter)
 
 
@@ -43,13 +44,4 @@ class AddDjangoRequestFilter(object):
                 record.username = request.META['HTTP_X_AUTH_SUBJECT']
             else:
                 record.username = '_'
-
-            # The "data" dictionary is used by the Sentry log handler.
-            if not hasattr(record, 'data'):
-                record.data = {}
-            record.data['client_ip'] = record.client_ip
-            record.data['absolute_url'] = record.absolute_url
-            record.data['raw_post_data'] = record.raw_post_data
-            record.data['username'] = record.username
-
         return 1

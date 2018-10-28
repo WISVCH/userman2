@@ -20,7 +20,7 @@ def getUsersJson(request):
 def getUserDienst2Status(request, uid):
     try:
         userObj = user.FromUID(uid)
-    except Exception, e:
+    except Exception as e:
         raise Http404
     dienst2Status = dienst2(uid)
     return JsonResponse(dienst2Status)
@@ -34,7 +34,7 @@ def displayUsers(request):
 def displayUser(request, uid):
     try:
         userObj = user.FromUID(uid)
-    except Exception, e:
+    except Exception as e:
         raise Http404
     dienst2Status = dienst2(uid)
     return render(request, 'user.html', {'user': userObj, 'dienst2Status': dienst2Status})
@@ -44,7 +44,7 @@ def displayUser(request, uid):
 def userChfn(request, uid):
     try:
         userObj = user.FromUID(uid)
-    except Exception, e:
+    except Exception as e:
         raise Http404
 
     if request.method == 'POST':
@@ -62,7 +62,7 @@ def userChfn(request, uid):
 def userChdesc(request, uid):
     try:
         userObj = user.FromUID(uid)
-    except Exception, e:
+    except Exception as e:
         raise Http404
 
     if request.method == 'POST':
@@ -80,7 +80,7 @@ def userChdesc(request, uid):
 def userChwarnRm(request, uid):
     try:
         userObj = user.FromUID(uid)
-    except Exception, e:
+    except Exception as e:
         raise Http404
 
     if request.method == 'POST':
@@ -98,7 +98,7 @@ def userChwarnRm(request, uid):
 def userChsh(request, uid):
     try:
         userObj = user.FromUID(uid)
-    except Exception, e:
+    except Exception as e:
         raise Http404
 
     if request.method == 'POST':
@@ -116,7 +116,7 @@ def userChsh(request, uid):
 def userChgroup(request, uid):
     try:
         userObj = user.FromUID(uid)
-    except Exception, e:
+    except Exception as e:
         raise Http404
 
     if request.method == 'POST':
@@ -134,7 +134,7 @@ def userChgroup(request, uid):
 def chHomeCH(request, uid):
     try:
         userObj = user.FromUID(uid)
-    except Exception, e:
+    except Exception as e:
         raise Http404
 
     if request.method == 'POST':
@@ -152,7 +152,7 @@ def chHomeCH(request, uid):
 def chHomeAnk(request, uid):
     try:
         userObj = user.FromUID(uid)
-    except Exception, e:
+    except Exception as e:
         raise Http404
 
     if request.method == 'POST':
@@ -170,7 +170,7 @@ def chHomeAnk(request, uid):
 def userChpriv(request, uid):
     try:
         userObj = user.FromUID(uid)
-    except Exception, e:
+    except Exception as e:
         raise Http404
 
     if request.method == 'POST':
@@ -190,7 +190,7 @@ def userChpriv(request, uid):
 def userRmpriv(request, uid, service, server):
     try:
         userObj = user.FromUID(uid)
-    except Exception, e:
+    except Exception as e:
         raise Http404
     serviceStr = service + "@" + server
     if not serviceStr in userObj.authorizedServices:
@@ -203,10 +203,10 @@ def userRmpriv(request, uid, service, server):
 def userShowldif(request, uid):
     try:
         userObj = user.FromUID(uid)
-    except Exception, e:
+    except Exception as e:
         raise Http404
 
-    print userObj.ldif
+    print(userObj.ldif)
 
     return render(request, 'usershowldif.html', {'user': userObj})
 
@@ -236,7 +236,7 @@ def addUser(request):
 def rmUser(request, uid):
     try:
         userObj = user.FromUID(uid)
-    except Exception, e:
+    except Exception as e:
         raise Http404
 
     userObj.remove()
@@ -247,7 +247,7 @@ def rmUser(request, uid):
 def removeProfile(request, uid):
     try:
         userObj = user.FromUID(uid)
-    except Exception, e:
+    except Exception as e:
         raise Http404
 
     newAction = userObj.removeProfile('ank.chnet')
@@ -259,7 +259,7 @@ def removeProfile(request, uid):
 def resetPassword(request, uid):
     try:
         userObj = user.FromUID(uid)
-    except Exception, e:
+    except Exception as e:
         raise Http404
 
     dienst2Status = dienst2(uid)
@@ -271,7 +271,7 @@ def resetPassword(request, uid):
 def chPassword(request, uid):
     try:
         userObj = user.FromUID(uid)
-    except Exception, e:
+    except Exception as e:
         raise Http404
 
     if request.method == 'POST':

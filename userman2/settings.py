@@ -55,10 +55,10 @@ STATICFILES_FINDERS = (
     #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django_request_logger.middleware.StoreRequestMiddleware'
+    'django_request_logger.middleware.StoreRequestMiddleware',
 )
 
 ROOT_URLCONF = 'urls'
@@ -126,4 +126,4 @@ ADMIN_MAIL = 'pccom@ch.tudelft.nl'
 
 ROOT_PATH = os.path.dirname(__file__)
 
-from local import *
+from .local import *

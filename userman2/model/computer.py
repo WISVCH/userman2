@@ -4,7 +4,7 @@ import ldap
 from django.conf import settings
 from ldap.cidict import cidict
 
-from ldapconn import LDAPConn
+from.ldapconn import LDAPConn
 from userman2.scripts import execute_script
 
 
@@ -52,8 +52,8 @@ def getAllComputers():
 def FromUID(uid):
     try:
         return Computer("uid=" + uid + "," + settings.LDAP_COMPUTERDN)
-    except ldap.LDAPError, e:
-        raise Exception, "Error finding computer " + uid
+    except ldap.LDAPError as e:
+        raise Exception("Error finding computer " + uid)
 
 
 def GetFreeUIDNumber():
@@ -65,7 +65,7 @@ def GetFreeUIDNumber():
         if len(res) == 0:
             return i
 
-    raise Exception, "No more free user IDs"
+    raise Exception("No more free user IDs")
 
 
 def Add(computer_name):

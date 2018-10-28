@@ -1,11 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import re
 
 import ldap
 from django.conf import settings
 from ldap.cidict import cidict
 
-from ldapconn import LDAPConn
+from.ldapconn import LDAPConn
 from userman2.model import action
 from userman2.scripts import execute_script
 
@@ -26,7 +26,7 @@ class Group(LDAPConn):
         self.__attrs = cidict(attrs)
 
     def _get_cn(self):
-        return self.__attrs["cn"][0]
+        return self.__attrs["cn"][0].decode()
 
     cn = property(_get_cn)
 
@@ -45,7 +45,7 @@ class Group(LDAPConn):
 
     def _get_members(self):
         if 'memberuid' in self.__attrs:
-            return self.__attrs["memberUid"]
+            return list(map(lambda s: s.decode(), self.__attrs["memberUid"]))
         return []
 
     members = property(_get_members)
@@ -79,7 +79,7 @@ class Group(LDAPConn):
         return action.Add('createGroupDir', host, self.dn, "Create group directory on host " + host + " for " + self.cn)
 
     def addGroupMapping(self):
-        raise Exception, "Should create samba group mapping"
+        raise Exception("Should create samba group mapping")
 
     def __str__(self):
         return "Group: [ dn:'" + self.dn + ", cn:'" + self.cn + "' ]"
@@ -90,7 +90,7 @@ def FromCN(cn):
     ld.connectAnon()
     res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_SUBTREE, "cn=" + cn)
     if not res:
-        raise Exception, "Error finding group " + cn
+        raise Exception("Error finding group " + cn)
 
     (dn, attrs) = res[0]
     return Group(dn, attrs)

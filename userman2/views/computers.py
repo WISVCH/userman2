@@ -37,7 +37,7 @@ def addComputer(request):
 def rmComputer(request, cn):
     try:
         computerObj = computer.FromUID(cn)
-    except Exception, e:
+    except Exception as e:
         raise Http404
 
     computerObj.connectRoot()

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import string
 from config import *
@@ -24,9 +24,9 @@ def moveUser(user):
     newHomeDir = "/export/gebruikers/" + "BC" + "/" + user.getUID()
 
     if os.path.exists(oldHomeDir):
-        print oldHomeDir
+        print(oldHomeDir)
 
-    print "Moving User:", user.getUID(), "from", oldHomeDir, "to", newHomeDir
+    print("Moving User:", user.getUID(), "from", oldHomeDir, "to", newHomeDir)
     user.setHomeDirectory("ank.chnet", newHomeDir)
     os.makedirs(newHomeDir)
     os.rename(oldHomeDir, newHomeDir)
@@ -36,7 +36,7 @@ if __name__ == "__main__":
     import sys
     import ldap
     if len(sys.argv) != 2:
-        print "Usage: " + sys.argv[0] + " <username | --all>"
+        print("Usage: " + sys.argv[0] + " <username | --all>")
         sys.exit(1)
 
     try:
@@ -44,7 +44,7 @@ if __name__ == "__main__":
 
         try:
             l.simple_bind_s(ldapUsername, ldapPass)
-        except ldap.LDAPError, e:
+        except ldap.LDAPError as e:
             sys.stderr.write("Fatal Error.\n")
         sys.stderr.write("Error: %s" % e)
             sys.exit()
@@ -62,5 +62,5 @@ if __name__ == "__main__":
     finally:
         try:
             l.unbind()
-        except ldap.LDAPError, e:
+        except ldap.LDAPError as e:
             pass

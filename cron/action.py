@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # local imports
 import config
@@ -109,25 +109,22 @@ class Action:
         elif attrs['actionName'][0] == 'generateAllLogonScripts':
             return True
         else:
-            raise Exception, 'unknown actionName: ' + attrs['actionName'][0]
+            raise Exception('unknown actionName: ' + attrs['actionName'][0])
 
     def renameMailbox(self, attrs):
         if not config.enableMailboxRename:
-            raise Exception, "Mailbox renaming not enabled on host " + \
-                self.getHost()
+            raise Exception("Mailbox renaming not enabled on host " + self.getHost())
 
         user = User(self.l, self.getAffectedDN())
         mailbox = os.path.join(config.mailDir, user.getUID())
         oldmailbox = abspath(self.getArguments())
 
         if exists(mailbox):
-            raise Exception, "New mailbox directory " + \
-                mailbox + " already exists!"
+            raise Exception("New mailbox directory " + mailbox + " already exists!")
         if not exists(oldmailbox):
-            raise Exception, "Old mailbox directory " + \
-                oldmailbox + " doesn't exist!"
+            raise Exception("Old mailbox directory " + oldmailbox + " doesn't exist!")
         if not mailbox.startswith(config.mailDir) or not oldmailbox.startswith(config.mailDir):
-            raise Exception, "Mailboxes must be created in " + config.mailDir
+            raise Exception("Mailboxes must be created in " + config.mailDir)
 
         makedirs(mailDir)
         os.rename(oldmailbox, mailDir)
@@ -136,8 +133,7 @@ class Action:
 
     def removeMailbox(self, attrs):
         if not config.enableMailboxRemoval:
-            raise Exception, "Mailbox removal not enabled on host " + \
-                self.getHost()
+            raise Exception("Mailbox removal not enabled on host " + self.getHost())
 
         user = User(self.l, self.getAffectedDN())
         mailbox = os.path.join(config.mailDir, user.getUID())
@@ -153,18 +149,16 @@ class Action:
 
     def removeGroupDir(self, attrs):
         if not config.enableGroupDirRemoval:
-            raise Exception, "Group directory removal not enabled on host " + \
-                self.getHost()
+            raise Exception("Group directory removal not enabled on host " + self.getHost())
 
         group = Group(self.l, self.getAffectedDN())
         homedir = abspath(
             os.path.join(config.groupDirBase, config.groupLocations[group.getParent()], group.getCN()))
 
         if not exists(homedir):
-            raise Exception, "Group directory " + homedir + " doesn't exist!"
+            raise Exception("Group directory " + homedir + " doesn't exist!")
         if not homedir.startswith(config.groupDirBase):
-            raise Exception, "Group directories must be created in " + \
-                config.groupDirBase
+            raise Exception("Group directories must be created in " + config.groupDirBase)
 
         tar = tarfile.open(
             os.path.join(config.graveyardDir, "GROUP_" + group.getCN() + "-" + str(int(time())) + ".tar.gz"), "w:gz")
@@ -179,7 +173,7 @@ class Action:
 
     def createGroupDir(self, attrs):
         if not config.enableGroupDirCreation:
-            raise Exception, "Group directory creation not enabled on host " + \
+            raise Exception("Group directory creation not enabled on host " + \)
                 self.getHost()
 
         group = Group(self.l, self.getAffectedDN())
@@ -187,10 +181,9 @@ class Action:
             os.path.join(config.groupDirBase, config.groupLocations[group.getParent()], group.getCN()))
 
         if exists(homedir):
-            raise Exception, "Group directory " + homedir + " already exists!"
+            raise Exception("Group directory " + homedir + " already exists!")
         if not homedir.startswith(config.groupDirBase):
-            raise Exception, "Group directories must be created in " + \
-                config.homeDirBase
+            raise Exception("Group directories must be created in " + config.homeDirBase)
 
         makedirs(homedir)
         self.chownTree(homedir, 0, group.getGIDNumber())
@@ -204,25 +197,22 @@ class Action:
 
     def removeGroup(self, attrs):
         if not config.enableGroupRemoval:
-            raise Exception, "Group removal not enabled on host " + \
-                self.getHost()
+            raise Exception("Group removal not enabled on host " + self.getHost())
 
         self.l.delete_s(self.getAffectedDN())
         return True
 
     def createHomeDir(self, attrs):
         if not config.enableHomeDirCreation:
-            raise Exception, "Home directory creation not enabled on host " + \
-                self.getHost()
+            raise Exception("Home directory creation not enabled on host " + self.getHost())
 
         user = User(self.l, self.getAffectedDN())
         homedir = abspath(user.getHomeDirectory(self.getHost()))
 
         if exists(homedir):
-            raise Exception, "Home directory " + homedir + " already exists!"
+            raise Exception("Home directory " + homedir + " already exists!")
         if not homedir.startswith(config.homeDirBase):
-            raise Exception, "Home directories must be created in " + \
-                config.homeDirBase
+            raise Exception("Home directories must be created in " + config.homeDirBase)
 
         makedirs(homedir)
         self.copyTree(config.skelDir, homedir)
@@ -236,22 +226,18 @@ class Action:
 
     def moveHomeDir(self, attrs):
         if not config.enableHomeDirMove:
-            raise Exception, "Home directory moving not enabled on host " + \
-                self.getHost()
+            raise Exception("Home directory moving not enabled on host " + self.getHost())
 
         user = User(self.l, self.getAffectedDN())
         homedir = abspath(user.getHomeDirectory(self.getHost()))
         oldhomedir = abspath(self.getArguments())
 
         if exists(homedir):
-            raise Exception, "New Home directory " + \
-                homedir + " already exists!"
+            raise Exception("New Home directory " + homedir + " already exists!")
         if not exists(oldhomedir):
-            raise Exception, "Old home directory " + \
-                oldhomedir + " doesn't exist!"
+            raise Exception("Old home directory " + oldhomedir + " doesn't exist!")
         if not homedir.startswith(config.homeDirBase) or not oldhomedir.startswith(config.homeDirBase):
-            raise Exception, "Home directories must be created in " + \
-                config.homeDirBase
+            raise Exception("Home directories must be created in " + config.homeDirBase)
 
         makedirs(homedir)
         os.rename(oldhomedir, homedir)
@@ -260,8 +246,7 @@ class Action:
 
     def removeProfile(self, attrs):
         if not config.enableProfileRemoval:
-            raise Exception, "Profile removal not enabled on host " + \
-                self.getHost()
+            raise Exception("Profile removal not enabled on host " + self.getHost())
 
         user = User(self.l, self.getAffectedDN())
 
@@ -278,15 +263,13 @@ class Action:
 
     def removeHomeDir(self, attrs):
         if not config.enableHomeDirRemoval:
-            raise Exception, "Home directory removal not enabled on host " + \
-                self.getHost()
+            raise Exception("Home directory removal not enabled on host " + self.getHost())
 
         user = User(self.l, self.getAffectedDN())
         homedir = abspath(user.getHomeDirectory(self.getHost()))
 
         if not homedir.startswith(config.homeDirBase):
-            raise Exception, "Home directories must be created in " + \
-                config.homeDirBase
+            raise Exception("Home directories must be created in " + config.homeDirBase)
 
         if exists(homedir):
             tar = tarfile.open(
@@ -299,8 +282,7 @@ class Action:
 
     def removeUser(self, attrs):
         if not config.enableUserRemoval:
-            raise Exception, "User removal not enabled on host " + \
-                self.getHost()
+            raise Exception("User removal not enabled on host " + self.getHost())
 
         self.l.delete_s(self.getAffectedDN())
         return True

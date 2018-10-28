@@ -2,7 +2,7 @@ import ldap
 from ldap.cidict import cidict
 from django.conf import settings
 
-from ldapconn import LDAPConn
+from.ldapconn import LDAPConn
 
 
 class Alias(LDAPConn):
@@ -21,7 +21,7 @@ class Alias(LDAPConn):
         self.__attrs = cidict(attrs)
 
     def _get_cn(self):
-        return self.__attrs["cn"][0]
+        return self.__attrs["cn"][0].decode()
 
     cn = property(_get_cn)
 
@@ -35,7 +35,7 @@ class Alias(LDAPConn):
 
     def _get_members(self):
         if 'rfc822mailmember' in self.__attrs:
-            return self.__attrs['rfc822MailMember']
+            return list(map(lambda s: s.decode(), self.__attrs["rfc822MailMember"]))
         return []
 
     members = property(_get_members)
@@ -59,7 +59,7 @@ def getCnForUid(uid, ld=None):
         ld.connectAnon()
     res = ld.l.search_s(
         settings.LDAP_ALIASDN, ldap.SCOPE_SUBTREE, 'rfc822MailMember=' + uid)
-    return [attribs["cn"][0] for dn, attribs in res]
+    return [attribs["cn"][0].decode() for dn, attribs in res]
 
 
 def fromCN(cn, ld=None):
@@ -68,7 +68,7 @@ def fromCN(cn, ld=None):
         ld.connectAnon()
     res = ld.l.search_s(settings.LDAP_ALIASDN, ldap.SCOPE_SUBTREE, "cn=" + cn)
     if not res:
-        raise Exception, "Error finding alias " + cn
+        raise Exception("Error finding alias " + cn)
 
     (dn, attrs) = res[0]
     return Alias(dn, attrs)

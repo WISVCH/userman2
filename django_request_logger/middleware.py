@@ -13,12 +13,10 @@ def _set_request(value):
 
 
 class StoreRequestMiddleware(object):
-    def process_request(self, request):
+    def __init__(self, get_response):
+        self.get_response = get_response
+        
+    def __call__(self, request):
         _set_request(request)
+        return self.get_response(request)
 
-    def process_response(self, request, response):
-        _set_request(None)
-        return response
-
-    # Note: do not clear the request in process_exception() - we want the request details in the error message logged
-    # by "django.request" and process_response() gets called later anyway.

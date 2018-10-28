@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # local imports
 import config
@@ -45,7 +45,7 @@ try:
 
     try:
         l.simple_bind_s(config.ldapUsername, config.ldapPass)
-    except ldap.LDAPError, e:
+    except ldap.LDAPError as e:
         sys.stderr.write("Fatal Error.\n")
         sys.stderr.write("Error: %s" % e)
         sys.exit()
@@ -59,5 +59,5 @@ try:
 finally:
     try:
         l.unbind()
-    except ldap.LDAPError, e:
+    except ldap.LDAPError as e:
         pass

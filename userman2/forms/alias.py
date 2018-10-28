@@ -1,6 +1,5 @@
 from django import forms
 from userman2.model import user, alias
-import choicefield
 
 # The code under AddUserForm is only evaluated once at start-up, so if
 # we create the list of choices there it will never be changed even if
@@ -9,13 +8,11 @@ import choicefield
 
 
 class PossibleUsers:
-
     def __iter__(self):
         return iter([("", "")] + [(username, username) for username in user.GetAllUserNames()])
 
 
 class PossibleAliases:
-
     def __iter__(self):
         return iter([("", "")] + [(username, username) for username in alias.getAllAliasNames()])
 
@@ -26,9 +23,14 @@ class AliasForm(forms.Form):
 
 
 class AddUserForm(forms.Form):
-    uid = choicefield.NoCacheChoiceField(choices=PossibleUsers(), required=False)
-    alias = choicefield.NoCacheChoiceField(choices=PossibleAliases(), required=False)
+    uid = forms.ChoiceField(choices=[], required=False)
+    alias = forms.ChoiceField(choices=[], required=False)
     email = forms.EmailField(required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(AddUserForm, self).__init__(*args, **kwargs)
+        self.fields['uid'].choices = PossibleUsers()
+        self.fields['alias'].choices = PossibleAliases()
 
 
 class AddAliasForm(forms.Form):

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import os
 
@@ -25,4 +25,4 @@ def mailAdmin(subject, message):
         p.write(msg.as_string())
         status = p.close()
         if status is not None:
-            print "Sendmail exit status ", status
+            print("Sendmail exit status ", status)
