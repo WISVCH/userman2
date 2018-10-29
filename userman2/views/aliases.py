@@ -6,7 +6,6 @@ from userman2.forms.alias import *
 from userman2.model.ldapconn import LDAPError
 
 
-@cache_control(no_cache=True, must_revalidate=True)
 def displayAliases(request):
     if (request.GET):
         form = AliasForm(request.GET)
@@ -21,20 +20,21 @@ def displayAliases(request):
     return render(request, 'groupsaliases.html', {'alias': True, 'groups': aliases, 'form': form})
 
 
-@cache_control(no_cache=True, must_revalidate=True)
 def displayAlias(request, cn):
     try:
         aliasObj = alias.fromCN(cn)
-    except Exception as e:
+    except:
         raise Http404
     return render(request, 'groupalias.html', {'group': aliasObj})
 
 
-@cache_control(no_cache=True, must_revalidate=True)
 def rmuser(request, cn, user):
+    if request.method != 'POST':
+        raise Http404
+
     try:
         aliasObj = alias.fromCN(cn)
-    except Exception as e:
+    except:
         raise Http404
 
     if not user in aliasObj.members:
@@ -42,10 +42,9 @@ def rmuser(request, cn, user):
 
     aliasObj.connectRoot()
     aliasObj.removeMember(user)
-    return HttpResponseRedirect('/aliases/' + aliasObj.cn + '/')
+    return HttpResponseRedirect('/aliases/' + aliasObj.cn)
 
 
-@cache_control(no_cache=True, must_revalidate=True)
 def adduser(request, cn):
     try:
         aliasObj = alias.fromCN(cn)
@@ -63,7 +62,7 @@ def adduser(request, cn):
                     aliasObj.addMember(str(form.cleaned_data['alias']))
                 elif form.cleaned_data['email']:
                     aliasObj.addMember(str(form.cleaned_data['email']))
-                return HttpResponseRedirect('/aliases/' + aliasObj.cn + '/')
+                return HttpResponseRedirect('/aliases/' + aliasObj.cn)
             except LDAPError as e:
                 return render(request, 'error.html', {'msg': e.message})
     else:
@@ -72,7 +71,6 @@ def adduser(request, cn):
     return render(request, 'form.html', {'form': form, 'uid': aliasObj.cn})
 
 
-@cache_control(no_cache=True, must_revalidate=True)
 def addAlias(request, parent):
     if not parent in alias.GetParents():
         raise Http404
@@ -83,20 +81,22 @@ def addAlias(request, parent):
             if alias.Exists(form.cleaned_data['common_name']):
                 raise Http404
             alias.Add(parent, str(form.cleaned_data['common_name']))
-            return HttpResponseRedirect('/aliases/' + form.cleaned_data['common_name'] + '/')
+            return HttpResponseRedirect('/aliases/' + form.cleaned_data['common_name'])
     else:
         form = AddAliasForm()
 
     return render(request, 'form.html', {'form': form, 'uid': "aliases"})
 
 
-@cache_control(no_cache=True, must_revalidate=True)
 def rmAlias(request, cn):
+    if request.method != 'POST':
+        raise Http404
+
     try:
         aliasObj = alias.fromCN(cn)
-    except Exception as e:
+    except:
         raise Http404
 
     aliasObj.connectRoot()
     aliasObj.remove()
-    return HttpResponseRedirect('/aliases/')
+    return HttpResponseRedirect('/aliases')

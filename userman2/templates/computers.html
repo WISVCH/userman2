@@ -17,7 +17,12 @@
     </thead>
     {% for computer in computers %}
     <tr>
-        <td style="width: 32px;"><a href='{{ computer.uid|urlencode }}/rm'><i class="far fa-minus-square"></i></td>
+        <td style="width: 32px;">
+            <form method="post" action="{{ request.get_full_path }}/{{ computer.uid|urlencode }}/rm">
+                {% csrf_token %}
+                <button style="border: none; background: none; display: inline;" class="far fa-minus-square text-primary"></button>
+            </form>
+        </td>
         <td>{{ computer.uid }}</td>
     </tr>
     {% endfor %}

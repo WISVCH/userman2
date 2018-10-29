@@ -1,12 +1,11 @@
-table.group {
-    margin: 0 5px 5px 5px;
-    float: left;
-    width: 19%;
+form {
+    display: inline;
 }
 
-table.groupfilter {
-    margin: 0 0 0 5px;
-    float: none;
+table.group {
+    margin: 0 5px 5px 0;
+    float: left;
+    width: 19%;
 }
 
 footer {

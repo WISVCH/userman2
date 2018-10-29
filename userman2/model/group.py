@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from userman2.scripts import execute_script
+from userman2.model import action
 import re
 
 import ldap
@@ -6,8 +8,6 @@ from django.conf import settings
 from ldap.cidict import cidict
 
 from.ldapconn import LDAPConn
-from userman2.model import action
-from userman2.scripts import execute_script
 
 
 class Group(LDAPConn):
@@ -62,8 +62,7 @@ class Group(LDAPConn):
             ld.connectRoot()
             ld.l.delete_s(self.dn)
         else:
-            removeAction = action.Add('removeGroup', 'ank.chnet', self.dn,
-                                      'Remove group entry in LDAP for ' + self.dn)
+            removeAction = action.Add('removeGroup', 'ank.chnet', self.dn, 'Remove group entry in LDAP for ' + self.dn)
             removeAnkGroupDirAction = self.removeGroupDir('ank.chnet', removeAction)
             removeAnkGroupDirAction.locked = False
             removeAction.locked = False
@@ -111,8 +110,7 @@ def GetAllGroups(filter_data=False):
     else:
         filter_string = "(objectClass=posixGroup)"
 
-    res = ld.l.search_s(
-        settings.LDAP_GROUPDN, ldap.SCOPE_SUBTREE, filter_string)
+    res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_SUBTREE, filter_string)
 
     res.sort()
     ret = {}
@@ -127,8 +125,7 @@ def GetAllGroups(filter_data=False):
 def Groupname(value):
     ld = LDAPConn()
     ld.connectAnon()
-    res = ld.l.search_s(
-        settings.LDAP_GROUPDN, ldap.SCOPE_SUBTREE, "(gidNumber=" + value + ")")
+    res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_SUBTREE, "(gidNumber=" + value + ")")
     if len(res) > 0 and 'cn' in res[0][1]:
         return res[0][1]['cn'][0]
     else:
@@ -139,8 +136,7 @@ def GetCnForUid(uid):
     ld = LDAPConn()
     ld.connectAnon()
 
-    res = ld.l.search_s(
-        settings.LDAP_GROUPDN, ldap.SCOPE_SUBTREE, 'memberUid=' + uid)
+    res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_SUBTREE, 'memberUid=' + uid)
     return [attribs["cn"][0].decode() for dn, attribs in res]
 
 

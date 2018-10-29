@@ -1,9 +1,6 @@
 {% extends "base.html" %}
-{% load userman_tags %}
 {% block title %}Userman2 — Manage Users{% endblock %}
-{% load static %}
 {% block content %}
-
 {% verbatim %}
 <div id="app">
     <table class="table table-striped">
@@ -36,7 +33,7 @@
         </thead>
         <tbody>
             <tr v-for="user in filterUsers">
-                <td><a v-bind:href="user.name + '/'"><i class="far fa-edit"></i></span></a></td>
+                <td><a v-bind:href="'/users/' + user.name"><i class="far fa-edit"></i></span></a></td>
                 <td>{{ user.name }}</td>
                 <td>{{ user.full_name }}</td>
                 <td>{{ user.uid }}</td>
@@ -62,7 +59,6 @@
         </tbody>
     </table>
 </div>
-{% endverbatim %}
 
 <script type="text/javascript">
     const app = new Vue({
@@ -76,7 +72,7 @@
             filterDienst2status: '',
         },
         async created() {
-            const response = await fetch('../users.json');
+            const response = await fetch('/users.json');
             const users = await response.json();
             this.users = users;
         },
@@ -103,7 +99,7 @@
                 let users = this.filterUsers;
                 let promises = [];
                 for (const [i, user] of users.entries()) {
-                    promises.push(fetch(user.name + '/dienst2status.json')
+                    promises.push(fetch('/users/' + user.name + '/dienst2status.json')
                         .then(response => response.json())
                         .then(json => this.$set(users[i], 'dienst2status', json)));
                 }
@@ -113,5 +109,5 @@
         }
     })
 </script>
-
+{% endverbatim %}
 {% endblock %}

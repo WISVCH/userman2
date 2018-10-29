@@ -36,20 +36,23 @@
         <thead>
             <tr>
                 <th colspan='3'>
-                    Members <a href='adduser/'><i class="fas fa-user-plus"></i></a>
+                    Members <a href='{{ request.get_full_path }}/adduser'><i class="fas fa-user-plus"></i></a>
                 </th>
             </tr>
         </thead>
         {% for member in group.members %}
         <tr>
             <td style="width: 32px;">
-                {% if group.gidNumber %}
-                <a href='rmuser/{{ member }}/' title="Remove user from group" onclick="return confirm('Really remove user {{ member }} from group {{ group.cn }}?')">
-                {% else %}
-                <a href='rmuser/{{ member }}/' title="Remove user from alias" onclick="return confirm('Really remove user {{ member }} from alias {{ group.cn }}?')">
-                {% endif %}
-                   <i class="fas fa-user-minus"></i>
-                </a>
+                <form method="post" action="{{ request.get_full_path }}/rmuser/{{ member }}">
+                    {% csrf_token %}
+                    <button style="border: none; background: none; display: inline;" class="far fa-minus-square text-primary"
+                        {% if group.gidNumber %}
+                            onclick="return confirm('Really remove user {{ member }} from group {{ group.cn }}?')"
+                        {% else %}
+                            onclick="return confirm('Really remove user {{ member }} from alias {{ group.cn }}?')"
+                        {% endif %}
+                    ></button>
+                </form>
             </td>
             {% if group.gidNumber %}
             <td colspan='2'><a href='{% url 'displayUser' member %}'>{{ member }}</a></td>
@@ -72,6 +75,9 @@
         </tr>
         {% endfor %} {% endif %}
     </table>
-    <p><a href='rm/' onclick="return confirm('Really remove {{ group.cn }}?')">Remove</a></p>
+    <form method="post" action="{{ request.get_full_path }}/rm">
+        {% csrf_token %}
+        <button class="btn btn-danger" onclick="return confirm('Really remove {{ group.cn }}?')">Remove</button>
+    </form>
 </div>
 {% endblock %}

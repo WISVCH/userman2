@@ -20,10 +20,10 @@ def groupname(value):
 @stringfilter
 def aliaslink(value):
     if alias.Exists(value):
-        return mark_safe("<a href='../../aliases/" + value + "/'>" + value + "</a>")
+        return mark_safe("<a href='/aliases/" + value + "'>" + value + "</a>")
     if user.Exists(value):
-        return mark_safe("<a href='../../users/" + value + "/'>" + value + "</a>")
-    return mark_safe("<a href='../../aliases?uid=" + value + "'>" + value + "</a>")
+        return mark_safe("<a href='/users/" + value + "'>" + value + "</a>")
+    return mark_safe("<a href='/aliases?uid=" + value + "'>" + value + "</a>")
 
 
 @register.filter

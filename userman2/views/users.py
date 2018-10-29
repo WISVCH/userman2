@@ -20,7 +20,7 @@ def getUsersJson(request):
 def getUserDienst2Status(request, uid):
     try:
         userObj = user.FromUID(uid)
-    except Exception as e:
+    except:
         raise Http404
     dienst2Status = dienst2(uid)
     return JsonResponse(dienst2Status)
@@ -30,147 +30,138 @@ def displayUsers(request):
     return render(request, 'users.html')
 
 
-@cache_control(no_cache=True, must_revalidate=True)
 def displayUser(request, uid):
     try:
         userObj = user.FromUID(uid)
-    except Exception as e:
+    except:
         raise Http404
     dienst2Status = dienst2(uid)
     return render(request, 'user.html', {'user': userObj, 'dienst2Status': dienst2Status})
 
 
-@cache_control(no_cache=True, must_revalidate=True)
 def userChfn(request, uid):
     try:
         userObj = user.FromUID(uid)
-    except Exception as e:
+    except:
         raise Http404
 
     if request.method == 'POST':
         form = ChfnForm(request.POST)
         if form.is_valid():
             userObj.gecos = form.cleaned_data
-            return HttpResponseRedirect('/users/' + userObj.uid + '/')
+            return HttpResponseRedirect('/users/' + userObj.uid)
     else:
         form = ChfnForm(initial=userObj.gecos)
 
     return render(request, 'form.html', {'form': form, 'uid': userObj.uid})
 
 
-@cache_control(no_cache=True, must_revalidate=True)
 def userChdesc(request, uid):
     try:
         userObj = user.FromUID(uid)
-    except Exception as e:
+    except:
         raise Http404
 
     if request.method == 'POST':
         form = ChdescForm(request.POST)
         if form.is_valid():
             userObj.description = str(form.cleaned_data["description"])
-            return HttpResponseRedirect('/users/' + userObj.uid + '/')
+            return HttpResponseRedirect('/users/' + userObj.uid)
     else:
         form = ChdescForm(initial={"description": userObj.description})
 
     return render(request, 'form.html', {'form': form, 'uid': userObj.uid})
 
 
-@cache_control(no_cache=True, must_revalidate=True)
 def userChwarnRm(request, uid):
     try:
         userObj = user.FromUID(uid)
-    except Exception as e:
+    except:
         raise Http404
 
     if request.method == 'POST':
         form = ChwarnRmForm(request.POST)
         if form.is_valid():
             userObj.toBeDeleted = form.cleaned_data["toBeDeleted"]
-            return HttpResponseRedirect('/users/' + userObj.uid + '/')
+            return HttpResponseRedirect('/users/' + userObj.uid)
     else:
         form = ChwarnRmForm(initial={"toBeDeleted": userObj.toBeDeleted})
 
     return render(request, 'form.html', {'form': form, 'uid': userObj.uid})
 
 
-@cache_control(no_cache=True, must_revalidate=True)
 def userChsh(request, uid):
     try:
         userObj = user.FromUID(uid)
-    except Exception as e:
+    except:
         raise Http404
 
     if request.method == 'POST':
         form = ChshForm(request.POST)
         if form.is_valid():
             userObj.loginShell = str(form.cleaned_data["login_shell"])
-            return HttpResponseRedirect('/users/' + userObj.uid + '/')
+            return HttpResponseRedirect('/users/' + userObj.uid)
     else:
         form = ChshForm(initial={"login_shell": userObj.loginShell})
 
     return render(request, 'form.html', {'form': form, 'uid': userObj.uid})
 
 
-@cache_control(no_cache=True, must_revalidate=True)
 def userChgroup(request, uid):
     try:
         userObj = user.FromUID(uid)
-    except Exception as e:
+    except:
         raise Http404
 
     if request.method == 'POST':
         form = ChgroupForm(request.POST)
         if form.is_valid():
             userObj.gidNumber = str(form.cleaned_data["gid_number"])
-            return HttpResponseRedirect('/users/' + userObj.uid + '/')
+            return HttpResponseRedirect('/users/' + userObj.uid)
     else:
         form = ChgroupForm(initial={"gid_number": userObj.gidNumber})
 
     return render(request, 'form.html', {'form': form, 'uid': userObj.uid})
 
 
-@cache_control(no_cache=True, must_revalidate=True)
 def chHomeCH(request, uid):
     try:
         userObj = user.FromUID(uid)
-    except Exception as e:
+    except:
         raise Http404
 
     if request.method == 'POST':
         form = ChHomeForm(request.POST)
         if form.is_valid():
             userObj.homeDirectoryCH = str(form.cleaned_data["new_directory"])
-            return HttpResponseRedirect('/users/' + userObj.uid + '/')
+            return HttpResponseRedirect('/users/' + userObj.uid)
     else:
         form = ChHomeForm(initial={"new_directory": userObj.description})
 
     return render(request, 'form.html', {'form': form, 'uid': userObj.uid})
 
 
-@cache_control(no_cache=True, must_revalidate=True)
 def chHomeAnk(request, uid):
     try:
         userObj = user.FromUID(uid)
-    except Exception as e:
+    except:
         raise Http404
 
     if request.method == 'POST':
         form = ChHomeForm(request.POST)
         if form.is_valid():
             userObj.homeDirectoryAnk = str(form.cleaned_data["new_directory"])
-            return HttpResponseRedirect('/users/' + userObj.uid + '/')
+            return HttpResponseRedirect('/users/' + userObj.uid)
     else:
         form = ChHomeForm(initial={"new_directory": userObj.description})
 
     return render(request, 'form.html', {'form': form, 'uid': userObj.uid})
 
 
-@cache_control(no_cache=True, must_revalidate=True)
 def userChpriv(request, uid):
     try:
         userObj = user.FromUID(uid)
-    except Exception as e:
+    except:
         raise Http404
 
     if request.method == 'POST':
@@ -179,27 +170,28 @@ def userChpriv(request, uid):
             serviceStr = str(form.cleaned_data["service"])
             if serviceStr not in userObj.authorizedServices:
                 userObj.addAuthorizedService(serviceStr)
-                return HttpResponseRedirect('/users/' + userObj.uid + '/chpriv/')
+                return HttpResponseRedirect('/users/' + userObj.uid + '/chpriv')
     else:
         form = ChprivForm()
 
     return render(request, 'userpriv.html', {'form': form, 'user': userObj})
 
 
-@cache_control(no_cache=True, must_revalidate=True)
 def userRmpriv(request, uid, service, server):
+    if request.method != 'POST':
+        raise Http404
+
     try:
         userObj = user.FromUID(uid)
-    except Exception as e:
+    except:
         raise Http404
     serviceStr = service + "@" + server
     if not serviceStr in userObj.authorizedServices:
         raise Http404
     userObj.removeAuthorizedService(serviceStr)
-    return HttpResponseRedirect('/users/' + userObj.uid + '/chpriv/')
+    return HttpResponseRedirect('/users/' + userObj.uid + '/chpriv')
 
 
-@cache_control(no_cache=True, must_revalidate=True)
 def userShowldif(request, uid):
     try:
         userObj = user.FromUID(uid)
@@ -211,7 +203,6 @@ def userShowldif(request, uid):
     return render(request, 'usershowldif.html', {'user': userObj})
 
 
-@cache_control(no_cache=True, must_revalidate=True)
 def addUser(request):
     if request.method == 'POST':
         form = AddUserForm(request.POST)
@@ -225,26 +216,30 @@ def addUser(request):
                 newUser.addAuthorizedService(str(access))
             # newUser.createSambaEntry()
 
-            return HttpResponseRedirect('/users/' + form.cleaned_data['uid'] + '/')
+            return HttpResponseRedirect('/users/' + form.cleaned_data['uid'])
     else:
         form = AddUserForm()
 
     return render(request, 'form.html', {'form': form, 'uid': "users"})
 
 
-@cache_control(no_cache=True, must_revalidate=True)
 def rmUser(request, uid):
+    if request.method != 'POST':
+        raise Http404
+
     try:
         userObj = user.FromUID(uid)
     except Exception as e:
         raise Http404
 
     userObj.remove()
-    return HttpResponseRedirect('/users/')
+    return HttpResponseRedirect('/users')
 
 
-@cache_control(no_cache=True, must_revalidate=True)
 def removeProfile(request, uid):
+    if request.method != 'POST':
+        raise Http404
+
     try:
         userObj = user.FromUID(uid)
     except Exception as e:
@@ -252,11 +247,13 @@ def removeProfile(request, uid):
 
     newAction = userObj.removeProfile('ank.chnet')
     newAction.locked = False
-    return HttpResponseRedirect('/users/' + userObj.uid + '/')
+    return HttpResponseRedirect('/users/' + userObj.uid)
 
 
-@cache_control(no_cache=True, must_revalidate=True)
 def resetPassword(request, uid):
+    if request.method != 'POST':
+        raise Http404
+
     try:
         userObj = user.FromUID(uid)
     except Exception as e:
@@ -267,7 +264,6 @@ def resetPassword(request, uid):
     return render(request, 'user.html', {'user': userObj, 'dienst2Status': dienst2Status, 'password': password})
 
 
-@cache_control(no_cache=True, must_revalidate=True)
 def chPassword(request, uid):
     try:
         userObj = user.FromUID(uid)
@@ -278,7 +274,7 @@ def chPassword(request, uid):
         form = ChpassForm(request.POST)
         if form.is_valid():
             userObj.changePassword(form.cleaned_data['password'])
-            return HttpResponseRedirect('/users/' + userObj.uid + '/')
+            return HttpResponseRedirect('/users/' + userObj.uid)
     else:
         form = ChpassForm()
 

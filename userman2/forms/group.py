@@ -1,14 +1,17 @@
 from django import forms
 from userman2.model import user
 
+
 class PossibleUsers:
     def __iter__(self):
         return iter([("", "")] + [(username, username) for username in user.GetAllUserNames()])
 
 
 class GroupsForm(forms.Form):
-    uid = forms.RegexField(regex="^[a-zA-Z\d \-\$]+$", required=False)
-    cn = forms.RegexField(regex="^[^:^,]+$", required=False)
+    uid = forms.RegexField(regex="^[a-zA-Z\d \-\$]+$", required=False,
+                           widget=forms.TextInput(attrs={'placeholder': 'Filter by member'}))
+    cn = forms.RegexField(regex="^[^:^,]+$", required=False,
+                          widget=forms.TextInput(attrs={'placeholder': 'Filter by name'}))
 
 
 class AddUserForm(forms.Form):

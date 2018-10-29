@@ -9,7 +9,6 @@ from email.mime.text import MIMEText
 from userman2.forms.massmail import *
 
 
-@cache_control(no_cache=True, must_revalidate=True)
 def selectUsers(request):
     if (request.GET):
         form = MassMailForm(request.GET)
@@ -48,7 +47,7 @@ def writeMail(request):
         form = WriteMailForm(request.GET)
         if form.is_valid():
             if not form.cleaned_data["users"]:
-                return HttpResponseRedirect('/massmail/')
+                return HttpResponseRedirect('/massmail')
             usernames = form.cleaned_data["users"]
 
     return render(request, 'massmail2.html', {'form': form, 'users': usernames})
@@ -85,7 +84,7 @@ def sendMail(request):
                     if removaldate:
                         userObj = user.FromUID(username)
                         userObj.toBeDeleted = removaldate
-                return HttpResponseRedirect('/massmail/')
+                return HttpResponseRedirect('/massmail')
             return render(request, 'massmail3.html', {'form': form, 'users': usernames, 'fromaddress': form.cleaned_data['fromaddress'], 'subject': form.cleaned_data['subject'], 'body': form.cleaned_data['body'], 'removaldue': form.cleaned_data['removaldue'], 'removalunits': form.cleaned_data['removalunits']})
 
-    return HttpResponseRedirect('/massmail/')
+    return HttpResponseRedirect('/massmail')

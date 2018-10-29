@@ -11,7 +11,7 @@
             </th>
         </tr>
         <tr>
-            <td style="width: 32px;"><a href='chuid'><i class="far fa-edit"></i></a></td>
+            <td style="width: 32px;"><a href='{{ request.get_full_path }}/chuid'><i class="far fa-edit"></i></a></td>
             <td style="width: 11em;">UID</td>
             <td>{{ user.uid }}</td>
         </tr>
@@ -21,7 +21,7 @@
             <td>{{ user.uidNumber }}</td>
         </tr>
         <tr>
-            <td rowspan='4'><a href='chfn'><i class="far fa-edit"></i></a></td>
+            <td rowspan='4'><a href='{{ request.get_full_path }}/chfn'><i class="far fa-edit"></i></a></td>
             <td>Full Name</td>
             <td>{{ user.gecos.full_name }}</td>
         </tr>
@@ -38,35 +38,36 @@
             <td>{{ user.gecos.home_phone }}</td>
         </tr>
         <tr>
-            <td><a href='chdesc'><i class="far fa-edit"></i></a></td>
+            <td><a href='{{ request.get_full_path }}/chdesc'><i class="far fa-edit"></i></a></td>
             <td>Description</td>
             <td>{{ user.description }}</td>
         </tr>
         <tr>
-            <td><a href='chwarnrm'><i class="far fa-edit"></i></a></td>
+            <td><a href='{{ request.get_full_path }}/chwarnrm'><i class="far fa-edit"></i></a></td>
             <td>Removal date</td>
             <td>{{ user.toBeDeleted }}</td>
         </tr>
         <tr>
-            <td><a href='chsh'><i class="far fa-edit"></i></a></td>
+            <td><a href='{{ request.get_full_path }}/chsh'><i class="far fa-edit"></i></a></td>
             <td>Login Shell</td>
             <td>{{ user.loginShell }}</td>
         </tr>
         <tr>
-            <td><a href='chhomeank'><i class="far fa-edit"></i></a></td>
+            <td><a href='{{ request.get_full_path }}/chhomeank'><i class="far fa-edit"></i></a></td>
             <td>Home Directory</td>
             <td>{{ user.homeDirectoryAnk }}</td>
         </tr>
         <tr>
-            <td><a href='chhomech'><i class="far fa-edit"></i></a></td>
+            <td><a href='{{ request.get_full_path }}/chhomech'><i class="far fa-edit"></i></a></td>
             <td>Home Directory (CH)</td>
             <td>{{ user.homeDirectoryCH }}</td>
         </tr>
         <tr>
-            <td><a href='chgroup'><i class="far fa-edit"></i></a></td>
+            <td><a href='{{ request.get_full_path }}/chgroup'><i class="far fa-edit"></i></a></td>
             <td>Primary Group ID</td>
-            <td>{{ user.gidNumber }} (<a
-                    href='/groups/{{ user.gidNumber|groupname }}'>{{ user.gidNumber|groupname }}</a>)
+            <td>
+                {{ user.gidNumber }}
+                (<a href='/groups/{{ user.gidNumber|groupname }}'>{{ user.gidNumber|groupname }}</a>)
             </td>
         </tr>
         <tr>
@@ -94,7 +95,7 @@
         </tr>
         <thead>
             <th colspan='3'>
-                Authorized Services <a href='chpriv'><i class="far fa-edit"></i></a>
+                Authorized Services <a href='{{ request.get_full_path }}/chpriv'><i class="far fa-edit"></i></a>
             </th>
         </tr>
         {% for service in user.authorizedServices %}
@@ -108,24 +109,31 @@
 
     <p>
     <ul>
-        <li><a href='showldif'>Display an LDIF for this user</a>
-    </ul></p>
-    <p>
-    <ul>
-        <li><a href='chpasswd/'>Change user's password</a>
-        <li>
-            {% if password %}
-                <span style="color: #BD0000">New password: <code>{{ password }}</code></span>
-            {% else %}
-                <a href='resetpasswd/' onclick="return confirm('Reset password for {{ user.uid }}?')">
-                    Reset user's password</a>
-            {% endif %}
-    </ul></p>
-    <p>
-    <ul>
-        <li><a href='removeprofile/' onclick="return confirm('Remove profile for {{ user.uid }}?')">Remove user's
-            profile</a>
-        <li><a href='rm/' onclick="return confirm('Are you very sure you really want to delete {{ user.uid }}?')">Remove
-            user</a>
-    </ul></div>
+        <li><a href='{{ request.get_full_path }}/showldif'>Display an LDIF for this user</a></li>
+        <li><a href='{{ request.get_full_path }}/chpasswd'>Change user's password</a></li>
+    </ul>
+
+    {% if password %}
+        <p style="color: #BD0000">New password: <code>{{ password }}</code></p>
+    {% else %}
+        <form method="post" action="{{ request.get_full_path }}/resetpasswd">
+            {% csrf_token %}
+            <button class="btn btn-warning" onclick="return confirm('Reset password for {{ user.uid }}?')">
+                Reset password
+            </button>
+        </form>
+    {% endif %}
+    <form method="post" action="{{ request.get_full_path }}/removeprofile">
+        {% csrf_token %}
+        <button class="btn btn-warning" onclick="return confirm('Remove profile for {{ user.uid }}?')">
+            Remove user's profile
+        </button>
+    </form>
+    <form method="post" action="{{ request.get_full_path }}/rm">
+        {% csrf_token %}
+        <button class="btn btn-danger" onclick="return confirm('Remove user {{ user.uid }}?')">
+            Remove user
+        </button>
+    </form>
+</div>
 {% endblock %}

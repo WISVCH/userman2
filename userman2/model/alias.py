@@ -57,8 +57,7 @@ def getCnForUid(uid, ld=None):
     if not ld:
         ld = LDAPConn()
         ld.connectAnon()
-    res = ld.l.search_s(
-        settings.LDAP_ALIASDN, ldap.SCOPE_SUBTREE, 'rfc822MailMember=' + uid)
+    res = ld.l.search_s(settings.LDAP_ALIASDN, ldap.SCOPE_SUBTREE, 'rfc822MailMember=' + uid)
     return [attribs["cn"][0].decode() for dn, attribs in res]
 
 
@@ -90,10 +89,9 @@ def getIndirectCnForUid(uid, recurse=False, ld=None):
 def getAllAliasNames():
     ld = LDAPConn()
     ld.connectAnon()
-    res = ld.l.search_s(
-        settings.LDAP_ALIASDN, ldap.SCOPE_SUBTREE, "objectClass=nisMailAlias")
+    res = ld.l.search_s(settings.LDAP_ALIASDN, ldap.SCOPE_SUBTREE, "objectClass=nisMailAlias")
     res.sort()
-    return [attrs['cn'][0] for (dn, attrs) in res]
+    return [attrs['cn'][0].decode() for (dn, attrs) in res]
 
 
 def getAllAliases(filter_data=False):
@@ -110,9 +108,8 @@ def getAllAliases(filter_data=False):
         filter_string += "(objectClass=nisMailAlias))"
     else:
         filter_string = "(objectClass=nisMailAlias)"
-    res = ld.l.search_s(
-        settings.LDAP_ALIASDN, ldap.SCOPE_SUBTREE, filter_string)
 
+    res = ld.l.search_s(settings.LDAP_ALIASDN, ldap.SCOPE_SUBTREE, filter_string)
     res.sort()
     ret = {}
     for dn, attrs in res:
@@ -137,8 +134,7 @@ def GetParents():
     ld.connectAnon()
 
     filter_string = "(objectClass=organizationalUnit)"
-    res = ld.l.search_s(
-        settings.LDAP_ALIASDN, ldap.SCOPE_ONELEVEL, filter_string)
+    res = ld.l.search_s(settings.LDAP_ALIASDN, ldap.SCOPE_ONELEVEL, filter_string)
     res.sort()
     return [attribs['ou'][0].decode() for (_, attribs) in res]
 

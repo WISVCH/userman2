@@ -2,35 +2,37 @@
 {% block title %}Userman2 — Manage Aliases{% endblock %}
 {% load static %}
 {% block content %}
-    <form action='' method='get'>
-        <table class='groupfilter'>
-            <tr class='title'>
-                <td style="width: 32px;"><button class="fas fa-search"></button></td>
-                <td style="padding-right: 1em;">memberUid: {{ form.uid }}</td>
-                <td>CN: {{ form.cn }}</td>
-            </tr>
-        </table>
-    </form>
-    {% for groupou in groups.items %}
-        <table class='group table'>
-            <thead>
-                <tr class='title'>
-                    <th colspan='2'>
-                        {{ groupou.0 }}
-                        {% if not form.uid.value %}
-                        <a href='../add{% if alias %}alias{% else %}group{% endif %}/{{ groupou.0 }}'>
-                            <i class="far fa-plus-square"></i>
-                        </a>
-                        {% endif %}
-                    </th>
-                </tr>
-            </thead>
-            {% for group in groupou.1 %}
-                <tr>
-                    <td><a href='{{ group.cn }}/'><i class="far fa-edit"></i></a></td>
-                    <td>{{ group.cn }}</td>
-                </tr>
-            {% endfor %}
-        </table>
+
+<form method="get">
+    <p>
+        {{ form.cn }}
+        {{ form.uid }}
+        <button><i class="fas fa-search"></i></button>
+    </p>
+</form>
+
+{% for groupou in groups.items %}
+<table class='group table'>
+    <thead>
+        <tr class='title'>
+            <th colspan='2'>
+                {{ groupou.0 }}
+                {% if not form.uid.value %}
+                <a href='{{ request.get_full_path }}/{{ groupou.0 }}/add'>
+                    <i class="far fa-plus-square"></i>
+                </a>
+                {% endif %}
+            </th>
+        </tr>
+    </thead>
+    {% for group in groupou.1 %}
+        <tr>
+            <td><a href='{{ request.get_full_path }}/{{ group.cn }}'><i class="far fa-edit"></i></a></td>
+            <td>{{ group.cn }}</td>
+        </tr>
     {% endfor %}
+</table>
+</div>
+{% endfor %}
+
 {% endblock %}

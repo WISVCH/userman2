@@ -58,6 +58,7 @@ STATICFILES_FINDERS = (
 MIDDLEWARE = (
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django_request_logger.middleware.StoreRequestMiddleware',
 )
 

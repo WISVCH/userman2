@@ -2,6 +2,7 @@
 {% block title %}Userman2 — Change {{ uid }}{% endblock %}
 {% block content %}
 <form method="post" action="">
+    {% csrf_token %}
     <table class="table">
         <thead>
             <tr>
