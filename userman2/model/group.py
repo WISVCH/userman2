@@ -141,7 +141,7 @@ def GetCnForUid(uid):
 
     res = ld.l.search_s(
         settings.LDAP_GROUPDN, ldap.SCOPE_SUBTREE, 'memberUid=' + uid)
-    return [attribs["cn"][0] for dn, attribs in res]
+    return [attribs["cn"][0].decode() for dn, attribs in res]
 
 
 def GetParents():
@@ -151,7 +151,7 @@ def GetParents():
 
     filter_string = "(objectClass=organizationalUnit)"
     res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_ONELEVEL, filter_string)
-    res = [attribs['ou'][0] for (_, attribs) in res]
+    res = [attribs['ou'][0].decode() for (_, attribs) in res]
     res.append('None')
     res.sort()
     return res
@@ -187,5 +187,5 @@ def Add(parent, cn):
     dn = 'cn=' + cn + ou + ',' + settings.LDAP_GROUPDN
     gidNumber = GetFreeGIDNumber()
     ld.addObject(dn, {'objectClass': 'posixGroup', 'cn': cn, 'gidNumber': str(gidNumber)})
-    execute_script("sudo /usr/local/userman/scripts/createsambauser %s" % re.escape(cn))
+    execute_script("sudo /usr/local/userman/scripts/addgroupmapping %s" % re.escape(cn))
     return FromCN(cn)

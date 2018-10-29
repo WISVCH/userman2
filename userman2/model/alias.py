@@ -140,7 +140,7 @@ def GetParents():
     res = ld.l.search_s(
         settings.LDAP_ALIASDN, ldap.SCOPE_ONELEVEL, filter_string)
     res.sort()
-    return [attribs['ou'][0] for (_, attribs) in res]
+    return [attribs['ou'][0].decode() for (_, attribs) in res]
 
 
 def Exists(cn):
