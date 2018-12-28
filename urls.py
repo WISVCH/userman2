@@ -25,7 +25,6 @@ urlpatterns += [
     url(r'^users/([a-zA-Z][a-zA-Z\d\-_]+)/chpriv$', users.userChpriv),
     url(r'^users/([a-zA-Z][a-zA-Z\d\-_]+)/chpriv/rm/([a-zA-z-]+)@([a-zA-z\d-]+)$', users.userRmpriv),
     url(r'^users/([a-zA-Z][a-zA-Z\d\-_]+)/chgroup$', users.userChgroup),
-    url(r'^users/([a-zA-Z][a-zA-Z\d\-_]+)/showldif$', users.userShowldif),
     url(r'^users/([a-zA-Z][a-zA-Z\d\-_]+)/chhomeank$', users.chHomeAnk),
     url(r'^users/([a-zA-Z][a-zA-Z\d\-_]+)/chhomech$', users.chHomeCH),
     url(r'^users/([a-zA-Z][a-zA-Z\d\-_]+)/resetpasswd$', users.resetPassword),

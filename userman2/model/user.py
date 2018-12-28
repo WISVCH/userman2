@@ -5,7 +5,6 @@ import time
 from io import StringIO
 
 import ldap
-import ldif
 from django.conf import settings
 from ldap.cidict import cidict
 from pyasn1.codec.ber import decoder
@@ -200,18 +199,6 @@ class User(LDAPConn):
 
     def removeProfile(self, host, parent=False):
         return action.Add('removeProfile', host, self.dn, 'Remove profile on ' + host + ' for ' + self.uid, parent)
-
-        # def generateLogonScript(self, host):
-        # return action.Add('generateLogonScript', host, self.dn, 'Generate
-        # logonscript on ' + host + ' for ' + self.uid)
-
-    def get_ldif(self):
-        out = StringIO()
-        ldif_out = ldif.LDIFWriter(out)
-        ldif_out.unparse(self.dn, dict(self.__attrs))
-        return out.getvalue()
-
-    ldif = property(get_ldif)
 
     def remove(self):
         # Remove self from aliases/groups

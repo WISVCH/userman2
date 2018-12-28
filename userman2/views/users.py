@@ -192,17 +192,6 @@ def userRmpriv(request, uid, service, server):
     return HttpResponseRedirect('/users/' + userObj.uid + '/chpriv')
 
 
-def userShowldif(request, uid):
-    try:
-        userObj = user.FromUID(uid)
-    except Exception as e:
-        raise Http404
-
-    print(userObj.ldif)
-
-    return render(request, 'usershowldif.html', {'user': userObj})
-
-
 def addUser(request):
     if request.method == 'POST':
         form = AddUserForm(request.POST)
