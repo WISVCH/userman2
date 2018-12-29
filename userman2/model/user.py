@@ -1,23 +1,24 @@
 #!/usr/bin/env python3
+from userman2.scripts import execute_script
+from userman2.model import group
+from userman2.model import alias
+from userman2.model import action
 import datetime
 import logging
 import time
+import secrets
+import string
 from io import StringIO
 
 import ldap
 from django.conf import settings
 from ldap.cidict import cidict
-from pyasn1.codec.ber import decoder
-from pyasn1.type import univ, namedtype, tag
 
 from cron.mail import mailAdmin
 from.ldapconn import LDAPConn
-from userman2.model import action
-from userman2.model import alias
-from userman2.model import group
-from userman2.scripts import execute_script
 
 auditlog = logging.getLogger("userman2.audit")
+logger = logging.getLogger(__name__)
 
 
 class User(LDAPConn):
@@ -234,26 +235,17 @@ class User(LDAPConn):
 
     def resetPassword(self):
         auditlog.info("Reset password for dn '%s'", self.dn)
-        res = self.l.passwd_s(self.dn, None, None)
+        alphabet = string.ascii_letters + string.digits
+        password = ''.join(secrets.choice(alphabet) for i in range(20))
+        res = self.l.passwd_s(self.dn, None, password)
         if res != (None, None):
-            password = str(decoder.decode(res[1], asn1Spec=PasswordModifySeq())[0].getComponentByName('password'))
-            return password
-        else:
-            raise Exception("Unexpected response from modify password request")
+            msg = "Unexpected response from modify password request"
+            logger.error(msg, res)
+            raise Exception(msg)
+        return password
 
     def __str__(self):
         return "User: [ dn:'" + self.dn + ", uid:'" + self.uid + "', cn:'" + self.cn + "' ]"
-
-
-class PasswordModifySeq(univ.Sequence):
-    componentType = namedtype.NamedTypes(
-        namedtype.NamedType(
-            'password',
-            univ.OctetString().subtype(
-                implicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0)
-            )
-        )
-    )
 
 
 def FromUID(uid):
