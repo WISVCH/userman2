@@ -248,8 +248,7 @@ def resetPassword(request, uid):
         raise Http404
 
     password = userObj.resetPassword()
-    return render(request, 'user.html', {'user': userObj, 'password': password})
-
+    return JsonResponse({'password': password})
 
 def chPassword(request, uid):
     try:

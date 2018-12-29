@@ -3,7 +3,13 @@
 {% block title %}Userman2 — Editing {{ user.uid }}{% endblock %}
 {% load static %}
 {% block content %}
-<div>
+<div id="app">
+    {% verbatim %}
+    <div v-if="password" class="alert alert-success" role="alert">
+        <p>Password has been successfully reset to: <code>{{ password }}</code></p>
+    </div>
+    {% endverbatim %}
+
     <table class="table">
         <thead>
             <th colspan='3'>
@@ -73,7 +79,7 @@
         <tr>
             <td>&nbsp;</td>
             <td>Dienst2</td>
-            <td id="dienst2"><dienst2 v-if="dienst2status" :status="dienst2status" :full_name="full_name"></dienst2></td>
+            <td><dienst2 v-if="dienst2status" :status="dienst2status" :full_name="full_name"></dienst2></td>
         </tr>
         <tr>
             <td>&nbsp;</td>
@@ -111,17 +117,11 @@
     <ul>
         <li><a href='{{ request.get_full_path }}/chpasswd'>Change user's password</a></li>
     </ul>
+    </p>
 
-    {% if password %}
-        <p style="color: #BD0000">New password: <code>{{ password }}</code></p>
-    {% else %}
-        <form method="post" action="{{ request.get_full_path }}/resetpasswd">
-            {% csrf_token %}
-            <button class="btn btn-warning" onclick="return confirm('Reset password for {{ user.uid }}?')">
-                Reset password
-            </button>
-        </form>
-    {% endif %}
+    <button class="btn btn-warning" @click.prevent="resetPassword">
+        Reset password
+    </button>
     <form method="post" action="{{ request.get_full_path }}/removeprofile">
         {% csrf_token %}
         <button class="btn btn-warning" onclick="return confirm('Remove profile for {{ user.uid }}?')">
@@ -138,16 +138,32 @@
 
 <script type="text/javascript">
     const app = new Vue({
-        el: '#dienst2',
+        el: '#app',
         data: {
             username: '{{ user.uid }}',
             full_name: '{{ user.gecos.full_name }}',
             dienst2status: undefined,
+            password: undefined,
+            csrf_token: '{{ csrf_token }}',
         },
         async created() {
             const response = await fetch('/users/' + this.username + '/dienst2status.json')
             this.dienst2status = await response.json()
         },
+        methods: {
+            async resetPassword() {
+                if (!confirm(`Reset password for ${this.username}?`)) {
+                    return
+                }
+                const response = await fetch(
+                    '/users/' + this.username + '/resetpasswd.json', {
+                        method: 'POST',
+                        headers: {'X-CSRFToken': this.csrf_token}
+                    })
+                const json = await response.json()
+                this.password = json.password
+            },
+        }
     })
 </script>
 {% endblock %}
