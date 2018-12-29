@@ -3,13 +3,6 @@ import logging
 from . import middleware
 
 
-def add_filter_to_all_handlers():
-    filter = AddDjangoRequestFilter()
-    for handler in logging._handlers.values():
-        print("handler", handler)
-        handler.addFilter(filter)
-
-
 def get_client_ip(request):
     if request is None:
         return ""
@@ -20,7 +13,7 @@ def get_client_ip(request):
     return client_ip
 
 
-class AddDjangoRequestFilter(object):
+class LoggingFilter(logging.Filter):
     def filter(self, record):
         # Initialise custom fields to empty, so the formatter doesn't raise an error if there is no request or user
         record.client_ip = ""
@@ -36,7 +29,7 @@ class AddDjangoRequestFilter(object):
             try:
                 record.raw_post_data = request.body
             except Exception as e:
-                 record.raw_post_data = '<ERROR: %s>' % e.message
+                record.raw_post_data = '<ERROR: %s>' % e.message
 
             if 'AUTHENTICATE_UID' in request.META:
                 record.username = request.META['AUTHENTICATE_UID']
@@ -44,4 +37,4 @@ class AddDjangoRequestFilter(object):
                 record.username = request.META['HTTP_X_AUTH_SUBJECT']
             else:
                 record.username = '_'
-        return 1
+        return True

@@ -129,4 +129,47 @@ ADMIN_MAIL = 'pccom@ch.tudelft.nl'
 
 ROOT_PATH = os.path.dirname(__file__)
 
+LOGGING = {
+    'version': 1,
+    'filters': {
+        'request_info': {
+            '()': 'django_request_logger.logger.LoggingFilter',
+        }
+    },
+    'formatters': {
+        'standard': {
+            'format': '%(asctime)s %(levelname)s %(name)s.%(funcName)s:%(lineno)s [%(username)s %(client_ip)s] %(message)s',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'filters': ['request_info'],
+            'formatter': 'standard',
+        },
+    },
+    'loggers': {
+        'userman2': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django.security': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
+
 from .local import *
