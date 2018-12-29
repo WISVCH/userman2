@@ -247,8 +247,6 @@ class User(LDAPConn):
         if res != (None, None):
             raise Exception("Unexpected response from modify password request")
 
-    dienst2Status = {}
-
     def __str__(self):
         return "User: [ dn:'" + self.dn + ", uid:'" + self.uid + "', cn:'" + self.cn + "' ]"
 

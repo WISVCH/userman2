@@ -35,8 +35,7 @@ def displayUser(request, uid):
         userObj = user.FromUID(uid)
     except:
         raise Http404
-    dienst2Status = dienst2(uid)
-    return render(request, 'user.html', {'user': userObj, 'dienst2Status': dienst2Status})
+    return render(request, 'user.html', {'user': userObj})
 
 
 def userChfn(request, uid):
@@ -248,9 +247,8 @@ def resetPassword(request, uid):
     except Exception as e:
         raise Http404
 
-    dienst2Status = dienst2(uid)
     password = userObj.resetPassword()
-    return render(request, 'user.html', {'user': userObj, 'dienst2Status': dienst2Status, 'password': password})
+    return render(request, 'user.html', {'user': userObj, 'password': password})
 
 
 def chPassword(request, uid):
