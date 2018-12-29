@@ -68,7 +68,6 @@ class LDAPConn(object):
                 mod_attrs.append((k, list(map(lambda s: s.encode(), v))))
             else:
                 mod_attrs.append((k, v))
-        print(mod_attrs)
         auditlog.info("Add object dn '%s' with entries %s", dn, mod_attrs)
         self.l.add_s(dn, mod_attrs)
 
