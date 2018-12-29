@@ -121,8 +121,8 @@
     </button>
     <form method="post" action="{{ request.get_full_path }}/removeprofile">
         {% csrf_token %}
-        <button class="btn btn-warning" onclick="return confirm('Remove profile for {{ user.uid }}?')">
-            Remove user's profile
+        <button class="btn btn-warning" onclick="return confirm('Reset Windows profile for {{ user.uid }}?')">
+            Reset Windows profile
         </button>
     </form>
     <form method="post" action="{{ request.get_full_path }}/rm">
