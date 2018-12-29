@@ -250,22 +250,6 @@ def resetPassword(request, uid):
     password = userObj.resetPassword()
     return JsonResponse({'password': password})
 
-def chPassword(request, uid):
-    try:
-        userObj = user.FromUID(uid)
-    except Exception as e:
-        raise Http404
-
-    if request.method == 'POST':
-        form = ChpassForm(request.POST)
-        if form.is_valid():
-            userObj.changePassword(form.cleaned_data['password'])
-            return HttpResponseRedirect('/users/' + userObj.uid)
-    else:
-        form = ChpassForm()
-
-    return render(request, 'form.html', {'form': form, 'user': userObj})
-
 
 def dienst2(username):
     if username in settings.DIENST2_WHITELIST:

@@ -241,12 +241,6 @@ class User(LDAPConn):
         else:
             raise Exception("Unexpected response from modify password request")
 
-    def changePassword(self, password):
-        auditlog.info("Change password for dn '%s'", self.dn)
-        res = self.l.passwd_s(self.dn, None, password)
-        if res != (None, None):
-            raise Exception("Unexpected response from modify password request")
-
     def __str__(self):
         return "User: [ dn:'" + self.dn + ", uid:'" + self.uid + "', cn:'" + self.cn + "' ]"
 

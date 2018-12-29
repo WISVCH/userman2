@@ -113,12 +113,9 @@
         {% endfor %}
     </table>
 
-    <p>
-    <ul>
-        <li><a href='{{ request.get_full_path }}/chpasswd'>Change user's password</a></li>
-    </ul>
-    </p>
-
+    <button class="btn btn-warning" @click.prevent="changePassword">
+        Change password
+    </button>
     <button class="btn btn-warning" @click.prevent="resetPassword">
         Reset password
     </button>
@@ -133,6 +130,11 @@
         <button class="btn btn-danger" onclick="return confirm('Remove user {{ user.uid }}?')">
             Remove user
         </button>
+    </form>
+
+    <form id="changePassword" method="post" action="https://ch.tudelft.nl/password/">
+      <input type="hidden" name="username"/>
+      <input type="hidden" name="currentPassword" />
     </form>
 </div>
 
@@ -155,13 +157,26 @@
                 if (!confirm(`Reset password for ${this.username}?`)) {
                     return
                 }
+                this.password = await this.resetPasswordExecute()
+            },
+            async changePassword() {
+                if (!confirm(`Change password for ${this.username}?\nThis will reset the user's password first.`)) {
+                    return
+                }
+                const password = await this.resetPasswordExecute()
+                const form = document.getElementById('changePassword')
+                form.elements['username'].value = this.username
+                form.elements['currentPassword'].value = password
+                form.submit()
+            },
+            async resetPasswordExecute() {
                 const response = await fetch(
                     '/users/' + this.username + '/resetpasswd.json', {
                         method: 'POST',
                         headers: {'X-CSRFToken': this.csrf_token}
                     })
                 const json = await response.json()
-                this.password = json.password
+                return json.password
             },
         }
     })

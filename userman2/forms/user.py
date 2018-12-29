@@ -65,7 +65,3 @@ class AddUserForm(forms.Form):
             ('systemd-user@rob', 'systemd-user@rob')
         )
     )
-
-
-class ChpassForm(forms.Form):
-    password = forms.CharField(widget=forms.PasswordInput, min_length=8)
