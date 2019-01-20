@@ -6,17 +6,17 @@ workflow "Build and deploy on push to master" {
 action "Filter master branch" {
   uses = "actions/bin/filter@master"
   args = "branch master"
+  needs = ["Build Docker image"]
 }
 
 action "Build Docker image" {
   uses = "actions/docker/cli@master"
   args = "build -t quay.io/wisvch/userman2:$GITHUB_SHA ."
-  needs = ["Filter master branch"]
 }
 
 action "Log in to Quay" {
   uses = "actions/docker/login@master"
-  needs = ["Build Docker image"]
+  needs = ["Filter master branch"]
   secrets = ["DOCKER_USERNAME", "DOCKER_PASSWORD", "DOCKER_REGISTRY_URL"]
 }
 
