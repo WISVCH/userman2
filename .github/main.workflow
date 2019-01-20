@@ -1,6 +1,6 @@
 workflow "Build and deploy on push to master" {
   on = "push"
-  resolves = ["Push image"]
+  resolves = ["Push latest image"]
 }
 
 action "Filter master branch" {
@@ -11,7 +11,7 @@ action "Filter master branch" {
 
 action "Build Docker image" {
   uses = "actions/docker/cli@master"
-  args = "build -t quay.io/wisvch/userman2:$GITHUB_SHA ."
+  args = "build -t userman2 ."
 }
 
 action "Log in to Quay" {
@@ -20,8 +20,20 @@ action "Log in to Quay" {
   secrets = ["DOCKER_USERNAME", "DOCKER_PASSWORD", "DOCKER_REGISTRY_URL"]
 }
 
+action "Docker Tag" {
+  uses = "actions/docker/tag@master"
+  needs = ["Filter master branch"]
+  args = "userman2 quay.io/wisvch/userman2"
+}
+
 action "Push image" {
   uses = "actions/docker/cli@master"
-  needs = ["Log in to Quay"]
-  args = "push quay.io/wisvch/userman2:$GITHUB_SHA"
+  needs = ["Log in to Quay", "Docker Tag"]
+  args = "push quay.io/wisvch/userman2:$IMAGE_SHA"
+}
+
+action "Push latest image" {
+  uses = "actions/docker/cli@master"
+  needs = ["Push image"]
+  args = "push quay.io/wisvch/userman2:latest"
 }
