@@ -7,7 +7,7 @@ Vue.component('dienst2', {
         </span>
         <span v-if="status.status == 'error'">
             <i class="fas fa-times-circle" style="color: red;"></i>
-            <a v-bind:href="'https://dienst2.chnet/ldb/index/#' + full_name">{{ status.message }}</a>
+            <a v-bind:href="'https://dienst2.ch.tudelft.nl/ldb/index/#' + full_name">{{ status.message }}</a>
         </span>
         <span v-if="status.status == 'warning'">
             <i class="fas fa-exclamation-circle" style="color: orange"></i>

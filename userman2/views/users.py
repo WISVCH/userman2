@@ -257,7 +257,7 @@ def dienst2(username):
 
     headers = {'Authorization': 'Token ' + settings.DIENST2_APITOKEN}
     url = settings.DIENST2_BASEURL + '/ldb/api/v3/people/'
-    link_prefix = 'https://dienst2.chnet/ldb/people/%d/'
+    link_prefix = 'https://dienst2.ch.tudelft.nl/ldb/people/%d/'
     try:
         r = requests.get(url, params={'ldap_username': username}, headers=headers, timeout=5)
     except requests.exceptions.RequestException as e:
