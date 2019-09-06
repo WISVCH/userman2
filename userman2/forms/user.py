@@ -36,9 +36,10 @@ class ChprivForm(forms.Form):
 class ChshForm(forms.Form):
     login_shell = forms.ChoiceField(
         choices=(
-            ('/bin/bash', '/bin/bash'),
+            ("/bin/bash", "/bin/bash"),
             ("/bin/zsh", "/bin/zsh"),
-            ("/bin/false", "/bin/false")
+            ("/usr/bin/fish", "/usr/bin/fish"),
+            ("/bin/false", "/bin/false"),
         )
     )
 
