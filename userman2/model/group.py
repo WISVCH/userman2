@@ -7,7 +7,7 @@ import ldap
 from django.conf import settings
 from ldap.cidict import cidict
 
-from.ldapconn import LDAPConn
+from .ldapconn import LDAPConn
 
 
 class Group(LDAPConn):
@@ -31,7 +31,7 @@ class Group(LDAPConn):
     cn = property(_get_cn)
 
     def _get_parent(self):
-        parent = self.dn.split(',')[1].split('=')[1]
+        parent = self.dn.split(",")[1].split("=")[1]
         if parent == "Group":
             return "None"
         return parent
@@ -44,17 +44,17 @@ class Group(LDAPConn):
     gidNumber = property(_get_gidNumber)
 
     def _get_members(self):
-        if 'memberuid' in self.__attrs:
+        if "memberuid" in self.__attrs:
             return list(map(lambda s: s.decode(), self.__attrs["memberUid"]))
         return []
 
     members = property(_get_members)
 
     def removeMember(self, member):
-        self.removeEntries({'memberUid': member})
+        self.removeEntries({"memberUid": member})
 
     def addMember(self, member):
-        self.addEntries({'memberUid': member})
+        self.addEntries({"memberUid": member})
 
     def remove(self):
         if self.parent == "None" or self.parent == "Besturen":
@@ -62,20 +62,21 @@ class Group(LDAPConn):
             ld.connectRoot()
             ld.l.delete_s(self.dn)
         else:
-            removeAction = action.Add('removeGroup', 'ank.chnet', self.dn, 'Remove group entry in LDAP for ' + self.dn)
-            removeAnkGroupDirAction = self.removeGroupDir('ank.chnet', removeAction)
+            removeAction = action.Add("removeGroup", "ank.chnet", self.dn, "Remove group entry in LDAP for " + self.dn)
+            removeAnkGroupDirAction = self.removeGroupDir("ank.chnet", removeAction)
             removeAnkGroupDirAction.locked = False
             removeAction.locked = False
 
     def getPrimaryMembers(self):
         from userman2.model import user
+
         return user.GetPrimaryMembersForGid(self.gidNumber)
 
     def removeGroupDir(self, host, parent):
-        return action.Add('removeGroupDir', host, self.dn, 'Remove group directory on ank.chnet for ' + self.cn, parent)
+        return action.Add("removeGroupDir", host, self.dn, "Remove group directory on ank.chnet for " + self.cn, parent)
 
     def createGroupDir(self, host):
-        return action.Add('createGroupDir', host, self.dn, "Create group directory on host " + host + " for " + self.cn)
+        return action.Add("createGroupDir", host, self.dn, "Create group directory on host " + host + " for " + self.cn)
 
     def addGroupMapping(self):
         raise Exception("Should create samba group mapping")
@@ -102,10 +103,10 @@ def GetAllGroups(filter_data=False):
 
     if filter_data:
         filter_string = "(&"
-        if filter_data['uid']:
-            filter_string += "(memberUid=*" + filter_data['uid'] + "*)"
-        if filter_data['cn']:
-            filter_string += "(cn=*" + filter_data['cn'] + "*)"
+        if filter_data["uid"]:
+            filter_string += "(memberUid=*" + filter_data["uid"] + "*)"
+        if filter_data["cn"]:
+            filter_string += "(cn=*" + filter_data["cn"] + "*)"
         filter_string += "(objectClass=posixGroup))"
     else:
         filter_string = "(objectClass=posixGroup)"
@@ -126,17 +127,17 @@ def Groupname(value):
     ld = LDAPConn()
     ld.connectAnon()
     res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_SUBTREE, "(gidNumber=" + value + ")")
-    if len(res) > 0 and 'cn' in res[0][1]:
-        return res[0][1]['cn'][0]
+    if len(res) > 0 and "cn" in res[0][1]:
+        return res[0][1]["cn"][0]
     else:
-        return 'unknown group'
+        return "unknown group"
 
 
 def GetCnForUid(uid):
     ld = LDAPConn()
     ld.connectAnon()
 
-    res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_SUBTREE, 'memberUid=' + uid)
+    res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_SUBTREE, "memberUid=" + uid)
     return [attribs["cn"][0].decode() for dn, attribs in res]
 
 
@@ -147,8 +148,8 @@ def GetParents():
 
     filter_string = "(objectClass=organizationalUnit)"
     res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_ONELEVEL, filter_string)
-    res = [attribs['ou'][0].decode() for (_, attribs) in res]
-    res.append('None')
+    res = [attribs["ou"][0].decode() for (_, attribs) in res]
+    res.append("None")
     res.sort()
     return res
 
@@ -179,9 +180,9 @@ def Add(parent, cn):
     ld = LDAPConn()
     ld.connectRoot()
 
-    ou = '' if parent == 'None' else ',ou=' + parent
-    dn = 'cn=' + cn + ou + ',' + settings.LDAP_GROUPDN
+    ou = "" if parent == "None" else ",ou=" + parent
+    dn = "cn=" + cn + ou + "," + settings.LDAP_GROUPDN
     gidNumber = GetFreeGIDNumber()
-    ld.addObject(dn, {'objectClass': 'posixGroup', 'cn': cn, 'gidNumber': str(gidNumber)})
+    ld.addObject(dn, {"objectClass": "posixGroup", "cn": cn, "gidNumber": str(gidNumber)})
     execute_script("sudo /usr/local/userman/scripts/addgroupmapping %s" % re.escape(cn))
     return FromCN(cn)

@@ -9,25 +9,25 @@ from userman2.model import computer
 def displayComputers(request):
     computers = computer.getAllComputers()
     count = len(computers)
-    return render(request, 'computers.html', {'computers': computers, 'count': count})
+    return render(request, "computers.html", {"computers": computers, "count": count})
 
 
 def addComputer(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = AddComputerForm(request.POST)
         if form.is_valid():
-            uid = form.cleaned_data['uid'] + '$'
+            uid = form.cleaned_data["uid"] + "$"
             if not computer.Exists(uid):
                 computer.Add(uid)
-            return HttpResponseRedirect('/computers')
+            return HttpResponseRedirect("/computers")
     else:
         form = AddComputerForm()
 
-    return render(request, 'form.html', {'form': form, 'uid': "computers"})
+    return render(request, "form.html", {"form": form, "uid": "computers"})
 
 
 def rmComputer(request, cn):
-    if request.method != 'POST':
+    if request.method != "POST":
         raise Http404
 
     try:
@@ -37,4 +37,4 @@ def rmComputer(request, cn):
 
     computerObj.connectRoot()
     computerObj.remove()
-    return HttpResponseRedirect('/computers')
+    return HttpResponseRedirect("/computers")

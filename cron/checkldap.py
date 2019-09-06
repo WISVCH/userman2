@@ -27,17 +27,23 @@ def process(action):
     try:
         action.lock()
         if action.execute():
-            mailAdmin("Success: " + action.getActionName(),
-                      "The following action has been processed: " + str(action))
+            mailAdmin("Success: " + action.getActionName(), "The following action has been processed: " + str(action))
             action.delete()
             return True
         else:
             action.unlock()
             return False
-    except Exception, err:
-        mailAdmin("ERROR: " + action.getActionName(), "An error occured while processing " + str(action) +
-                  ".\nThe error was: " + str(err) + "\nThe Action has been locked, and must be re-enabled manually.")
+    except Exception as err:
+        mailAdmin(
+            "ERROR: " + action.getActionName(),
+            "An error occured while processing "
+            + str(action)
+            + ".\nThe error was: "
+            + str(err)
+            + "\nThe Action has been locked, and must be re-enabled manually.",
+        )
         action.lock()
+
 
 # Main loop, read pending actions and process them
 try:

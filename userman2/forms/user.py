@@ -2,14 +2,16 @@ from django import forms
 
 
 class ChfnForm(forms.Form):
-    full_name = forms.RegexField(
-        regex="^[^:^,]+$", error_messages={'invalid': "Gecos entries may not contain : or ,"})
+    full_name = forms.RegexField(regex="^[^:^,]+$", error_messages={"invalid": "Gecos entries may not contain : or ,"})
     room_number = forms.RegexField(
-        regex="^[^:^,]+$", required=False, error_messages={'invalid': "Gecos entries may not contain : or ,"})
+        regex="^[^:^,]+$", required=False, error_messages={"invalid": "Gecos entries may not contain : or ,"}
+    )
     work_phone = forms.RegexField(
-        regex="^[\d\-]+$", required=False, error_messages={'invalid': "Phone numbers may only contain digits and -."})
+        regex="^[\d\-]+$", required=False, error_messages={"invalid": "Phone numbers may only contain digits and -."}
+    )
     home_phone = forms.RegexField(
-        regex="^[\d\-]+$", required=False, error_messages={'invalid': "Phone numbers may only contain digits and -."})
+        regex="^[\d\-]+$", required=False, error_messages={"invalid": "Phone numbers may only contain digits and -."}
+    )
 
 
 class ChdescForm(forms.Form):
@@ -28,7 +30,7 @@ class ChprivForm(forms.Form):
             ("sshd@hendrik", "sshd@hendrik"),
             ("systemd-user@hendrik", "systemd-user@hendrik"),
             ("samba@ank", "samba@ank"),
-            ("vpn@fw-01", "vpn@fw-01")
+            ("vpn@fw-01", "vpn@fw-01"),
         )
     )
 
@@ -45,7 +47,7 @@ class ChshForm(forms.Form):
 
 
 class ChgroupForm(forms.Form):
-    gid_number = forms.ChoiceField(choices=((100, 'users'), (50, 'staff')))
+    gid_number = forms.ChoiceField(choices=((100, "users"), (50, "staff")))
 
 
 class ChHomeForm(forms.Form):
@@ -55,14 +57,12 @@ class ChHomeForm(forms.Form):
 class AddUserForm(forms.Form):
     uid = forms.RegexField(
         regex="^[a-z][a-z\d\-$_]+$",
-        error_messages={'invalid': "UID entry must consist of alphanumeric characters, and be lower case"})
+        error_messages={"invalid": "UID entry must consist of alphanumeric characters, and be lower case"},
+    )
     full_name = forms.RegexField(
-        regex="^[^:^,]+$", error_messages={'invalid': "Full name entry may not contain : or ,"})
+        regex="^[^:^,]+$", error_messages={"invalid": "Full name entry may not contain : or ,"}
+    )
     access = forms.MultipleChoiceField(
-        initial=('samba@ank',),
-        choices=(
-            ('samba@ank', 'samba@ank'),
-            ('sshd@rob', 'sshd@rob'),
-            ('systemd-user@rob', 'systemd-user@rob')
-        )
+        initial=("samba@ank",),
+        choices=(("samba@ank", "samba@ank"), ("sshd@rob", "sshd@rob"), ("systemd-user@rob", "systemd-user@rob")),
     )

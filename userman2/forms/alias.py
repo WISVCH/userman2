@@ -18,10 +18,12 @@ class PossibleAliases:
 
 
 class AliasForm(forms.Form):
-    uid = forms.RegexField(regex="^[a-zA-Z\d \-\$]+$", required=False,
-                           widget=forms.TextInput(attrs={'placeholder': 'Filter by member'}))
-    cn = forms.RegexField(regex="^[^:^,]+$", required=False,
-                          widget=forms.TextInput(attrs={'placeholder': 'Filter by name'}))
+    uid = forms.RegexField(
+        regex="^[a-zA-Z\d \-\$]+$", required=False, widget=forms.TextInput(attrs={"placeholder": "Filter by member"})
+    )
+    cn = forms.RegexField(
+        regex="^[^:^,]+$", required=False, widget=forms.TextInput(attrs={"placeholder": "Filter by name"})
+    )
 
 
 class AddUserForm(forms.Form):
@@ -31,8 +33,8 @@ class AddUserForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         super(AddUserForm, self).__init__(*args, **kwargs)
-        self.fields['uid'].choices = PossibleUsers()
-        self.fields['alias'].choices = PossibleAliases()
+        self.fields["uid"].choices = PossibleUsers()
+        self.fields["alias"].choices = PossibleAliases()
 
 
 class AddAliasForm(forms.Form):

@@ -10,7 +10,7 @@ from userman2.forms.massmail import *
 
 
 def selectUsers(request):
-    if (request.GET):
+    if request.GET:
         form = MassMailForm(request.GET)
         if form.is_valid():
             # Add all users, or just the selected groups
@@ -29,6 +29,7 @@ def selectUsers(request):
 
             def f(x):
                 return x.uid not in excluded_users
+
             users = filter(f, users)
         else:
             users = user.GetAllUsers()
@@ -38,7 +39,7 @@ def selectUsers(request):
 
     count = {"total": len(users)}
 
-    return render(request, 'massmail.html', {'users': users, 'form': form, 'count': count})
+    return render(request, "massmail.html", {"users": users, "form": form, "count": count})
 
 
 def writeMail(request):
@@ -47,10 +48,10 @@ def writeMail(request):
         form = WriteMailForm(request.GET)
         if form.is_valid():
             if not form.cleaned_data["users"]:
-                return HttpResponseRedirect('/massmail')
+                return HttpResponseRedirect("/massmail")
             usernames = form.cleaned_data["users"]
 
-    return render(request, 'massmail2.html', {'form': form, 'users': usernames})
+    return render(request, "massmail2.html", {"form": form, "users": usernames})
 
 
 def sendMail(request):
@@ -62,29 +63,39 @@ def sendMail(request):
             if form.cleaned_data["reallysend"]:
                 removaldate = False
                 if form.cleaned_data["removalunits"] == "days":
-                    removaldate = datetime.datetime.now() + datetime.timedelta(
-                        days=form.cleaned_data["removaldue"])
+                    removaldate = datetime.datetime.now() + datetime.timedelta(days=form.cleaned_data["removaldue"])
                 elif form.cleaned_data["removalunits"] == "weeks":
-                    removaldate = datetime.datetime.now() + datetime.timedelta(
-                        weeks=form.cleaned_data["removaldue"])
+                    removaldate = datetime.datetime.now() + datetime.timedelta(weeks=form.cleaned_data["removaldue"])
                 elif form.cleaned_data["removalunits"] == "months":
                     removaldate = datetime.datetime.now() + datetime.timedelta(
-                        days=form.cleaned_data["removaldue"] * 30)
+                        days=form.cleaned_data["removaldue"] * 30
+                    )
 
                 for username in usernames:
                     msg = MIMEText(form.cleaned_data["body"])
-                    msg['Subject'] = form.cleaned_data["subject"]
-                    msg['From'] = form.cleaned_data["fromaddress"]
-                    msg['To'] = username + "@ch.tudelft.nl"
+                    msg["Subject"] = form.cleaned_data["subject"]
+                    msg["From"] = form.cleaned_data["fromaddress"]
+                    msg["To"] = username + "@ch.tudelft.nl"
                     s = smtplib.SMTP()
                     s.connect()
-                    s.sendmail(
-                        form.cleaned_data["fromaddress"], [username + "@ch.tudelft.nl"], msg.as_string())
+                    s.sendmail(form.cleaned_data["fromaddress"], [username + "@ch.tudelft.nl"], msg.as_string())
                     s.close()
                     if removaldate:
                         userObj = user.FromUID(username)
                         userObj.toBeDeleted = removaldate
-                return HttpResponseRedirect('/massmail')
-            return render(request, 'massmail3.html', {'form': form, 'users': usernames, 'fromaddress': form.cleaned_data['fromaddress'], 'subject': form.cleaned_data['subject'], 'body': form.cleaned_data['body'], 'removaldue': form.cleaned_data['removaldue'], 'removalunits': form.cleaned_data['removalunits']})
+                return HttpResponseRedirect("/massmail")
+            return render(
+                request,
+                "massmail3.html",
+                {
+                    "form": form,
+                    "users": usernames,
+                    "fromaddress": form.cleaned_data["fromaddress"],
+                    "subject": form.cleaned_data["subject"],
+                    "body": form.cleaned_data["body"],
+                    "removaldue": form.cleaned_data["removaldue"],
+                    "removalunits": form.cleaned_data["removalunits"],
+                },
+            )
 
-    return HttpResponseRedirect('/massmail')
+    return HttpResponseRedirect("/massmail")

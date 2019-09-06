@@ -7,7 +7,7 @@ from userman2.model.ldapconn import LDAPError
 
 
 def displayAliases(request):
-    if (request.GET):
+    if request.GET:
         form = AliasForm(request.GET)
         if form.is_valid():
             aliases = alias.getAllAliases(form.cleaned_data)
@@ -17,7 +17,7 @@ def displayAliases(request):
         form = AliasForm()
         aliases = alias.getAllAliases()
 
-    return render(request, 'groupsaliases.html', {'alias': True, 'groups': aliases, 'form': form})
+    return render(request, "groupsaliases.html", {"alias": True, "groups": aliases, "form": form})
 
 
 def displayAlias(request, cn):
@@ -25,11 +25,11 @@ def displayAlias(request, cn):
         aliasObj = alias.fromCN(cn)
     except:
         raise Http404
-    return render(request, 'groupalias.html', {'group': aliasObj})
+    return render(request, "groupalias.html", {"group": aliasObj})
 
 
 def rmuser(request, cn, user):
-    if request.method != 'POST':
+    if request.method != "POST":
         raise Http404
 
     try:
@@ -42,7 +42,7 @@ def rmuser(request, cn, user):
 
     aliasObj.connectRoot()
     aliasObj.removeMember(user)
-    return HttpResponseRedirect('/aliases/' + aliasObj.cn)
+    return HttpResponseRedirect("/aliases/" + aliasObj.cn)
 
 
 def adduser(request, cn):
@@ -51,45 +51,45 @@ def adduser(request, cn):
     except Exception:
         raise Http404
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = AddUserForm(request.POST)
         if form.is_valid():
             try:
                 aliasObj.connectRoot()
-                if form.cleaned_data['uid']:
-                    aliasObj.addMember(str(form.cleaned_data['uid']))
-                elif form.cleaned_data['alias']:
-                    aliasObj.addMember(str(form.cleaned_data['alias']))
-                elif form.cleaned_data['email']:
-                    aliasObj.addMember(str(form.cleaned_data['email']))
-                return HttpResponseRedirect('/aliases/' + aliasObj.cn)
+                if form.cleaned_data["uid"]:
+                    aliasObj.addMember(str(form.cleaned_data["uid"]))
+                elif form.cleaned_data["alias"]:
+                    aliasObj.addMember(str(form.cleaned_data["alias"]))
+                elif form.cleaned_data["email"]:
+                    aliasObj.addMember(str(form.cleaned_data["email"]))
+                return HttpResponseRedirect("/aliases/" + aliasObj.cn)
             except LDAPError as e:
-                return render(request, 'error.html', {'msg': e.message})
+                return render(request, "error.html", {"msg": e.message})
     else:
         form = AddUserForm()
 
-    return render(request, 'form.html', {'form': form, 'uid': aliasObj.cn})
+    return render(request, "form.html", {"form": form, "uid": aliasObj.cn})
 
 
 def addAlias(request, parent):
     if not parent in alias.GetParents():
         raise Http404
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = AddAliasForm(request.POST)
         if form.is_valid():
-            if alias.Exists(form.cleaned_data['common_name']):
+            if alias.Exists(form.cleaned_data["common_name"]):
                 raise Http404
-            alias.Add(parent, str(form.cleaned_data['common_name']))
-            return HttpResponseRedirect('/aliases/' + form.cleaned_data['common_name'])
+            alias.Add(parent, str(form.cleaned_data["common_name"]))
+            return HttpResponseRedirect("/aliases/" + form.cleaned_data["common_name"])
     else:
         form = AddAliasForm()
 
-    return render(request, 'form.html', {'form': form, 'uid': "aliases"})
+    return render(request, "form.html", {"form": form, "uid": "aliases"})
 
 
 def rmAlias(request, cn):
-    if request.method != 'POST':
+    if request.method != "POST":
         raise Http404
 
     try:
@@ -99,4 +99,4 @@ def rmAlias(request, cn):
 
     aliasObj.connectRoot()
     aliasObj.remove()
-    return HttpResponseRedirect('/aliases')
+    return HttpResponseRedirect("/aliases")
