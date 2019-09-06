@@ -4,7 +4,6 @@ from django.views.generic import RedirectView
 import userman2.views.aliases as aliases
 import userman2.views.computers as computers
 import userman2.views.groups as groups
-import userman2.views.massmail as massmail
 import userman2.views.users as users
 
 urlpatterns = [
@@ -31,12 +30,6 @@ urlpatterns += [
     url(r'^users/([a-zA-Z][a-zA-Z\d\-_]+)/removeprofile$', users.removeProfile),
     url(r'^users/([a-zA-Z][a-zA-Z\d\-_]+)/rm$', users.rmUser),
 ]
-
-# urlpatterns += [
-#     url(r'^massmail$', massmail.selectUsers),
-#     url(r'^massmail/writemail$', massmail.writeMail),
-#     url(r'^massmail/writemail/sendmail$', massmail.sendMail),
-# ]
 
 urlpatterns += [
     url(r'^groups$', groups.displayGroups, name='displayGroups'),
