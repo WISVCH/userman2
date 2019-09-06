@@ -1,8 +1,25 @@
-TEMPLATE_DEBUG = DEBUG = True
+import os
+import ldap
 
-SECRET_KEY = 'CHANGEME'
-LDAP_PASSWORD = 'CHANGEME'
+# Set up CH CA certificate
+os.environ['REQUESTS_CA_BUNDLE'] = 'wisvch.pem'
+ldap.set_option(ldap.OPT_X_TLS_CACERTFILE, 'wisvch.pem')
+
+DEBUG = True
+
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost'
+]
+
+INTERNAL_IPS = [
+    '127.0.0.1'
+]
+
+# No need to modify these for read-only use during development
+SECRET_KEY = 'development'
+LDAP_PASSWORD = ''
 DIENST2_BASEURL = 'https://dienst2.ch.tudelft.nl'
-DIENST2_APIKEY = 'CHANGEME'
+DIENST2_APITOKEN = ''
 DIENST2_WHITELIST = ['root','nobody']
-SSH_ANK_PRIVKEY_FILE = 'CHANGEME'
+SSH_ANK_PRIVKEY_FILE = ''
