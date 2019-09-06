@@ -32,7 +32,7 @@ class User(LDAPConn):
             self.__attrs = cidict(attrs)
             return
 
-        self.connectRoot()
+        self.connectAnon()
         res = self.l.search_s(self.dn, ldap.SCOPE_BASE)
         (_, attrs) = res[0]
         self.__attrs = cidict(attrs)

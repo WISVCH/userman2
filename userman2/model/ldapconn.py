@@ -10,6 +10,7 @@ auditlog = logging.getLogger("userman2.audit")
 class LDAPConn(object):
     def __init__(self):
         self.connected = False
+        self.privileged = False
         self.dn = None
 
     def connectAnon(self):
@@ -19,14 +20,16 @@ class LDAPConn(object):
         ldap.set_option(ldap.OPT_X_TLS_REQUIRE_CERT, ldap.OPT_X_TLS_HARD)
         self.l = ldap.initialize(settings.LDAP_HOST)
         self.connected = True
+        self.privileged = False
 
     def connectRoot(self):
-        if self.connected:
+        if self.connected and self.privileged:
             return
         auditlog.debug("LDAP connected as root.")
         self.l = ldap.initialize(settings.LDAP_HOST)
         self.l.simple_bind_s(settings.LDAP_USER, settings.LDAP_PASSWORD)
         self.connected = True
+        self.privileged = True
 
     def disconnect(self):
         if not self.connected:
@@ -34,11 +37,12 @@ class LDAPConn(object):
         auditlog.info("LDAP disconnected as anon.")
         self.l.unbind()
         self.connected = False
+        self.privileged = False
 
     def modifyEntries(self, changes):
         if not self.dn:
             raise Exception("The object you are modifying has no dn")
-        if not self.connected:
+        if not self.connected or not self.privileged:
             self.connectRoot()
         auditlog.info("Modify dn '%s' entries %s", self.dn, changes)
         mod_attrs = [(ldap.MOD_REPLACE, k, v.encode()) for (k, v) in changes.items()]
@@ -47,7 +51,7 @@ class LDAPConn(object):
     def addEntries(self, changes):
         if not self.dn:
             raise Exception("The object you are modifying has no dn")
-        if not self.connected:
+        if not self.connected or not self.privileged:
             self.connectRoot()
         auditlog.info("Add to dn '%s' entries %s", self.dn, changes)
         mod_attrs = [(ldap.MOD_ADD, k, v.encode()) for (k, v) in changes.items()]
@@ -58,7 +62,7 @@ class LDAPConn(object):
             raise LDAPError("Attribute already exists.")
 
     def addObject(self, dn, changes):
-        if not self.connected:
+        if not self.connected or not self.privileged:
             self.connectRoot()
         mod_attrs = []
         for (k, v) in changes.items():
@@ -74,7 +78,7 @@ class LDAPConn(object):
     def delObject(self):
         if not self.dn:
             raise Exception("The object you are removing has no dn")
-        if not self.connected:
+        if not self.connected or not self.privileged:
             self.connectRoot()
         auditlog.info("Delete object with dn '%s'", self.dn)
         self.l.delete_s(self.dn)
@@ -82,7 +86,7 @@ class LDAPConn(object):
     def removeEntries(self, changes):
         if not self.dn:
             raise Exception("The object you are modifying has no dn")
-        if not self.connected:
+        if not self.connected or not self.privileged:
             self.connectRoot()
         mod_attrs = []
         for (k, v) in changes.items():
