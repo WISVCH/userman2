@@ -254,6 +254,8 @@ def resetPassword(request, uid):
 def dienst2(username):
     if username in settings.DIENST2_WHITELIST:
         return {'status': 'whitelisted', 'message': 'Whitelisted'}
+    if not settings.DIENST2_APITOKEN:
+        return {'error': 'Dienst2 API token not set'}
 
     headers = {'Authorization': 'Token ' + settings.DIENST2_APITOKEN}
     url = settings.DIENST2_BASEURL + '/ldb/api/v3/people/'
