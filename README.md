@@ -8,7 +8,9 @@
 
    - Python 3
    - Yarn
-   - `libldap2-dev` and `libsasl2-dev` (`apt install libldap2-dev libsasl2-dev` on Debian/ubuntu)
+   - `libldap2-dev` and `libsasl2-dev`
+       - `apt install libldap2-dev libsasl2-dev` on Debian/ubuntu
+       - On macOS see https://stackoverflow.com/questions/43328378/python-ldap-macos-valueerror-option-error
 
 2. Create a [Python virtual environment]:
 
