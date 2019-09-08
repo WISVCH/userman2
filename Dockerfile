@@ -33,3 +33,5 @@ USER 999
 ENTRYPOINT ["/srv/docker-entrypoint.sh"]
 CMD ["gunicorn"]
 EXPOSE 8000
+
+LABEL quay.expires-after=12w
