@@ -7,9 +7,9 @@ def get_client_ip(request):
     if request is None:
         return ""
 
-    client_ip = request.META.get('REMOTE_ADDR')
-    if 'HTTP_X_FORWARDED_FOR' in request.META:
-        client_ip += " [%s]" % request.META['HTTP_X_FORWARDED_FOR']
+    client_ip = request.META.get("REMOTE_ADDR")
+    if "HTTP_X_FORWARDED_FOR" in request.META:
+        client_ip += " [%s]" % request.META["HTTP_X_FORWARDED_FOR"]
     return client_ip
 
 
@@ -29,12 +29,12 @@ class LoggingFilter(logging.Filter):
             try:
                 record.raw_post_data = request.body
             except Exception as e:
-                record.raw_post_data = '<ERROR: %s>' % e.message
+                record.raw_post_data = "<ERROR: %s>" % e.message
 
-            if 'AUTHENTICATE_UID' in request.META:
-                record.username = request.META['AUTHENTICATE_UID']
-            elif 'HTTP_X_AUTH_SUBJECT' in request.META:
-                record.username = request.META['HTTP_X_AUTH_SUBJECT']
+            if "AUTHENTICATE_UID" in request.META:
+                record.username = request.META["AUTHENTICATE_UID"]
+            elif "HTTP_X_AUTH_SUBJECT" in request.META:
+                record.username = request.META["HTTP_X_AUTH_SUBJECT"]
             else:
-                record.username = '_'
+                record.username = "_"
         return True

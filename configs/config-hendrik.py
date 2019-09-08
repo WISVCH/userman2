@@ -1,5 +1,5 @@
 localHostname = "ch.chnet"
-adminMail = 'pccom@ch.tudelft.nl'
+adminMail = "pccom@ch.tudelft.nl"
 
 # LDAP Settings
 ldapServername = "ldaps://ank.chnet"
@@ -22,7 +22,7 @@ enableGroupDirCreation = False
 enableGroupDirRemoval = False
 enableSambaShareRegen = False
 groupDirBase = "/export/groepen/userman_test/"
-groupLocations = {'Commissies': 'commissies', 'Overig': 'overig'}
+groupLocations = {"Commissies": "commissies", "Overig": "overig"}
 
 # Home directories
 enableHomeDirCreation = False

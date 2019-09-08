@@ -7,7 +7,7 @@ from userman2.model import group
 
 
 def displayGroups(request):
-    if (request.GET):
+    if request.GET:
         form = GroupsForm(request.GET)
         if form.is_valid():
             groups = group.GetAllGroups(form.cleaned_data)
@@ -17,7 +17,7 @@ def displayGroups(request):
         form = GroupsForm()
         groups = group.GetAllGroups()
 
-    return render(request, 'groupsaliases.html', {'groups': groups, 'form': form})
+    return render(request, "groupsaliases.html", {"groups": groups, "form": form})
 
 
 def displayGroup(request, cn):
@@ -25,11 +25,11 @@ def displayGroup(request, cn):
         groupObj = group.FromCN(cn)
     except:
         raise Http404
-    return render(request, 'groupalias.html', {'group': groupObj})
+    return render(request, "groupalias.html", {"group": groupObj})
 
 
 def rmuser(request, cn, user):
-    if request.method != 'POST':
+    if request.method != "POST":
         raise Http404
 
     try:
@@ -42,7 +42,7 @@ def rmuser(request, cn, user):
 
     groupObj.connectRoot()
     groupObj.removeMember(user)
-    return HttpResponseRedirect('/groups/' + groupObj.cn)
+    return HttpResponseRedirect("/groups/" + groupObj.cn)
 
 
 def adduser(request, cn):
@@ -51,40 +51,40 @@ def adduser(request, cn):
     except:
         raise Http404
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = AddUserForm(request.POST)
         if form.is_valid():
             groupObj.connectRoot()
             groupObj.addMember(str(form.cleaned_data["user"]))
-            return HttpResponseRedirect('/groups/' + groupObj.cn)
+            return HttpResponseRedirect("/groups/" + groupObj.cn)
     else:
         form = AddUserForm()
 
-    return render(request, 'form.html', {'form': form, 'uid': groupObj.cn})
+    return render(request, "form.html", {"form": form, "uid": groupObj.cn})
 
 
 def addGroup(request, parent):
     if not parent in group.GetParents():
         raise Http404
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = AddGroupForm(request.POST)
         if form.is_valid():
-            if group.Exists(form.cleaned_data['common_name']):
+            if group.Exists(form.cleaned_data["common_name"]):
                 raise Http404
-            newGroup = group.Add(parent, str(form.cleaned_data['common_name']))
+            newGroup = group.Add(parent, str(form.cleaned_data["common_name"]))
             if not newGroup.parent == "None" and not newGroup.parent == "Besturen":
-                newAction = newGroup.createGroupDir('ank.chnet')
+                newAction = newGroup.createGroupDir("ank.chnet")
                 newAction.locked = False
-            return HttpResponseRedirect('/groups/' + form.cleaned_data['common_name'])
+            return HttpResponseRedirect("/groups/" + form.cleaned_data["common_name"])
     else:
         form = AddGroupForm()
 
-    return render(request, 'form.html', {'form': form, 'uid': "groups"})
+    return render(request, "form.html", {"form": form, "uid": "groups"})
 
 
 def rmGroup(request, cn):
-    if request.method != 'POST':
+    if request.method != "POST":
         raise Http404
 
     try:
@@ -94,4 +94,4 @@ def rmGroup(request, cn):
 
     groupObj.remove()
 
-    return HttpResponseRedirect('/groups')
+    return HttpResponseRedirect("/groups")

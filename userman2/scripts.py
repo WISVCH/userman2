@@ -18,8 +18,10 @@ def execute_script(script):
     _, stdout, stderr = client.exec_command(script)
     status = stdout.channel.recv_exit_status()
     if status != 0:
-        raise ScriptError("Script \"%s\" failed with exit code %d\n---stdout:\n%s\n---stderr:\n%s" %
-                          (script, status, stdout.read(), stderr.read()))
+        raise ScriptError(
+            'Script "%s" failed with exit code %d\n---stdout:\n%s\n---stderr:\n%s'
+            % (script, status, stdout.read(), stderr.read())
+        )
 
 
 class ScriptError(Exception):

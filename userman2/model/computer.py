@@ -4,12 +4,11 @@ import ldap
 from django.conf import settings
 from ldap.cidict import cidict
 
-from.ldapconn import LDAPConn
+from .ldapconn import LDAPConn
 from userman2.scripts import execute_script
 
 
 class Computer(LDAPConn):
-
     def __init__(self, dn, attrs=False):
         LDAPConn.__init__(self)
         self.dn = dn
@@ -60,8 +59,7 @@ def GetFreeUIDNumber():
     ld = LDAPConn()
     ld.connectAnon()
     for i in range(settings.MIN_COMPUTER_ID, settings.MAX_COMPUTER_ID + 1):
-        res = ld.l.search_s(
-            settings.LDAP_COMPUTERDN, ldap.SCOPE_SUBTREE, "uidNumber=" + str(i))
+        res = ld.l.search_s(settings.LDAP_COMPUTERDN, ldap.SCOPE_SUBTREE, "uidNumber=" + str(i))
         if len(res) == 0:
             return i
 
@@ -72,14 +70,16 @@ def Add(computer_name):
     ld = LDAPConn()
     ld.connectRoot()
 
-    dn = 'uid=' + computer_name + ',' + settings.LDAP_COMPUTERDN
-    entry = {'uid': computer_name,
-             'objectClass': ['account', 'chbakAccount'],
-             'uidNumber': str(GetFreeUIDNumber()),
-             'cn': "Machine Account " + computer_name,
-             'gidNumber': str(settings.MACHINE_GIDNUMBER),
-             'homeDirectory': "/dev/null",
-             'authorizedService': "samba@ank"}
+    dn = "uid=" + computer_name + "," + settings.LDAP_COMPUTERDN
+    entry = {
+        "uid": computer_name,
+        "objectClass": ["account", "chbakAccount"],
+        "uidNumber": str(GetFreeUIDNumber()),
+        "cn": "Machine Account " + computer_name,
+        "gidNumber": str(settings.MACHINE_GIDNUMBER),
+        "homeDirectory": "/dev/null",
+        "authorizedService": "samba@ank",
+    }
     ld.addObject(dn, entry)
 
     execute_script("sudo /usr/local/userman/scripts/createsambamachine %s" % re.escape(computer_name))
@@ -88,6 +88,5 @@ def Add(computer_name):
 def Exists(uid):
     ld = LDAPConn()
     ld.connectAnon()
-    res = ld.l.search_s(
-        settings.LDAP_COMPUTERDN, ldap.SCOPE_SUBTREE, "uid=" + uid)
+    res = ld.l.search_s(settings.LDAP_COMPUTERDN, ldap.SCOPE_SUBTREE, "uid=" + uid)
     return len(res) != 0

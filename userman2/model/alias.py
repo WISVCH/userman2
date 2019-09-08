@@ -2,7 +2,7 @@ import ldap
 from ldap.cidict import cidict
 from django.conf import settings
 
-from.ldapconn import LDAPConn
+from .ldapconn import LDAPConn
 
 
 class Alias(LDAPConn):
@@ -26,7 +26,7 @@ class Alias(LDAPConn):
     cn = property(_get_cn)
 
     def _get_parent(self):
-        parent = self.dn.split(',')[1].split('=')[1]
+        parent = self.dn.split(",")[1].split("=")[1]
         if parent == "Aliases":
             return "None"
         return parent
@@ -34,17 +34,17 @@ class Alias(LDAPConn):
     parent = property(_get_parent)
 
     def _get_members(self):
-        if 'rfc822mailmember' in self.__attrs:
+        if "rfc822mailmember" in self.__attrs:
             return list(map(lambda s: s.decode(), self.__attrs["rfc822MailMember"]))
         return []
 
     members = property(_get_members)
 
     def removeMember(self, member):
-        self.removeEntries({'rfc822MailMember': member})
+        self.removeEntries({"rfc822MailMember": member})
 
     def addMember(self, member):
-        self.addEntries({'rfc822MailMember': member})
+        self.addEntries({"rfc822MailMember": member})
 
     def remove(self):
         self.delObject()
@@ -57,7 +57,7 @@ def getCnForUid(uid, ld=None):
     if not ld:
         ld = LDAPConn()
         ld.connectAnon()
-    res = ld.l.search_s(settings.LDAP_ALIASDN, ldap.SCOPE_SUBTREE, 'rfc822MailMember=' + uid)
+    res = ld.l.search_s(settings.LDAP_ALIASDN, ldap.SCOPE_SUBTREE, "rfc822MailMember=" + uid)
     return [attribs["cn"][0].decode() for dn, attribs in res]
 
 
@@ -91,7 +91,7 @@ def getAllAliasNames():
     ld.connectAnon()
     res = ld.l.search_s(settings.LDAP_ALIASDN, ldap.SCOPE_SUBTREE, "objectClass=nisMailAlias")
     res.sort()
-    return [attrs['cn'][0].decode() for (dn, attrs) in res]
+    return [attrs["cn"][0].decode() for (dn, attrs) in res]
 
 
 def getAllAliases(filter_data=False):
@@ -101,10 +101,10 @@ def getAllAliases(filter_data=False):
 
     if filter_data:
         filter_string = "(&"
-        if filter_data['uid']:
-            filter_string += "(rfc822MailMember=" + filter_data['uid'] + ")"
-        if filter_data['cn']:
-            filter_string += "(cn=*" + filter_data['cn'] + "*)"
+        if filter_data["uid"]:
+            filter_string += "(rfc822MailMember=" + filter_data["uid"] + ")"
+        if filter_data["cn"]:
+            filter_string += "(cn=*" + filter_data["cn"] + "*)"
         filter_string += "(objectClass=nisMailAlias))"
     else:
         filter_string = "(objectClass=nisMailAlias)"
@@ -118,7 +118,7 @@ def getAllAliases(filter_data=False):
             ret[alias.parent] = []
         ret[alias.parent] += [alias]
         # Find indirect aliases
-        if filter_data and filter_data['uid']:
+        if filter_data and filter_data["uid"]:
             for iCN in getIndirectCnForUid(alias.cn, True, ld):
                 iAlias = fromCN(iCN, ld)
                 if not iAlias.parent in ret:
@@ -136,7 +136,7 @@ def GetParents():
     filter_string = "(objectClass=organizationalUnit)"
     res = ld.l.search_s(settings.LDAP_ALIASDN, ldap.SCOPE_ONELEVEL, filter_string)
     res.sort()
-    return [attribs['ou'][0].decode() for (_, attribs) in res]
+    return [attribs["ou"][0].decode() for (_, attribs) in res]
 
 
 def Exists(cn):
@@ -147,7 +147,7 @@ def Exists(cn):
 
 
 def Add(parent, cn):
-    dn = 'cn=' + cn + ',ou=' + parent + ',' + settings.LDAP_ALIASDN
+    dn = "cn=" + cn + ",ou=" + parent + "," + settings.LDAP_ALIASDN
     ld = LDAPConn()
     ld.connectRoot()
-    ld.addObject(dn, {'objectClass': 'nisMailAlias', 'cn': cn})
+    ld.addObject(dn, {"objectClass": "nisMailAlias", "cn": cn})

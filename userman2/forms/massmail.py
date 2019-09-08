@@ -14,14 +14,11 @@ class MassMailForm(forms.Form):
         possibleGroups.sort()
 
     groups = forms.MultipleChoiceField(required=False, choices=possibleGroups)
-    excludedgroups = forms.MultipleChoiceField(
-        required=False, choices=possibleGroups)
+    excludedgroups = forms.MultipleChoiceField(required=False, choices=possibleGroups)
 
-    possibleUsers = [(username, username)
-                     for username in user.GetAllUserNames()]
+    possibleUsers = [(username, username) for username in user.GetAllUserNames()]
     users = forms.MultipleChoiceField(required=False, choices=possibleUsers)
-    excludedusers = forms.MultipleChoiceField(
-        required=False, choices=possibleUsers)
+    excludedusers = forms.MultipleChoiceField(required=False, choices=possibleUsers)
 
     uidnumber = forms.IntegerField(required=False)
     deleted = forms.BooleanField(required=False, initial=False)
@@ -34,27 +31,27 @@ class MassMailForm(forms.Form):
 
 
 class WriteMailForm(forms.Form):
-    possibleUsers = [(username, username)
-                     for username in user.GetAllUserNames()]
-    users = forms.MultipleChoiceField(
-        required=True, widget=forms.MultipleHiddenInput, choices=possibleUsers)
+    possibleUsers = [(username, username) for username in user.GetAllUserNames()]
+    users = forms.MultipleChoiceField(required=True, widget=forms.MultipleHiddenInput, choices=possibleUsers)
     fromaddress = forms.EmailField(required=True)
     subject = forms.CharField(required=False)
     body = forms.CharField(required=False, widget=forms.Textarea)
     removaldue = forms.IntegerField(required=False)
-    removalunits = forms.ChoiceField(required=False, choices=[
-                                     ('None', 'None'), ('days', 'days'), ('weeks', 'weeks'), ('months', 'months')])
+    removalunits = forms.ChoiceField(
+        required=False, choices=[("None", "None"), ("days", "days"), ("weeks", "weeks"), ("months", "months")]
+    )
 
 
 class SendMailForm(forms.Form):
-    possibleUsers = [(username, username)
-                     for username in user.GetAllUserNames()]
-    users = forms.MultipleChoiceField(
-        required=True, widget=forms.MultipleHiddenInput, choices=possibleUsers)
+    possibleUsers = [(username, username) for username in user.GetAllUserNames()]
+    users = forms.MultipleChoiceField(required=True, widget=forms.MultipleHiddenInput, choices=possibleUsers)
     fromaddress = forms.EmailField(required=True, widget=forms.HiddenInput)
     subject = forms.CharField(required=True, widget=forms.HiddenInput)
     body = forms.CharField(required=True, widget=forms.HiddenInput)
     removaldue = forms.IntegerField(required=False, widget=forms.HiddenInput)
-    removalunits = forms.ChoiceField(required=False, choices=[
-                                     ('None', 'None'), ('days', 'days'),  ('weeks', 'weeks'), ('months', 'months')], widget=forms.HiddenInput)
+    removalunits = forms.ChoiceField(
+        required=False,
+        choices=[("None", "None"), ("days", "days"), ("weeks", "weeks"), ("months", "months")],
+        widget=forms.HiddenInput,
+    )
     reallysend = forms.BooleanField(required=False)
