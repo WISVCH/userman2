@@ -235,6 +235,8 @@ class User(LDAPConn):
         return alias.getIndirectCnForUid(self.uid, ld=self)
 
     def resetPassword(self):
+        if not self.connected or not self.privileged:
+            self.connectRoot()
         auditlog.info("Reset password for dn '%s'", self.dn)
         alphabet = string.ascii_letters + string.digits
         password = "".join(secrets.choice(alphabet) for i in range(20))
