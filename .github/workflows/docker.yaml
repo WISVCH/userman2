@@ -2,7 +2,7 @@ name: Docker
 on:
   push:
   schedule:
-  - cron: '54 2 1-7 * 6'
+  - cron: '54 2 2 * *'
 jobs:
   buildDockerImage:
     name: Build Docker image
