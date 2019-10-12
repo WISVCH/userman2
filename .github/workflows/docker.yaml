@@ -11,28 +11,23 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v1
     - name: Build Docker image
-      uses: actions/docker/cli@master
-      with:
-        args: build -t userman2 .
-    - name: Docker tag
-      uses: actions/docker/tag@master
-      with:
-        args: userman2 quay.io/wisvch/userman2
-      if: github.ref == 'refs/heads/master'
+      run: docker build -t userman2 .
     - name: Log in to Quay
-      uses: actions/docker/login@master
+      run: echo "$DOCKER_PASSWORD" | docker login --username $DOCKER_USERNAME --password-stdin $DOCKER_REGISTRY_URL
       env:
         DOCKER_REGISTRY_URL: ${{ secrets.DOCKER_REGISTRY_URL }}
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       if: github.ref == 'refs/heads/master'
+    - name: Docker tag image
+      run: docker tag userman2 quay.io/wisvch/userman2:$GITHUB_SHA
+      if: github.ref == 'refs/heads/master'
+    - name: Docker tag latest image
+      run: docker tag userman2 quay.io/wisvch/userman2:latest
+      if: github.ref == 'refs/heads/master'
     - name: Push image
-      uses: actions/docker/cli@master
-      with:
-        args: push quay.io/wisvch/userman2:$IMAGE_SHA
+      run: docker push quay.io/wisvch/userman2:$GITHUB_SHA
       if: github.ref == 'refs/heads/master'
     - name: Push latest image
-      uses: actions/docker/cli@master
-      with:
-        args: push quay.io/wisvch/userman2:latest
+      run: docker push quay.io/wisvch/userman2:latest
       if: github.ref == 'refs/heads/master'
