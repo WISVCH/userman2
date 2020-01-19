@@ -201,33 +201,10 @@ def GetAllUserNames():
     return [attrs["uid"][0].decode() for (dn, attrs) in res]
 
 
-def GetAllUsers(filter_data=False):
+def GetAllUsers():
     ld = LDAPConn()
     ld.connectAnon()
-    if filter_data:
-        filter_string = "(&"
-        if filter_data["uid"]:
-            filter_string += "(uid=*" + filter_data["uid"] + "*)"
-        if filter_data["cn"]:
-            filter_string += "(cn=*" + filter_data["cn"] + "*)"
-        if filter_data["uidnumber"]:
-            filter_string += "(uidNumber=" + str(filter_data["uidnumber"]) + ")"
-        if filter_data["chlocal"]:
-            filter_string += "(authorizedService=sshd@ch)"
-        if filter_data["nochlocal"]:
-            filter_string += "(!(authorizedService=sshd@ch))"
-        if filter_data["anklocal"]:
-            filter_string += "(authorizedService=sshd@ank)"
-        if filter_data["noanklocal"]:
-            filter_string += "(!(authorizedService=sshd@ank))"
-        if filter_data["anksamba"]:
-            filter_string += "(authorizedService=samba@ank)"
-        if filter_data["noanksamba"]:
-            filter_string += "(!(authorizedService=samba@ank))"
-        filter_string += ")"
-        res = ld.l.search_s(settings.LDAP_USERDN, ldap.SCOPE_ONELEVEL, filter_string)
-    else:
-        res = ld.l.search_s(settings.LDAP_USERDN, ldap.SCOPE_ONELEVEL)
+    res = ld.l.search_s(settings.LDAP_USERDN, ldap.SCOPE_ONELEVEL)
     res.sort()
     ret = [User(dn, attrs) for (dn, attrs) in res]
     return ret
