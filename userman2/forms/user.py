@@ -25,11 +25,11 @@ class ChwarnRmForm(forms.Form):
 class ChprivForm(forms.Form):
     service = forms.ChoiceField(
         choices=(
+            ("samba@ank", "samba@ank"),
             ("sshd@rob", "sshd@rob"),
             ("systemd-user@rob", "systemd-user@rob"),
             ("sshd@hendrik", "sshd@hendrik"),
             ("systemd-user@hendrik", "systemd-user@hendrik"),
-            ("samba@ank", "samba@ank"),
             ("vpn@fw-01", "vpn@fw-01"),
         )
     )
@@ -64,5 +64,10 @@ class AddUserForm(forms.Form):
     )
     access = forms.MultipleChoiceField(
         initial=("samba@ank",),
-        choices=(("samba@ank", "samba@ank"), ("sshd@rob", "sshd@rob"), ("systemd-user@rob", "systemd-user@rob")),
+        choices=(
+            ("samba@ank", "samba@ank"),
+            ("sshd@rob", "sshd@rob"),
+            ("systemd-user@rob", "systemd-user@rob"),
+            ("vpn@fw-01", "vpn@fw-01"),
+        ),
     )
