@@ -85,10 +85,6 @@ class Action:
             return self.removeGroup(attrs)
         elif attrs["actionName"][0] == "removeMailbox":
             return self.removeMailbox(attrs)
-        elif attrs["actionName"][0] == "renameMailbox":
-            return self.renameMailbox(attrs)
-        elif attrs["actionName"][0] == "moveHomeDir":
-            return self.moveHomeDir(attrs)
         elif attrs["actionName"][0] == "createHomeDir":
             return self.createHomeDir(attrs)
         elif attrs["actionName"][0] == "createMailbox":
@@ -97,34 +93,8 @@ class Action:
             return self.removeHomeDir(attrs)
         elif attrs["actionName"][0] == "removeUser":
             return self.removeUser(attrs)
-        elif attrs["actionName"][0] == "warnRemove":
-            return self.warnRemove(attrs)
-        elif attrs["actionName"][0] == "generateLogonScript":
-            return True
-        elif attrs["actionName"][0] == "generateAllLogonScripts":
-            return True
         else:
             raise Exception("unknown actionName: " + attrs["actionName"][0])
-
-    def renameMailbox(self, attrs):
-        if not config.enableMailboxRename:
-            raise Exception("Mailbox renaming not enabled on host " + self.getHost())
-
-        user = User(self.l, self.getAffectedDN())
-        mailbox = os.path.join(config.mailDir, user.getUID())
-        oldmailbox = abspath(self.getArguments())
-
-        if exists(mailbox):
-            raise Exception("New mailbox directory " + mailbox + " already exists!")
-        if not exists(oldmailbox):
-            raise Exception("Old mailbox directory " + oldmailbox + " doesn't exist!")
-        if not mailbox.startswith(config.mailDir) or not oldmailbox.startswith(config.mailDir):
-            raise Exception("Mailboxes must be created in " + config.mailDir)
-
-        makedirs(mailDir)
-        os.rename(oldmailbox, mailDir)
-
-        return True
 
     def removeMailbox(self, attrs):
         if not config.enableMailboxRemoval:
@@ -243,20 +213,6 @@ class Action:
 
         self.l.delete_s(self.getAffectedDN())
         return True
-
-    def warnRemove(self, attrs):
-        removalTime = datetime(*(strptime(attrs["arguments"][0], "%Y-%m-%d %H:%M:%S")[0:6]))
-
-        (attrs["arguments"][0])
-        if datetime.now() > removalTime:
-            user = User(self.l, attrs["affectedDN"][0])
-            mailAdmin(
-                "Admin notice, notify for " + user.getUID(),
-                "Beheerder, \n\nGebruiker " + user.getUID() + " staat vandaag voor verwijdering aangemerkt.\n\n",
-            )
-            return True
-
-        return False
 
     def chmodTree(self, dest, mode, dirmode):
         os.chmod(dest, dirmode)

@@ -32,4 +32,3 @@ graveyardDir = "/var/local/graveyard/"
 # Mailboxes
 enableMailboxCreation = False
 enableMailboxRemoval = False
-enableMailboxRename = False

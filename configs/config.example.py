@@ -33,4 +33,3 @@ mailDir = "/var/mail/"
 # Mailboxes
 enableMailboxCreation = False
 enableMailboxRemoval = True
-enableMailboxRename = True

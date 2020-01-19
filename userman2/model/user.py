@@ -105,22 +105,6 @@ class User(LDAPConn):
 
     gidNumber = property(_get_gidNumber, _set_gidNumber, None, "The user's primary group ID number")
 
-    # login permissions
-    def get_chLocal(self):
-        return "sshd@ch" in self.authorizedServices
-
-    chLocal = property(get_chLocal)
-
-    def get_ankLocal(self):
-        return "sshd@ank" in self.authorizedServices
-
-    ankLocal = property(get_ankLocal)
-
-    def get_ankSamba(self):
-        return "samba@ank" in self.authorizedServices
-
-    ankSamba = property(get_ankSamba)
-
     def _get_authorizedServices(self):
         if "authorizedservice" in self.__attrs:
             return list(map(lambda b: b.decode(), self.__attrs["authorizedService"]))
@@ -133,38 +117,6 @@ class User(LDAPConn):
 
     def removeAuthorizedService(self, service):
         self.removeEntries({"authorizedService": service})
-
-    def _get_homeDirCH(self):
-        return self.__attrs["homeDirectoryCH"][0]
-
-    def _set_homeDirCH(self, newHomeDir):
-        newAction = action.Add(
-            "moveHomeDir",
-            "ch.chnet",
-            self.dn,
-            "Move ch home directory from " + self.homeDirectoryCH + " to " + newHomeDir + " for user " + self.uid,
-        )
-        newAction.arguments = self.homeDirectoryCH
-        self.modifyEntries({"homeDirectoryCH": newHomeDir})
-        newAction.locked = False
-
-    homeDirectoryCH = property(_get_homeDirCH, _set_homeDirCH)
-
-    def _get_homeDir(self):
-        return self.__attrs["homeDirectory"][0]
-
-    def _set_homeDir(self, newHomeDir):
-        newAction = action.Add(
-            "moveHomeDir",
-            "ank.chnet",
-            self.dn,
-            "Move ank home directory from " + self.homeDirectoryAnk + " to " + newHomeDir + " for user " + self.uid,
-        )
-        newAction.arguments = self.homeDirectoryAnk
-        self.modifyEntries({"homeDirectory": newHomeDir})
-        newAction.locked = False
-
-    homeDirectoryAnk = property(_get_homeDir, _set_homeDir)
 
     def createHomeDir(self, host):
         return action.Add("createHomeDir", host, self.dn, "Create home directory on " + host + " for " + self.uid)
