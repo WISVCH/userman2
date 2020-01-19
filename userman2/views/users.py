@@ -123,40 +123,6 @@ def userChgroup(request, uid):
     return render(request, "form.html", {"form": form, "uid": userObj.uid})
 
 
-def chHomeCH(request, uid):
-    try:
-        userObj = user.FromUID(uid)
-    except:
-        raise Http404
-
-    if request.method == "POST":
-        form = ChHomeForm(request.POST)
-        if form.is_valid():
-            userObj.homeDirectoryCH = str(form.cleaned_data["new_directory"])
-            return HttpResponseRedirect("/users/" + userObj.uid)
-    else:
-        form = ChHomeForm(initial={"new_directory": userObj.description})
-
-    return render(request, "form.html", {"form": form, "uid": userObj.uid})
-
-
-def chHomeAnk(request, uid):
-    try:
-        userObj = user.FromUID(uid)
-    except:
-        raise Http404
-
-    if request.method == "POST":
-        form = ChHomeForm(request.POST)
-        if form.is_valid():
-            userObj.homeDirectoryAnk = str(form.cleaned_data["new_directory"])
-            return HttpResponseRedirect("/users/" + userObj.uid)
-    else:
-        form = ChHomeForm(initial={"new_directory": userObj.description})
-
-    return render(request, "form.html", {"form": form, "uid": userObj.uid})
-
-
 def userChpriv(request, uid):
     try:
         userObj = user.FromUID(uid)

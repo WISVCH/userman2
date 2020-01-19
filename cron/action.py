@@ -216,26 +216,6 @@ class Action:
 
         return True
 
-    def moveHomeDir(self, attrs):
-        if not config.enableHomeDirMove:
-            raise Exception("Home directory moving not enabled on host " + self.getHost())
-
-        user = User(self.l, self.getAffectedDN())
-        homedir = abspath(user.getHomeDirectory(self.getHost()))
-        oldhomedir = abspath(self.getArguments())
-
-        if exists(homedir):
-            raise Exception("New Home directory " + homedir + " already exists!")
-        if not exists(oldhomedir):
-            raise Exception("Old home directory " + oldhomedir + " doesn't exist!")
-        if not homedir.startswith(config.homeDirBase) or not oldhomedir.startswith(config.homeDirBase):
-            raise Exception("Home directories must be created in " + config.homeDirBase)
-
-        makedirs(homedir)
-        os.rename(oldhomedir, homedir)
-
-        return True
-
     def removeHomeDir(self, attrs):
         if not config.enableHomeDirRemoval:
             raise Exception("Home directory removal not enabled on host " + self.getHost())

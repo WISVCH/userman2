@@ -50,10 +50,6 @@ class ChgroupForm(forms.Form):
     gid_number = forms.ChoiceField(choices=((100, "users"), (50, "staff")))
 
 
-class ChHomeForm(forms.Form):
-    new_directory = forms.RegexField(regex="^[a-zA-Z\d\/\-\_]+$")
-
-
 class AddUserForm(forms.Form):
     uid = forms.RegexField(
         regex="^[a-z][a-z\d\-$_]+$",

@@ -24,7 +24,6 @@ groupLocations = {"Commissies": "commissies", "Overig": "overig"}
 
 # Home directories
 enableHomeDirCreation = False
-enableHomeDirMove = False
 enableHomeDirRemoval = False
 homeDirBase = "/export/gebruikers/"
 skelDir = "/etc/skel/"
