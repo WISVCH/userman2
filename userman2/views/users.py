@@ -72,23 +72,6 @@ def userChdesc(request, uid):
     return render(request, "form.html", {"form": form, "uid": userObj.uid})
 
 
-def userChwarnRm(request, uid):
-    try:
-        userObj = user.FromUID(uid)
-    except:
-        raise Http404
-
-    if request.method == "POST":
-        form = ChwarnRmForm(request.POST)
-        if form.is_valid():
-            userObj.toBeDeleted = form.cleaned_data["toBeDeleted"]
-            return HttpResponseRedirect("/users/" + userObj.uid)
-    else:
-        form = ChwarnRmForm(initial={"toBeDeleted": userObj.toBeDeleted})
-
-    return render(request, "form.html", {"form": form, "uid": userObj.uid})
-
-
 def userChsh(request, uid):
     try:
         userObj = user.FromUID(uid)

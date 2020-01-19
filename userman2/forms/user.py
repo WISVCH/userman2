@@ -18,10 +18,6 @@ class ChdescForm(forms.Form):
     description = forms.CharField(required=False)
 
 
-class ChwarnRmForm(forms.Form):
-    toBeDeleted = forms.DateTimeField(required=False)
-
-
 class ChprivForm(forms.Form):
     service = forms.ChoiceField(
         choices=(

@@ -166,28 +166,6 @@ class User(LDAPConn):
 
     homeDirectoryAnk = property(_get_homeDir, _set_homeDir)
 
-    def _get_toBeDeleted(self):
-        actions = action.GetAllActions({"actionName": "warnRemove", "affectedDN": self.dn}, self)
-        if actions:
-            newdate = datetime.datetime(*(time.strptime(actions[0].arguments, "%Y-%m-%d %H:%M:%S")[0:6]))
-            return newdate
-        return False
-
-    def _set_toBeDeleted(self, newdate):
-        actions = action.GetAllActions({"actionName": "warnRemove", "affectedDN": self.dn})
-        if actions:
-            if newdate:
-                actions[0].arguments = newdate.strftime("%Y-%m-%d %H:%M:%S")
-                actions[0].locked = False
-            else:
-                actions[0].remove()
-        else:
-            newaction = action.Add("warnRemove", "ch.chnet", self.dn, "Send removal warning")
-            newaction.arguments = newdate.strftime("%Y-%m-%d %H:%M:%S")
-            newaction.locked = False
-
-    toBeDeleted = property(_get_toBeDeleted, _set_toBeDeleted)
-
     def createHomeDir(self, host):
         return action.Add("createHomeDir", host, self.dn, "Create home directory on " + host + " for " + self.uid)
 

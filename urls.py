@@ -18,7 +18,6 @@ urlpatterns += [
     url(r"^users/([a-zA-Z][a-zA-Z\d\-_]+)/dienst2status.json$", users.getUserDienst2Status),
     url(r"^users/([a-zA-Z][a-zA-Z\d\-_]+)/chfn$", users.userChfn),
     url(r"^users/([a-zA-Z][a-zA-Z\d\-_]+)/chdesc$", users.userChdesc),
-    url(r"^users/([a-zA-Z][a-zA-Z\d\-_]+)/chwarnrm$", users.userChwarnRm),
     url(r"^users/([a-zA-Z][a-zA-Z\d\-_]+)/chsh$", users.userChsh),
     url(r"^users/([a-zA-Z][a-zA-Z\d\-_]+)/chpriv$", users.userChpriv),
     url(r"^users/([a-zA-Z][a-zA-Z\d\-_]+)/chpriv/rm/([a-zA-z-]+)@([a-zA-z\d-]+)$", users.userRmpriv),
