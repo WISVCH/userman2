@@ -1,4 +1,4 @@
-localHostname = "ch.chnet"
+localHostname = "hendrik.chnet"
 adminMail = "pccom@ch.tudelft.nl"
 
 # LDAP Settings

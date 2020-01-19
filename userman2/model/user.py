@@ -142,11 +142,11 @@ class User(LDAPConn):
         removeAction = action.Add("removeUser", "ank.chnet", self.dn, "Remove user " + self.uid)
         removeHomedirAnk = self.removeHomedir("ank.chnet", removeAction)
         removeHomedirRob = self.removeHomedir("rob.chnet", removeAction)
-        removeMailboxCh = self.removeMailbox("ch.chnet", removeAction)
+        removeMailboxHendrik = self.removeMailbox("hendrik.chnet", removeAction)
 
         # Unlock removal tree
         removeHomedirAnk.locked = False
-        removeMailboxCh.locked = False
+        removeMailboxHendrik.locked = False
         removeHomedirRob.locked = False
         removeAction.locked = False
 
