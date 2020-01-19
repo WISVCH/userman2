@@ -1,23 +1,17 @@
 #!/usr/bin/env python3
 
+import os
+import tarfile
+from os import makedirs
+from os.path import abspath, exists
+from shutil import copy2, rmtree
+from time import time
+
 # local imports
 import config
-from user import User
-from group import Group
-
-from os.path import abspath, exists
-from os import makedirs
-import os
-from shutil import copy2, move, rmtree
-import tarfile
-
 import ldap
-from mail import mailAdmin
-
-from datetime import datetime
-from time import time
-from time import strptime, strftime
-from ldap.cidict import cidict
+from group import Group
+from user import User
 
 
 class Action:
@@ -87,8 +81,6 @@ class Action:
             return self.removeMailbox(attrs)
         elif attrs["actionName"][0] == "createHomeDir":
             return self.createHomeDir(attrs)
-        elif attrs["actionName"][0] == "createMailbox":
-            return True
         elif attrs["actionName"][0] == "removeHomeDir":
             return self.removeHomeDir(attrs)
         elif attrs["actionName"][0] == "removeUser":
