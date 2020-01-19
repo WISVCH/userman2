@@ -2,9 +2,9 @@
 set -euo pipefail
 
 if [ "$#" -ne 1 ]; then
-    echo "Usage: $0 <username> <password>"
+    echo "Usage: $0 <username>"
     exit 1
 fi
 
-newpw=`pwgen 20 1`
-echo -e "$newpw\n$newpw" | pdbedit -t -a -u $1
+newpw=$(pwgen 20 1)
+echo -e "$newpw\n$newpw" | pdbedit -t -a -u "$1"

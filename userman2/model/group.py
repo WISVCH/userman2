@@ -184,5 +184,5 @@ def Add(parent, cn):
     dn = "cn=" + cn + ou + "," + settings.LDAP_GROUPDN
     gidNumber = GetFreeGIDNumber()
     ld.addObject(dn, {"objectClass": "posixGroup", "cn": cn, "gidNumber": str(gidNumber)})
-    execute_script("sudo /usr/local/userman/scripts/addgroupmapping %s" % re.escape(cn))
+    execute_script("sudo /usr/local/userman2/scripts/addgroupmapping %s" % re.escape(cn))
     return FromCN(cn)

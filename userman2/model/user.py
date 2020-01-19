@@ -262,7 +262,7 @@ def Add(uid, fullname):
     }
     ld.addObject(dn, entry)
 
-    execute_script("sudo /usr/local/userman/scripts/createsambauser %s" % uid)
+    execute_script("sudo /usr/local/userman2/scripts/createsambauser %s" % uid)
 
     mailAdmin("Account created: %s" % uid, "A new account was created for %s (%s)" % (uid, fullname))
 
