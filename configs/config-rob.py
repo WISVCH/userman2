@@ -26,11 +26,9 @@ groupLocations = {"Commissies": "commissies", "Overig": "overig"}
 enableHomeDirCreation = True
 enableHomeDirMove = True
 enableHomeDirRemoval = True
-enableQuotas = False
 homeDirBase = "/home/"
 skelDir = "/etc/skel/"
 graveyardDir = "/var/local/graveyard/"
-quotaString = "30000 32500 0 0 -a /dev/sdc3"
 
 # Mailboxes
 enableMailboxCreation = False

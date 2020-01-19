@@ -32,11 +32,9 @@ groupLocations = {"Commissies": "commissies", "Overig": "overig"}
 # Home directories
 enableHomeDirCreation = True
 enableHomeDirMove = True
-enableQuotas = False
 homeDirBase = "/export/gebruikers/"
 skelDir = "/etc/skel/"
 graveyardDir = "/var/local/graveyard/"
-quotaString = "30000 32500 0 0 -a /dev/sdc3"
 
 # Mailboxes
 enableMailboxCreation = False

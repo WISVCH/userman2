@@ -214,8 +214,6 @@ class Action:
         self.chmodTree(homedir, 0o600, 0o700)
         self.chownTree(homedir, user.getUIDNumber(), user.getGIDNumber())
 
-        if config.enableQuotas:
-            os.system("/usr/sbin/setquota -u " + user.getUID() + " " + config.quotaString)
         return True
 
     def moveHomeDir(self, attrs):
