@@ -19,7 +19,6 @@ enableGroupRemoval = True
 # Group directories
 enableGroupDirCreation = False
 enableGroupDirRemoval = False
-enableSambaShareRegen = False
 groupDirBase = "/export/groepen/userman_test/"
 groupLocations = {"Commissies": "commissies", "Overig": "overig"}
 

@@ -2,7 +2,6 @@
 
 # local imports
 import config
-from regeneratesambagroupconf import regenSambaGroupConf
 from user import User
 from group import Group
 
@@ -164,9 +163,6 @@ class Action:
         tar.close()
         rmtree(homedir)
 
-        if config.enableSambaShareRegen:
-            regenSambaGroupConf()
-
         return True
 
     def createGroupDir(self, attrs):
@@ -191,9 +187,6 @@ class Action:
             + ":rwx "
             + homedir
         )
-
-        if config.enableSambaShareRegen:
-            regenSambaGroupConf()
 
         return True
 

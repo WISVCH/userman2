@@ -26,7 +26,6 @@ loginScriptKixEndTemplate = loginScriptDir + "loginkixendtemplate"
 # Group directories
 enableGroupDirCreation = True
 enableGroupDirRemoval = True
-enableSambaShareRegen = True
 groupDirBase = "/export/groepen/"
 groupLocations = {"Commissies": "commissies", "Overig": "overig"}
 
