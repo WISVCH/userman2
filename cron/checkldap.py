@@ -19,7 +19,7 @@ def process(action):
         if not process(child):
             processed = False
 
-    # Check wether or not to proceed with execution
+    # Check whether or not to proceed with execution
     if not processed or (action.getHost() != config.localHostname) or action.isLocked():
         return False
 
