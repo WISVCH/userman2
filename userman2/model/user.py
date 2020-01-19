@@ -118,6 +118,16 @@ class User(LDAPConn):
     def removeAuthorizedService(self, service):
         self.removeEntries({"authorizedService": service})
 
+    def _get_homeDirRob(self):
+        return self.__attrs["homeDirectoryCH"][0]
+
+    homeDirectoryRob = property(_get_homeDirRob)
+
+    def _get_homeDirAnk(self):
+        return self.__attrs["homeDirectory"][0]
+
+    homeDirectoryAnk = property(_get_homeDirAnk)
+
     def createHomeDir(self, host):
         return action.Add("createHomeDir", host, self.dn, "Create home directory on " + host + " for " + self.uid)
 
