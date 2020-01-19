@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
+
 import config
-import string
 import ldap
 from ldap.cidict import cidict
 
-
 class User:
-
     """Represents a user in the ldap tree."""
 
     def __init__(self, l, dn):
@@ -18,7 +16,7 @@ class User:
         self.attrs = cidict(attrs)
 
     def getUID(self):
-        return self.attrs["uid"][0]
+        return self.attrs["uid"][0].decode()
 
     def getUIDNumber(self):
         return int(self.attrs["uidNumber"][0])
@@ -28,9 +26,9 @@ class User:
 
     def getHomeDirectory(self, host):
         if host == "rob.chnet":
-            return self.attrs["homeDirectoryCH"][0]
+            return self.attrs["homeDirectoryCH"][0].decode()
         else:
-            return self.attrs["homeDirectory"][0]
+            return self.attrs["homeDirectory"][0].decode()
 
     def getPrimaryGroup(self):
         res = self.l.search_s(config.ldapGroupOU, ldap.SCOPE_SUBTREE, "gidNumber=" + self.attrs["gidNumber"][0])

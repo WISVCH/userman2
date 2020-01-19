@@ -23,7 +23,6 @@ groupDirBase = "/export/groepen/userman_test/"
 groupLocations = {"Commissies": "commissies", "Overig": "overig"}
 
 # Home directories
-enableHomeDirCreation = True
 enableHomeDirRemoval = True
 homeDirBase = "/home/"
 skelDir = "/etc/skel/"

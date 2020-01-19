@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 
-# local imports
 import config
 from action import Action
 
 import sys
 import ldap
-from ldap.cidict import cidict
 from mail import mailAdmin
 
 
@@ -27,7 +25,7 @@ def process(action):
     try:
         action.lock()
         if action.execute():
-            mailAdmin("Success: " + action.getActionName(), "The following action has been processed: " + str(action))
+            mailAdmin("Success: " + action.getDescription(), "The following action has been processed: " + str(action))
             action.delete()
             return True
         else:
@@ -36,7 +34,7 @@ def process(action):
     except Exception as err:
         mailAdmin(
             "ERROR: " + action.getActionName(),
-            "An error occured while processing "
+            "An error occurred while processing "
             + str(action)
             + ".\nThe error was: "
             + str(err)

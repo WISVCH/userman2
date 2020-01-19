@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
-import config
-import string
+
 import ldap
 from ldap.cidict import cidict
-
 
 class Group:
     def __init__(self, l, dn):
@@ -14,7 +12,7 @@ class Group:
         self.attrs = cidict(attrs)
 
     def getCN(self):
-        return self.attrs["cn"][0]
+        return self.attrs["cn"][0].decode()
 
     def getParent(self):
         return self.dn.split(",")[1].split("=")[1]

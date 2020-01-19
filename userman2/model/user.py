@@ -229,6 +229,7 @@ def GetFreeUIDNumber():
     ld.connectAnon()
     for i in reversed(range(settings.MIN_USER_ID, settings.MAX_USER_ID + 1)):
         res = ld.l.search_s(settings.LDAP_USERDN, ldap.SCOPE_SUBTREE, "uidNumber=" + str(i))
+        res = ld.l.search_s(settings.LDAP_USERDN, ldap.SCOPE_SUBTREE, "uidNumber=" + str(i))
         if len(res) > 0:
             if i == settings.MAX_USER_ID:
                 raise Exception("No more free user IDs")

@@ -16,13 +16,6 @@ ldapUserOU = "ou=People,dc=ank,dc=chnet"
 enableUserRemoval = True
 enableGroupRemoval = True
 
-# generation of loginscripts
-enableLoginScriptGen = True
-loginScriptDir = "/export/netlogon/"
-loginScriptTemplate = loginScriptDir + "logintemplate"
-loginScriptKixTemplate = loginScriptDir + "loginkixtemplate"
-loginScriptKixEndTemplate = loginScriptDir + "loginkixendtemplate"
-
 # Group directories
 enableGroupDirCreation = True
 enableGroupDirRemoval = True
@@ -30,7 +23,7 @@ groupDirBase = "/export/groepen/"
 groupLocations = {"Commissies": "commissies", "Overig": "overig"}
 
 # Home directories
-enableHomeDirCreation = True
+enableHomeDirRemoval = True
 homeDirBase = "/export/gebruikers/"
 skelDir = "/etc/skel/"
 graveyardDir = "/var/local/graveyard/"

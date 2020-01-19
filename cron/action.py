@@ -7,7 +7,6 @@ from os.path import abspath, exists
 from shutil import copy2, rmtree
 from time import time
 
-# local imports
 import config
 import ldap
 from group import Group
@@ -28,38 +27,38 @@ class Action:
     def getDescription(self):
         res = self.l.search_s(self.dn, ldap.SCOPE_BASE)
         (_, attrs) = res[0]
-        return attrs["description"][0]
+        return attrs["description"][0].decode()
 
     def getArguments(self):
         res = self.l.search_s(self.dn, ldap.SCOPE_BASE)
         (_, attrs) = res[0]
-        return attrs["arguments"][0]
+        return attrs["arguments"][0].decode()
 
     def getHost(self):
         res = self.l.search_s(self.dn, ldap.SCOPE_BASE)
         (_, attrs) = res[0]
-        return attrs["host"][0]
+        return attrs["host"][0].decode()
 
     def getAffectedDN(self):
         res = self.l.search_s(self.dn, ldap.SCOPE_BASE)
         (_, attrs) = res[0]
-        return attrs["affectedDN"][0]
+        return attrs["affectedDN"][0].decode()
 
     def getActionName(self):
         res = self.l.search_s(self.dn, ldap.SCOPE_BASE)
         (_, attrs) = res[0]
-        return attrs["actionName"][0]
+        return attrs["actionName"][0].decode()
 
     def isLocked(self):
         res = self.l.search_s(self.dn, ldap.SCOPE_BASE)
         (_, attrs) = res[0]
-        return attrs["actionLocked"][0] == "TRUE"
+        return attrs["actionLocked"][0].decode() != "FALSE"
 
     def lock(self):
-        self.l.modify_s(self.dn, [(ldap.MOD_REPLACE, "actionLocked", "TRUE")])
+        self.l.modify_s(self.dn, [(ldap.MOD_REPLACE, "actionLocked", "TRUE".encode())])
 
     def unlock(self):
-        self.l.modify_s(self.dn, [(ldap.MOD_REPLACE, "actionLocked", "FALSE")])
+        self.l.modify_s(self.dn, [(ldap.MOD_REPLACE, "actionLocked", "FALSE".encode())])
 
     def delete(self):
         self.l.delete_s(self.dn)
@@ -68,27 +67,23 @@ class Action:
         return "Action: " + self.dn + ", " + self.getDescription()
 
     def execute(self):
-        res = self.l.search_s(self.dn, ldap.SCOPE_BASE)
-        (_, attrs) = res[0]
-
-        if attrs["actionName"][0] == "createGroupDir":
-            return self.createGroupDir(attrs)
-        elif attrs["actionName"][0] == "removeGroupDir":
-            return self.removeGroupDir(attrs)
-        elif attrs["actionName"][0] == "removeGroup":
-            return self.removeGroup(attrs)
-        elif attrs["actionName"][0] == "removeMailbox":
-            return self.removeMailbox(attrs)
-        elif attrs["actionName"][0] == "createHomeDir":
-            return self.createHomeDir(attrs)
-        elif attrs["actionName"][0] == "removeHomeDir":
-            return self.removeHomeDir(attrs)
-        elif attrs["actionName"][0] == "removeUser":
-            return self.removeUser(attrs)
+        actionName = self.getActionName()
+        if actionName == "createGroupDir":
+            return self.createGroupDir()
+        elif actionName == "removeGroupDir":
+            return self.removeGroupDir()
+        elif actionName == "removeGroup":
+            return self.removeGroup()
+        elif actionName == "removeMailbox":
+            return self.removeMailbox()
+        elif actionName == "removeHomeDir":
+            return self.removeHomeDir()
+        elif actionName == "removeUser":
+            return self.removeUser()
         else:
-            raise Exception("unknown actionName: " + attrs["actionName"][0])
+            raise Exception("unknown actionName: " + actionName)
 
-    def removeMailbox(self, attrs):
+    def removeMailbox(self):
         if not config.enableMailboxRemoval:
             raise Exception("Mailbox removal not enabled on host " + self.getHost())
 
@@ -106,7 +101,7 @@ class Action:
 
         return True
 
-    def removeGroupDir(self, attrs):
+    def removeGroupDir(self):
         if not config.enableGroupDirRemoval:
             raise Exception("Group directory removal not enabled on host " + self.getHost())
 
@@ -127,7 +122,7 @@ class Action:
 
         return True
 
-    def createGroupDir(self, attrs):
+    def createGroupDir(self):
         if not config.enableGroupDirCreation:
             raise Exception("Group directory creation not enabled on host " + self.getHost())
 
@@ -152,33 +147,14 @@ class Action:
 
         return True
 
-    def removeGroup(self, attrs):
+    def removeGroup(self,):
         if not config.enableGroupRemoval:
             raise Exception("Group removal not enabled on host " + self.getHost())
 
         self.l.delete_s(self.getAffectedDN())
         return True
 
-    def createHomeDir(self, attrs):
-        if not config.enableHomeDirCreation:
-            raise Exception("Home directory creation not enabled on host " + self.getHost())
-
-        user = User(self.l, self.getAffectedDN())
-        homedir = abspath(user.getHomeDirectory(self.getHost()))
-
-        if exists(homedir):
-            raise Exception("Home directory " + homedir + " already exists!")
-        if not homedir.startswith(config.homeDirBase):
-            raise Exception("Home directories must be created in " + config.homeDirBase)
-
-        makedirs(homedir)
-        self.copyTree(config.skelDir, homedir)
-        self.chmodTree(homedir, 0o600, 0o700)
-        self.chownTree(homedir, user.getUIDNumber(), user.getGIDNumber())
-
-        return True
-
-    def removeHomeDir(self, attrs):
+    def removeHomeDir(self):
         if not config.enableHomeDirRemoval:
             raise Exception("Home directory removal not enabled on host " + self.getHost())
 
@@ -199,7 +175,7 @@ class Action:
 
         return True
 
-    def removeUser(self, attrs):
+    def removeUser(self):
         if not config.enableUserRemoval:
             raise Exception("User removal not enabled on host " + self.getHost())
 

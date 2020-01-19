@@ -116,7 +116,7 @@
     </button>
     <form method="post" action="{{ request.get_full_path }}/rm">
         {% csrf_token %}
-        <button class="btn btn-danger" onclick="return confirm('Remove user {{ user.uid }}?')">
+        <button class="btn btn-danger" onclick="return confirm('Remove user {{ user.uid }}?\n\nPlease note that user removal takes several minutes.')">
             Remove user
         </button>
     </form>
