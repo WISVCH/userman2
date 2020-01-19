@@ -96,8 +96,6 @@ class Action:
             return True
         elif attrs["actionName"][0] == "removeHomeDir":
             return self.removeHomeDir(attrs)
-        elif attrs["actionName"][0] == "removeProfile":
-            return self.removeProfile(attrs)
         elif attrs["actionName"][0] == "removeUser":
             return self.removeUser(attrs)
         elif attrs["actionName"][0] == "warnRemove":
@@ -244,25 +242,6 @@ class Action:
 
         makedirs(homedir)
         os.rename(oldhomedir, homedir)
-
-        return True
-
-    def removeProfile(self, attrs):
-        if not config.enableProfileRemoval:
-            raise Exception("Profile removal not enabled on host " + self.getHost())
-
-        user = User(self.l, self.getAffectedDN())
-
-        profile = os.path.join(config.profileDir, user.getUID() + ".pdm.V2")
-
-        if exists(profile):
-            tar = tarfile.open(
-                os.path.join(config.graveyardDir, "PROFILE_" + user.getUID() + "-" + str(int(time())) + ".tar.gz"),
-                "w:gz",
-            )
-            tar.add(profile)
-            tar.close()
-            rmtree(profile)
 
         return True
 

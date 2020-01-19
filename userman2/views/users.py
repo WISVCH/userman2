@@ -223,20 +223,6 @@ def rmUser(request, uid):
     return HttpResponseRedirect("/users")
 
 
-def removeProfile(request, uid):
-    if request.method != "POST":
-        raise Http404
-
-    try:
-        userObj = user.FromUID(uid)
-    except Exception as e:
-        raise Http404
-
-    newAction = userObj.removeProfile("ank.chnet")
-    newAction.locked = False
-    return HttpResponseRedirect("/users/" + userObj.uid)
-
-
 def resetPassword(request, uid):
     if request.method != "POST":
         raise Http404

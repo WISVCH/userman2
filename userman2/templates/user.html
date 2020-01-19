@@ -119,12 +119,6 @@
     <button class="btn btn-warning" @click.prevent="resetPassword">
         Reset password
     </button>
-    <form method="post" action="{{ request.get_full_path }}/removeprofile">
-        {% csrf_token %}
-        <button class="btn btn-warning" onclick="return confirm('Reset Windows profile for {{ user.uid }}?')">
-            Reset Windows profile
-        </button>
-    </form>
     <form method="post" action="{{ request.get_full_path }}/rm">
         {% csrf_token %}
         <button class="btn btn-danger" onclick="return confirm('Remove user {{ user.uid }}?')">
@@ -149,7 +143,7 @@
             csrf_token: '{{ csrf_token }}',
         },
         async created() {
-            const response = await fetch('/users/' + this.username + '/dienst2status.json')
+            const response = await fetch('/users/' + this.username + '/dienst2status.json');
             this.dienst2status = await response.json()
         },
         methods: {
@@ -163,10 +157,10 @@
                 if (!confirm(`Change password for ${this.username}?\nThis will reset the user's password first.`)) {
                     return
                 }
-                const password = await this.resetPasswordExecute()
-                const form = document.getElementById('changePassword')
-                form.elements['username'].value = this.username
-                form.elements['currentPassword'].value = password
+                const password = await this.resetPasswordExecute();
+                const form = document.getElementById('changePassword');
+                form.elements['username'].value = this.username;
+                form.elements['currentPassword'].value = password;
                 form.submit()
             },
             async resetPasswordExecute() {
@@ -174,8 +168,8 @@
                     '/users/' + this.username + '/resetpasswd.json', {
                         method: 'POST',
                         headers: {'X-CSRFToken': this.csrf_token}
-                    })
-                const json = await response.json()
+                    });
+                const json = await response.json();
                 return json.password
             },
         }

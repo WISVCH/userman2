@@ -199,9 +199,6 @@ class User(LDAPConn):
             "removeHomeDir", host, self.dn, "Remove home directory on " + host + " for " + self.uid, parent
         )
 
-    def removeProfile(self, host, parent=False):
-        return action.Add("removeProfile", host, self.dn, "Remove profile on " + host + " for " + self.uid, parent)
-
     def remove(self):
         # Remove self from aliases/groups
         for secGroupCN in self.getSecondaryGroups():
@@ -214,12 +211,10 @@ class User(LDAPConn):
         # Create removal tree
         removeAction = action.Add("removeUser", "ank.chnet", self.dn, "Remove user " + self.uid)
         removeHomedirAnk = self.removeHomedir("ank.chnet", removeAction)
-        removeProfileAnk = self.removeProfile("ank.chnet", removeHomedirAnk)
         removeHomedirRob = self.removeHomedir("rob.chnet", removeAction)
         removeMailboxCh = self.removeMailbox("ch.chnet", removeAction)
 
         # Unlock removal tree
-        removeProfileAnk.locked = False
         removeHomedirAnk.locked = False
         removeMailboxCh.locked = False
         removeHomedirRob.locked = False

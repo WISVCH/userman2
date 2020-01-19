@@ -33,11 +33,8 @@ groupLocations = {"Commissies": "commissies", "Overig": "overig"}
 # Home directories
 enableHomeDirCreation = True
 enableHomeDirMove = True
-enableHomeDirRemoval = True
-enableProfileRemoval = True
 enableQuotas = False
 homeDirBase = "/export/gebruikers/"
-profileDir = "/export/gebruikers/profiles/"
 skelDir = "/etc/skel/"
 graveyardDir = "/var/local/graveyard/"
 quotaString = "30000 32500 0 0 -a /dev/sdc3"
