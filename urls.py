@@ -2,7 +2,6 @@ from django.conf.urls import url
 from django.urls import reverse_lazy
 from django.views.generic import RedirectView
 import userman2.views.aliases as aliases
-import userman2.views.computers as computers
 import userman2.views.groups as groups
 import userman2.views.users as users
 
@@ -47,10 +46,4 @@ urlpatterns += [
     url(r"^aliases/([a-zA-Z][a-zA-Z\-_\d.]+)/rm$", aliases.rmAlias),
     url(r"^aliases/([a-zA-Z][a-zA-Z\-_\d.]+)/rmuser/([a-zA-Z\d][-+_\@\.a-zA-Z\d]+)$", aliases.rmuser),
     url(r"^aliases/([a-zA-Z][a-zA-Z\-_\d.]+)/adduser$", aliases.adduser),
-]
-
-urlpatterns += [
-    url(r"^computers$", computers.displayComputers, name="displayComputers"),
-    url(r"^computers/add$", computers.addComputer, name="addComputer"),
-    url(r"^computers/([a-zA-Z][a-zA-Z\-_\d.]+\$)/rm$", computers.rmComputer),
 ]

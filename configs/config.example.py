@@ -11,7 +11,6 @@ f.close()
 ldapActionsOU = "ou=Actions,dc=ank,dc=chnet"
 ldapGroupOU = "ou=Group,dc=ank,dc=chnet"
 ldapUserOU = "ou=People,dc=ank,dc=chnet"
-ldapMachineOU = "ou=Computers,dc=ank,dc=chnet"
 
 # Users & Groups
 enableUserRemoval = True
