@@ -4,6 +4,7 @@ import config
 import ldap
 from ldap.cidict import cidict
 
+
 class User:
     """Represents a user in the ldap tree."""
 

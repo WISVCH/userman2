@@ -3,6 +3,7 @@
 import ldap
 from ldap.cidict import cidict
 
+
 class Group:
     def __init__(self, l, dn):
         self.l = l
