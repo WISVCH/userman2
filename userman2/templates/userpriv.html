@@ -2,42 +2,44 @@
 {% block title %}Userman2 — User privileges for {{ user.cn }}{% endblock %}
 {% load static %}
 {% block content %}
-<form method="post" action="">
-    {% csrf_token %}
     <table class="table">
         <thead>
-            <tr>
-                <th colspan='2'>
-                    Current services
-                </th>
-            </tr>
+        <tr>
+            <th colspan='2'>
+                Current services
+            </th>
+        </tr>
         </thead>
         {% for service in user.authorizedServices %}
-        <tr>
-            <td style="width: 32px;">
-                <form method="post" action="{{ request.get_full_path }}/rm/{{ service }}">
-                    {% csrf_token %}
-                    <button style="border: none; background: none; display: inline;" class="far fa-minus-square text-primary"></button>
-                </form>
-            </td>
-            <td colspan='2'>{{ service }}</td>
-        </tr>
+            <tr>
+                <td style="width: 32px;">
+                    <form method="post" action="{{ request.get_full_path }}/rm/{{ service }}">
+                        {% csrf_token %}
+                        <button style="border: none; background: none; display: inline;"
+                                class="far fa-minus-square text-primary"></button>
+                    </form>
+                </td>
+                <td colspan='2'>{{ service }}</td>
+            </tr>
         {% endfor %}
         <thead>
-            <tr>
-                <th colspan='2'>
-                    Add authorized service
-                </th>
-            </tr>
+        <tr>
+            <th colspan='2'>
+                Add authorized service
+            </th>
+        </tr>
         </thead>
         <tr>
             <td colspan="2">
-                {{ form.service }}
-                <br />
-                <small>Note: always add systemd-user@host in addition to sshd@host access.</small>
+                <form method="post" action="">
+                    {% csrf_token %}
+                    {{ form.service }}
+                    <br/>
+                    <small>Note: always add systemd-user@host in addition to sshd@host access.</small>
+                    <br/>
+                    <button class="btn btn-primary">Submit</button>
+                </form>
             </td>
         </tr>
     </table>
-    <button class="btn btn-primary">Submit</button>
-</form>
 {% endblock %}
