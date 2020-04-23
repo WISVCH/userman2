@@ -10,6 +10,15 @@ jobs:
     steps:
     - name: Check out code
       uses: actions/checkout@v1
+    - name: Push to GitHub Packages
+      uses: docker/build-push-action@v1
+      with:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        registry: docker.pkg.github.com
+        repository: wisvch/userman2/userman2
+        tag_with_ref: true
+        tag_with_sha: true
     - name: Build Docker image
       run: docker build -t userman2 .
     - name: Log in to Quay
