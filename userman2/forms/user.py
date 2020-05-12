@@ -22,8 +22,11 @@ class ChprivForm(forms.Form):
     service = forms.ChoiceField(
         choices=(
             ("samba@ank", "samba@ank"),
+            ("sshd@ank", "sshd@ank"),
+            ("systemd-user@ank", "systemd-user@ank"),
             ("sshd@rob", "sshd@rob"),
             ("systemd-user@rob", "systemd-user@rob"),
+            ("dovecot@hendrik", "dovecot@hendrik"),
             ("sshd@hendrik", "sshd@hendrik"),
             ("systemd-user@hendrik", "systemd-user@hendrik"),
             ("vpn@fw-01", "vpn@fw-01"),
@@ -55,11 +58,13 @@ class AddUserForm(forms.Form):
         regex="^[^:^,]+$", error_messages={"invalid": "Full name entry may not contain : or ,"}
     )
     access = forms.MultipleChoiceField(
-        initial=("samba@ank",),
+        initial=("samba@ank", "dovecot@hendrik", "vpn@fw-01",),
         choices=(
             ("samba@ank", "samba@ank"),
             ("sshd@rob", "sshd@rob"),
             ("systemd-user@rob", "systemd-user@rob"),
+            ("dovecot@hendrik", "dovecot@hendrik"),
             ("vpn@fw-01", "vpn@fw-01"),
         ),
+        widget=forms.SelectMultiple(attrs={"size": 5}),
     )
