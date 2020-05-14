@@ -4,3 +4,4 @@ requests==2.23.0
 django_extensions==2.1.3
 paramiko==2.7.1
 whitenoise==5.0.1
+ddtrace

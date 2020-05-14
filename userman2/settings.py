@@ -87,6 +87,7 @@ INSTALLED_APPS = (
     "django.contrib.staticfiles",
     "django_extensions",
     "django_request_logger",
+    'ddtrace.contrib.django',
     "userman2",
 )
 
