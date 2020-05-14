@@ -3,7 +3,7 @@
 {% load userman_tags %}
 {% load static %}
 {% block content %}
-<div class="col-xs-6">
+<div class="col-xs-6" id="app">
     <table class="table table-striped">
         <thead>
             <tr>
@@ -74,10 +74,30 @@
             <td colspan='2'><a href='{% url 'displayUsers' %}'>{{ member }}</a></td>
         </tr>
         {% endfor %} {% endif %}
+        {% if not alias %}
+            <thead>
+            <tr>
+                <th colspan='3'>
+                    Pending Actions
+                </th>
+            </tr>
+            </thead>
+            <tr>
+                <td colspan="3">
+                    <actions dn="{{ group.dn }}"></actions>
+                </td>
+            </tr>
+        {% endif %}
     </table>
     <form method="post" action="{{ request.get_full_path }}/rm">
         {% csrf_token %}
         <button class="btn btn-danger" onclick="return confirm('Really remove {{ group.cn }}?')">Remove</button>
     </form>
 </div>
+
+<script type="text/javascript">
+    const app = new Vue({
+        el: '#app',
+    })
+</script>
 {% endblock %}

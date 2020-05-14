@@ -1,9 +1,9 @@
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
-from django.views.decorators.cache import cache_control
 
 from userman2.forms.alias import *
 from userman2.model.ldapconn import LDAPError
+from userman2.views.error import Error
 
 
 def displayAliases(request):
@@ -25,7 +25,7 @@ def displayAlias(request, cn):
         aliasObj = alias.fromCN(cn)
     except:
         raise Http404
-    return render(request, "groupalias.html", {"group": aliasObj})
+    return render(request, "groupalias.html", {"alias": True, "group": aliasObj})
 
 
 def rmuser(request, cn, user):
@@ -64,7 +64,7 @@ def adduser(request, cn):
                     aliasObj.addMember(str(form.cleaned_data["email"]))
                 return HttpResponseRedirect("/aliases/" + aliasObj.cn)
             except LDAPError as e:
-                return render(request, "error.html", {"msg": e.message})
+                return Error(request, e.message)
     else:
         form = AddUserForm()
 
@@ -79,7 +79,7 @@ def addAlias(request, parent):
         form = AddAliasForm(request.POST)
         if form.is_valid():
             if alias.Exists(form.cleaned_data["common_name"]):
-                raise Http404
+                return Error(request, "Alias already exists.")
             alias.Add(parent, str(form.cleaned_data["common_name"]))
             return HttpResponseRedirect("/aliases/" + form.cleaned_data["common_name"])
     else:

@@ -1,14 +1,12 @@
-from datetime import datetime
-
 import requests
 from django.conf import settings
 from django.http import Http404, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
-from django.views.decorators.cache import cache_control
 
 from userman2.forms.user import *
 from userman2.model import action
 from userman2.model import user
+from userman2.views.error import Error
 
 
 def getUsersJson(request):
@@ -145,12 +143,11 @@ def addUser(request):
         form = AddUserForm(request.POST)
         if form.is_valid():
             if user.Exists(form.cleaned_data["uid"]):
-                raise Http404
+                return Error(request, "User already exists.")
             newUser = user.Add(str(form.cleaned_data["uid"]), str(form.cleaned_data["full_name"]))
 
             for access in form.cleaned_data["access"]:
                 newUser.addAuthorizedService(str(access))
-            # newUser.createSambaEntry()
 
             return HttpResponseRedirect("/users/" + form.cleaned_data["uid"])
     else:
@@ -168,8 +165,11 @@ def rmUser(request, uid):
     except Exception as e:
         raise Http404
 
+    if len(action.GetAllActions({"affectedDN": userObj.dn})) > 0:
+        return Error(request, "Cannot remove user with pending actions.")
+
     userObj.remove()
-    return HttpResponseRedirect("/users")
+    return HttpResponseRedirect("/actions")
 
 
 def resetPassword(request, uid):
@@ -198,12 +198,12 @@ def dienst2(username):
         r = requests.get(url, params={"ldap_username": username}, headers=headers, timeout=5)
     except requests.exceptions.RequestException as e:
         return {"error": str(e)}
-    if r.status_code is not 200:
+    if r.status_code != 200:
         return {"error": "Status code %d" % r.status_code}
 
     json = r.json()
     n = len(json["results"])
-    if n is 0:
+    if n == 0:
         ret = {"status": "error", "message": "Username not found in Dienst2"}
     elif n > 1:
         ret = {"status": "error", "message": "Error: %d records matched" % n}

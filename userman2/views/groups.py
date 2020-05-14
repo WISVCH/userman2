@@ -1,9 +1,9 @@
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
-from django.views.decorators.cache import cache_control
 
 from userman2.forms.group import *
-from userman2.model import group
+from userman2.model import group, action
+from userman2.views.error import Error
 
 
 def displayGroups(request):
@@ -71,7 +71,7 @@ def addGroup(request, parent):
         form = AddGroupForm(request.POST)
         if form.is_valid():
             if group.Exists(form.cleaned_data["common_name"]):
-                raise Http404
+                return Error(request, "Alias already exists.")
             newGroup = group.Add(parent, str(form.cleaned_data["common_name"]))
             if not newGroup.parent == "None" and not newGroup.parent == "Besturen":
                 newAction = newGroup.createGroupDir("ank.chnet")
@@ -92,6 +92,8 @@ def rmGroup(request, cn):
     except:
         raise Http404
 
-    groupObj.remove()
+    if len(action.GetAllActions({"affectedDN": groupObj.dn})) > 0:
+        return Error(request, "Cannot remove group with pending actions.")
 
+    groupObj.remove()
     return HttpResponseRedirect("/groups")

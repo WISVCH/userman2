@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Userman2 — Manage Users{% endblock %}
+{% block title %}Userman2 — Users{% endblock %}
 {% block content %}
 {% verbatim %}
 <div id="app">
@@ -7,7 +7,7 @@
         <thead>
             <tr>
                 <th style="width: 32px;">&nbsp;</th>
-                <th>Username <a href='/adduser'><i class="far fa-plus-square"></i></i></a></th>
+                <th>Username <a href='/adduser'><i class="far fa-plus-square"></i></a></th>
                 <th>Full Name</th>
                 <th>UID</th>
                 <th style="width: 18em;">
@@ -33,7 +33,7 @@
         </thead>
         <tbody>
             <tr v-for="user in filterUsers" @click="link(user)" style="cursor: pointer">
-                <td><a :href="'/users/' + user.name"><i class="far fa-edit"></i></span></a></td>
+                <td><a :href="'/users/' + user.name"><i class="far fa-edit"></i></a></td>
                 <td>{{ user.name }}</td>
                 <td>{{ user.full_name }}</td>
                 <td>{{ user.uid }}</td>

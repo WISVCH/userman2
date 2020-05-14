@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load userman_tags %}
+{% block title %}Userman2 — Actions{% endblock %}
+{% load static %}
+{% block content %}
+<div id="app">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>
+                Pending Actions
+            </th>
+        </tr>
+        </thead>
+        <tr>
+            <td>
+                <actions v-if="actions" :actions="actions"></actions>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script type="text/javascript">
+    const app = new Vue({
+        el: '#app',
+        data: {
+            actions: undefined,
+        },
+        async created() {
+            const actions = fetch('/actions/actions.json');
+            this.actions = (await (await actions).json()).actions
+        },
+    })
+</script>
+{% endblock %}

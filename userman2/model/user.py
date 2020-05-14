@@ -1,20 +1,18 @@
 #!/usr/bin/env python3
-from userman2.scripts import execute_script
-from userman2.model import group
-from userman2.model import alias
-from userman2.model import action
-import datetime
 import logging
-import time
 import secrets
 import string
-from io import StringIO
+import time
 
 import ldap
 from django.conf import settings
 from ldap.cidict import cidict
 
 from cron.mail import mailAdmin
+from userman2.model import action
+from userman2.model import alias
+from userman2.model import group
+from userman2.scripts import execute_script
 from .ldapconn import LDAPConn
 
 auditlog = logging.getLogger("userman2.audit")
@@ -127,9 +125,6 @@ class User(LDAPConn):
         return self.__attrs["homeDirectory"][0]
 
     homeDirectoryAnk = property(_get_homeDirAnk)
-
-    def createHomeDir(self, host):
-        return action.Add("createHomeDir", host, self.dn, "Create home directory on " + host + " for " + self.uid)
 
     def removeMailbox(self, host, parent):
         return action.Add("removeMailbox", host, self.dn, "Remove mailbox on " + host + " for " + self.uid, parent)
