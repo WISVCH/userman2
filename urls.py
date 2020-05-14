@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.urls import reverse_lazy
 from django.views.generic import RedirectView
 
@@ -49,4 +49,9 @@ urlpatterns += [
 urlpatterns += [
     url("actions/actions.json", actions.getActions),
     url("actions", actions.displayActions, name="displayActions"),
+]
+
+# Health check
+urlpatterns += [
+    url("healthz", include("health_check.urls")),
 ]
