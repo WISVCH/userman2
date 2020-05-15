@@ -1,6 +1,7 @@
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
 
+from userman2.dienst2 import usernameInDienst2
 from userman2.forms.alias import *
 from userman2.model.ldapconn import LDAPError
 from userman2.views.error import Error
@@ -78,12 +79,15 @@ def addAlias(request, parent):
     if request.method == "POST":
         form = AddAliasForm(request.POST)
         if form.is_valid():
-            if alias.Exists(form.cleaned_data["common_name"]):
+            cn = form.cleaned_data["common_name"]
+            if alias.Exists(cn):
                 return Error(request, "Alias already exists.")
-            if user.Exists(form.cleaned_data["common_name"]):
+            if user.Exists(cn):
                 return Error(request, "User with same name already exists.")
-            alias.Add(parent, str(form.cleaned_data["common_name"]))
-            return HttpResponseRedirect("/aliases/" + form.cleaned_data["common_name"])
+            if usernameInDienst2(cn):
+                return Error(request, "Username already exists in Dienst2.")
+            alias.Add(parent, str(cn))
+            return HttpResponseRedirect("/aliases/" + cn)
     else:
         form = AddAliasForm()
 

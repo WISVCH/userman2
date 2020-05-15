@@ -1,8 +1,7 @@
-import requests
-from django.conf import settings
 from django.http import Http404, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 
+from userman2.dienst2 import fetchDienst2Status, usernameInDienst2
 from userman2.forms.user import *
 from userman2.model import action, alias
 from userman2.model import user
@@ -16,11 +15,9 @@ def getUsersJson(request):
 
 
 def getUserDienst2Status(request, uid):
-    try:
-        userObj = user.FromUID(uid)
-    except:
+    if not user.Exists(uid):
         raise Http404
-    dienst2Status = dienst2(uid)
+    dienst2Status = fetchDienst2Status(uid)
     return JsonResponse(dienst2Status)
 
 
@@ -142,16 +139,19 @@ def addUser(request):
     if request.method == "POST":
         form = AddUserForm(request.POST)
         if form.is_valid():
-            if user.Exists(form.cleaned_data["uid"]):
+            uid = form.cleaned_data["uid"]
+            if user.Exists(uid):
                 return Error(request, "User already exists.")
-            if alias.Exists(form.cleaned_data["uid"]):
+            if alias.Exists(uid):
                 return Error(request, "Alias with same name already exists.")
-            newUser = user.Add(str(form.cleaned_data["uid"]), str(form.cleaned_data["full_name"]))
+            if usernameInDienst2(uid):
+                return Error(request, "Username already exists in Dienst2.")
+            newUser = user.Add(str(uid), str(form.cleaned_data["full_name"]))
 
             for access in form.cleaned_data["access"]:
                 newUser.addAuthorizedService(str(access))
 
-            return HttpResponseRedirect("/users/" + form.cleaned_data["uid"])
+            return HttpResponseRedirect("/users/" + uid)
     else:
         form = AddUserForm()
 
@@ -185,35 +185,3 @@ def resetPassword(request, uid):
 
     password = userObj.resetPassword()
     return JsonResponse({"password": password})
-
-
-def dienst2(username):
-    if username in settings.DIENST2_WHITELIST:
-        return {"status": "whitelisted", "message": "Whitelisted"}
-    if not settings.DIENST2_APITOKEN:
-        return {"error": "Dienst2 API token not set"}
-
-    headers = {"Authorization": "Token " + settings.DIENST2_APITOKEN}
-    url = settings.DIENST2_BASEURL + "/ldb/api/v3/people/"
-    link_prefix = "https://dienst2.ch.tudelft.nl/ldb/people/%d/"
-    try:
-        r = requests.get(url, params={"ldap_username": username}, headers=headers, timeout=5)
-    except requests.exceptions.RequestException as e:
-        return {"error": str(e)}
-    if r.status_code != 200:
-        return {"error": "Status code %d" % r.status_code}
-
-    json = r.json()
-    n = len(json["results"])
-    if n == 0:
-        ret = {"status": "error", "message": "Username not found in Dienst2"}
-    elif n > 1:
-        ret = {"status": "error", "message": "Error: %d records matched" % n}
-    else:
-        if json["results"][0]["membership_status"] >= 30:
-            ret = {"status": "success", "message": "Active member"}
-        else:
-            ret = {"status": "warning", "message": "Not an active member"}
-        ret["id"] = json["results"][0]["id"]
-        ret["href"] = link_prefix % json["results"][0]["id"]
-    return ret
