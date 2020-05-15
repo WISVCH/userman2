@@ -80,6 +80,8 @@ def addAlias(request, parent):
         if form.is_valid():
             if alias.Exists(form.cleaned_data["common_name"]):
                 return Error(request, "Alias already exists.")
+            if user.Exists(form.cleaned_data["common_name"]):
+                return Error(request, "User with same name already exists.")
             alias.Add(parent, str(form.cleaned_data["common_name"]))
             return HttpResponseRedirect("/aliases/" + form.cleaned_data["common_name"])
     else:

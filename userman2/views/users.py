@@ -4,7 +4,7 @@ from django.http import Http404, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 
 from userman2.forms.user import *
-from userman2.model import action
+from userman2.model import action, alias
 from userman2.model import user
 from userman2.views.error import Error
 
@@ -144,6 +144,8 @@ def addUser(request):
         if form.is_valid():
             if user.Exists(form.cleaned_data["uid"]):
                 return Error(request, "User already exists.")
+            if alias.Exists(form.cleaned_data["uid"]):
+                return Error(request, "Alias with same name already exists.")
             newUser = user.Add(str(form.cleaned_data["uid"]), str(form.cleaned_data["full_name"]))
 
             for access in form.cleaned_data["access"]:
