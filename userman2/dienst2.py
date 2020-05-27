@@ -31,12 +31,15 @@ def fetchDienst2Status(username):
     elif n > 1:
         ret = {"status": "error", "message": "Error: %d records matched" % n}
     else:
-        if json["results"][0]["membership_status"] >= 30:
+        person = json["results"][0]
+        if person["membership_status"] >= 30:
             ret = {"status": "success", "message": "Active member"}
         else:
             ret = {"status": "warning", "message": "Not an active member"}
-        ret["id"] = json["results"][0]["id"]
-        ret["href"] = LINK_PREFIX % json["results"][0]["id"]
+        if person["email_forward"]:
+            ret["email_forward"] = person["email"]
+        ret["id"] = person["id"]
+        ret["href"] = LINK_PREFIX % person["id"]
     return ret
 
 

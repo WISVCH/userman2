@@ -74,7 +74,13 @@
         <tr>
             <td>&nbsp;</td>
             <td>Dienst2</td>
-            <td><dienst2 v-if="dienst2status" :status="dienst2status" :full_name="full_name"></dienst2></td>
+            <td>
+                <dienst2 v-if="dienst2status" :status="dienst2status" :full_name="full_name"></dienst2>
+                <span v-if="dienst2status.email_forward">
+                    Email for {{ user.uid }}@ch.tudelft.nl is forwarded to
+                    {% verbatim %}{{ dienst2status.email_forward }}{% endverbatim %}
+                </span>
+            </td>
         </tr>
         <tr>
             <td>&nbsp;</td>
