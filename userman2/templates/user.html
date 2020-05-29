@@ -76,10 +76,26 @@
             <td>Dienst2</td>
             <td>
                 <dienst2 v-if="dienst2status" :status="dienst2status" :full_name="full_name"></dienst2>
-                <span v-if="dienst2status.email_forward">
-                    Email for {{ user.uid }}@ch.tudelft.nl is forwarded to
-                    {% verbatim %}{{ dienst2status.email_forward }}{% endverbatim %}
-                </span>
+            </td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td>Email</td>
+            <td>
+                <template v-if="dienst2status">
+                    <span v-if="dienst2status.email_forward">
+                        Email for {{ user.uid }}@ch.tudelft.nl is forwarded to
+                        {% verbatim %}{{ dienst2status.email_forward }}{% endverbatim %}.
+                    </span>
+                    <span v-else-if="{% if "dovecot@hendrik" in user.authorizedServices %}true{% else %}false{% endif %}">
+                        Email for {{ user.uid }}@ch.tudelft.nl is delivered to their CH mailbox and/or forwarded if
+                        they set up a filter.
+                    </span>
+                    <span v-else>
+                        Email for {{ user.uid }} will not be delivered: neither Dienst2 forward set up
+                        nor mailbox privilege given.
+                    </span>
+                </template>
             </td>
         </tr>
         <tr>
