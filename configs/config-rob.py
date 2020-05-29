@@ -25,7 +25,6 @@ groupLocations = {"Commissies": "commissies", "Overig": "overig"}
 # Home directories
 enableHomeDirRemoval = True
 homeDirBase = "/home/"
-skelDir = "/etc/skel/"
 graveyardDir = "/var/local/graveyard/"
 
 # Mailboxes

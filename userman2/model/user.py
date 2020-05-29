@@ -116,15 +116,10 @@ class User(LDAPConn):
     def removeAuthorizedService(self, service):
         self.removeEntries({"authorizedService": service})
 
-    def _get_homeDirRob(self):
-        return self.__attrs["homeDirectoryCH"][0]
-
-    homeDirectoryRob = property(_get_homeDirRob)
-
-    def _get_homeDirAnk(self):
+    def _get_homeDirectory(self):
         return self.__attrs["homeDirectory"][0]
 
-    homeDirectoryAnk = property(_get_homeDirAnk)
+    homeDirectory = property(_get_homeDirectory)
 
     def removeMailbox(self, host, parent):
         return action.Add("removeMailbox", host, self.dn, "Remove mailbox on " + host + " for " + self.uid, parent)
@@ -249,8 +244,7 @@ def Add(uid, fullname):
         "displayName": fullname,
         "gecos": fullname + ",,,",
         "gidNumber": str(settings.USER_GIDNUMBER),
-        "homeDirectory": settings.ANK_HOME_BASE + uid,
-        "homeDirectoryCH": settings.CH_HOME_BASE + uid,
+        "homeDirectory": settings.CH_HOME_BASE + uid,
         "loginShell": settings.DEFAULT_SHELL,
         "shadowLastChange": str(int(time.time() / 86400)),
         "shadowMax": str(99999),

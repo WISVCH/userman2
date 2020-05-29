@@ -25,11 +25,8 @@ class User:
     def getGIDNumber(self):
         return int(self.attrs["gidNumber"][0])
 
-    def getHomeDirectory(self, host):
-        if host == "rob.chnet":
-            return self.attrs["homeDirectoryCH"][0].decode()
-        else:
-            return self.attrs["homeDirectory"][0].decode()
+    def getHomeDirectory(self):
+        return self.attrs["homeDirectory"][0].decode()
 
     def getPrimaryGroup(self):
         res = self.l.search_s(config.ldapGroupOU, ldap.SCOPE_SUBTREE, "gidNumber=" + self.attrs["gidNumber"][0])

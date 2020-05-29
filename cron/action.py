@@ -159,7 +159,7 @@ class Action:
             raise Exception("Home directory removal not enabled on host " + self.getHost())
 
         user = User(self.l, self.getAffectedDN())
-        homedir = abspath(user.getHomeDirectory(self.getHost()))
+        homedir = abspath(user.getHomeDirectory())
 
         if not homedir.startswith(config.homeDirBase):
             raise Exception("Home directories must be created in " + config.homeDirBase)

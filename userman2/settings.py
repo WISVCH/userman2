@@ -113,7 +113,6 @@ MIN_USER_ID = 1500
 MAX_USER_ID = 2500
 USER_GIDNUMBER = 100
 
-ANK_HOME_BASE = "/export/gebruikers/" + time.strftime("%Y") + "/"
 CH_HOME_BASE = "/home/" + time.strftime("%Y") + "/"
 DEFAULT_SHELL = "/bin/bash"
 GRAVEYARD_DIR = "/var/local/graveyard/"
