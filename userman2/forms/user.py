@@ -21,15 +21,15 @@ class ChdescForm(forms.Form):
 class ChprivForm(forms.Form):
     service = forms.ChoiceField(
         choices=(
-            ("samba@ank", "samba@ank"),
+            ("samba@ank", "samba@ank (CH Fileserver)"),
             ("sshd@ank", "sshd@ank"),
             ("systemd-user@ank", "systemd-user@ank"),
-            ("sshd@rob", "sshd@rob"),
-            ("systemd-user@rob", "systemd-user@rob"),
-            ("dovecot@hendrik", "dovecot@hendrik"),
+            ("sshd@rob", "sshd@rob (Committee websites)"),
+            ("systemd-user@rob", "systemd-user@rob (Committee websites)"),
+            ("dovecot@hendrik", "dovecot@hendrik (CH Mailbox)"),
             ("sshd@hendrik", "sshd@hendrik"),
             ("systemd-user@hendrik", "systemd-user@hendrik"),
-            ("vpn@fw-01", "vpn@fw-01"),
+            ("vpn@fw-01", "vpn@fw-01 (CH VPN)"),
         )
     )
 
@@ -60,11 +60,10 @@ class AddUserForm(forms.Form):
     access = forms.MultipleChoiceField(
         initial=("samba@ank", "dovecot@hendrik", "vpn@fw-01",),
         choices=(
-            ("samba@ank", "samba@ank"),
-            ("sshd@rob", "sshd@rob"),
-            ("systemd-user@rob", "systemd-user@rob"),
-            ("dovecot@hendrik", "dovecot@hendrik"),
-            ("vpn@fw-01", "vpn@fw-01"),
+            ("samba@ank", "samba@ank (CH Fileserver)"),
+            ("vpn@fw-01", "vpn@fw-01 (CH VPN)"),
+            ("sshd@rob", "sshd@rob (Committee websites)"),
+            ("systemd-user@rob", "systemd-user@rob (Committee websites)"),
         ),
-        widget=forms.SelectMultiple(attrs={"size": 5}),
+        widget=forms.SelectMultiple(attrs={"size": 4}),
     )
