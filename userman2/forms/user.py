@@ -58,12 +58,13 @@ class AddUserForm(forms.Form):
         regex="^[^:^,]+$", error_messages={"invalid": "Full name entry may not contain : or ,"}
     )
     access = forms.MultipleChoiceField(
-        initial=("samba@ank", "dovecot@hendrik", "vpn@fw-01",),
+        initial=("samba@ank", "vpn@fw-01",),
         choices=(
             ("samba@ank", "samba@ank (CH Fileserver)"),
             ("vpn@fw-01", "vpn@fw-01 (CH VPN)"),
+            ("dovecot@hendrik", "dovecot@hendrik (CH Mailbox)"),
             ("sshd@rob", "sshd@rob (Committee websites)"),
             ("systemd-user@rob", "systemd-user@rob (Committee websites)"),
         ),
-        widget=forms.SelectMultiple(attrs={"size": 4}),
+        widget=forms.SelectMultiple(attrs={"size": 5}),
     )
