@@ -17,12 +17,11 @@ jobs:
       with:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
-        registry: docker.pkg.github.com
-        repository: wisvch/userman2/userman2
+        registry: containers.pkg.github.com
+        repository: wisvch/userman2
         tag_with_ref: true
         tag_with_sha: true
         add_git_labels: true
-        push: ${{ github.ref == 'refs/heads/master' }}
     - name: Push to Quay
       uses: docker/build-push-action@v1
       with:
