@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
+import sys
+import traceback
 
 import config
-from action import Action
-
-import sys
 import ldap
+from action import Action
 from mail import mailAdmin
 
 
@@ -31,13 +31,13 @@ def process(action):
         else:
             action.unlock()
             return False
-    except Exception as err:
+    except Exception:
         mailAdmin(
-            "ERROR: " + action.getActionName(),
+            "ERROR: " + action.getDescription(),
             "An error occurred while processing "
             + str(action)
-            + ".\nThe error was: "
-            + str(err)
+            + "\n\n"
+            + traceback.format_exc()
             + "\nThe Action has been locked, and must be re-enabled manually.",
         )
         action.lock()
