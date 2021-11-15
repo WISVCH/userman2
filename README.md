@@ -6,10 +6,10 @@
 
 1. Install dependencies:
 
-   - Python 3
+   - Python 3 ([Django 1.11 supports 3.4, 3.5, 3.6, or 3.7](https://docs.djangoproject.com/en/1.11/releases/1.11/))
    - Yarn
-   - `libldap2-dev` and `libsasl2-dev`
-       - `apt install libldap2-dev libsasl2-dev` on Debian/ubuntu
+   - `libldap-common`, `libldap2-dev` and `libsasl2-dev`
+       - `apt install libldap-common libldap2-dev libsasl2-dev` on Debian/Ubuntu
        - On macOS see https://stackoverflow.com/questions/43328378/python-ldap-macos-valueerror-option-error
 
 2. Create a [Python virtual environment]:
