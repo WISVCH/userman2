@@ -35,3 +35,4 @@ CMD ["gunicorn"]
 EXPOSE 8000
 
 LABEL quay.expires-after=12w
+LABEL org.opencontainers.image.source="https://github.com/WISVCH/userman2"
