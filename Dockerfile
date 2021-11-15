@@ -4,7 +4,7 @@ WORKDIR /src
 COPY . .
 RUN yarn install --flat
 
-FROM python:3.6-bullseye
+FROM python:3.7-bullseye
 
 # CH CA certificate for LDAP connections
 RUN curl -so /usr/local/share/ca-certificates/wisvch.crt https://ch.tudelft.nl/certs/wisvch.crt && \
@@ -33,5 +33,3 @@ USER 999
 ENTRYPOINT ["/srv/docker-entrypoint.sh"]
 CMD ["gunicorn"]
 EXPOSE 8000
-
-LABEL org.opencontainers.image.source="https://github.com/WISVCH/userman2"
