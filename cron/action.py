@@ -147,7 +147,9 @@ class Action:
 
         return True
 
-    def removeGroup(self,):
+    def removeGroup(
+        self,
+    ):
         if not config.enableGroupRemoval:
             raise Exception("Group removal not enabled on host " + self.getHost())
 
