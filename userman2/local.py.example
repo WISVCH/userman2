@@ -15,4 +15,3 @@ LDAP_PASSWORD = ""
 DIENST2_BASEURL = "https://dienst2.ch.tudelft.nl"
 DIENST2_APITOKEN = ""
 DIENST2_WHITELIST = ["root", "nobody"]
-SSH_ANK_PRIVKEY_FILE = ""

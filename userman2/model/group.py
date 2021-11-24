@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
-import re
 
 import ldap
 from django.conf import settings
 from ldap.cidict import cidict
 
 from userman2.model import action
-from userman2.scripts import execute_script
 from .ldapconn import LDAPConn
 
 
@@ -77,9 +75,6 @@ class Group(LDAPConn):
 
     def createGroupDir(self, host):
         return action.Add("createGroupDir", host, self.dn, "Create group directory on host " + host + " for " + self.cn)
-
-    def addGroupMapping(self):
-        raise Exception("Should create samba group mapping")
 
     def __str__(self):
         return "Group: [ dn:'" + self.dn + ", cn:'" + self.cn + "' ]"
@@ -184,5 +179,4 @@ def Add(parent, cn):
     dn = "cn=" + cn + ou + "," + settings.LDAP_GROUPDN
     gidNumber = GetFreeGIDNumber()
     ld.addObject(dn, {"objectClass": "posixGroup", "cn": cn, "gidNumber": str(gidNumber)})
-    execute_script("sudo /usr/local/userman2/scripts/addgroupmapping %s" % re.escape(cn))
     return FromCN(cn)

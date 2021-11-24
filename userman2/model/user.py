@@ -12,7 +12,6 @@ from cron.mail import mailAdmin
 from userman2.model import action
 from userman2.model import alias
 from userman2.model import group
-from userman2.scripts import execute_script
 from .ldapconn import LDAPConn
 
 auditlog = logging.getLogger("userman2.audit")
@@ -251,8 +250,6 @@ def Add(uid, fullname):
         "shadowWarning": str(7),
     }
     ld.addObject(dn, entry)
-
-    execute_script("sudo /usr/local/userman2/scripts/createsambauser %s" % uid)
 
     mailAdmin("Account created: %s" % uid, "A new account was created for %s (%s)" % (uid, fullname))
 
