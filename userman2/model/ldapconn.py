@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 import logging
 
-from django.conf import settings
 import ldap
+from django.conf import settings
 
 auditlog = logging.getLogger("userman2.audit")
 
@@ -12,6 +12,7 @@ class LDAPConn(object):
         self.connected = False
         self.privileged = False
         self.dn = None
+        self.l = None
 
     def connectAnon(self):
         if self.connected:
@@ -45,7 +46,7 @@ class LDAPConn(object):
         if not self.connected or not self.privileged:
             self.connectRoot()
         auditlog.info("Modify dn '%s' entries %s", self.dn, changes)
-        mod_attrs = [(ldap.MOD_REPLACE, k, v.encode()) for (k, v) in changes.items()]
+        mod_attrs = [(ldap.MOD_REPLACE, k, None if v is None else v.encode()) for (k, v) in changes.items()]
         self.l.modify_s(self.dn, mod_attrs)
 
     def addEntries(self, changes):

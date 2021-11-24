@@ -30,7 +30,7 @@ class User(LDAPConn):
             self.__attrs = cidict(attrs)
             return
 
-        self.connectAnon()
+        self.connectRoot()
         res = self.l.search_s(self.dn, ldap.SCOPE_BASE)
         (_, attrs) = res[0]
         self.__attrs = cidict(attrs)
@@ -71,7 +71,7 @@ class User(LDAPConn):
         """Returns the user description"""
         if not "description" in self.__attrs:
             return ""
-        return self.__attrs["description"][0]
+        return self.__attrs["description"][0].decode()
 
     def _set_description(self, description):
         """Sets the user description, or removes it for an empty string"""
@@ -84,7 +84,7 @@ class User(LDAPConn):
     # loginShell attribute
     def _get_loginShell(self):
         """Returns the user's shell"""
-        return self.__attrs["loginShell"][0]
+        return self.__attrs["loginShell"][0].decode()
 
     def _set_loginShell(self, loginShell):
         """Sets the user's shell"""
@@ -117,7 +117,7 @@ class User(LDAPConn):
         self.removeEntries({"authorizedService": service})
 
     def _get_homeDirectory(self):
-        return self.__attrs["homeDirectory"][0]
+        return self.__attrs["homeDirectory"][0].decode()
 
     homeDirectory = property(_get_homeDirectory)
 

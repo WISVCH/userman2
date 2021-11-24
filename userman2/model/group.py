@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-from userman2.scripts import execute_script
-from userman2.model import action
 import re
 
 import ldap
 from django.conf import settings
 from ldap.cidict import cidict
 
+from userman2.model import action
+from userman2.scripts import execute_script
 from .ldapconn import LDAPConn
 
 
@@ -128,7 +128,7 @@ def Groupname(value):
     ld.connectAnon()
     res = ld.l.search_s(settings.LDAP_GROUPDN, ldap.SCOPE_SUBTREE, "(gidNumber=" + value + ")")
     if len(res) > 0 and "cn" in res[0][1]:
-        return res[0][1]["cn"][0]
+        return res[0][1]["cn"][0].decode()
     else:
         return "unknown group"
 
