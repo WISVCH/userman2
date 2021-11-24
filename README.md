@@ -15,13 +15,13 @@
 2. Create a [Python virtual environment]:
 
 ```
-python3 -m venv env
+python3 -m venv venv
 ```
 
 3. Activate the virtual environment in your shell:
 
 ```
-source env/bin/activate
+source venv/bin/activate
 ```
 
 4. Install Python dependencies into the virtual environment:

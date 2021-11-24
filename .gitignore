@@ -5,6 +5,7 @@ cron/config.py
 userman2/local.py
 /static
 /env/
+/venv/
 .idea/
 .vscode/
 *.iml
