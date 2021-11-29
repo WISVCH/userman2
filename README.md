@@ -6,7 +6,7 @@
 
 1. Install dependencies:
 
-   - Python 3 ([Django 1.11 supports 3.4, 3.5, 3.6, or 3.7](https://docs.djangoproject.com/en/1.11/releases/1.11/))
+   - [Python 3.6+](https://docs.djangoproject.com/en/3.2/faq/install/#what-python-version-can-i-use-with-django)
    - Yarn
    - `libldap-common`, `libldap2-dev` and `libsasl2-dev`
        - `apt install libldap-common libldap2-dev libsasl2-dev` on Debian/Ubuntu
