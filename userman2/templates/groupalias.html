@@ -71,7 +71,7 @@
         {% for member in group.getPrimaryMembers %}
         <tr>
             <td></td>
-            <td colspan='2'><a href='{% url 'displayUsers' %}'>{{ member }}</a></td>
+            <td colspan='2'><a href='{% url 'displayUser' member %}'>{{ member }}</a></td>
         </tr>
         {% endfor %} {% endif %}
         {% if not alias %}

@@ -203,7 +203,7 @@ def GetPrimaryMembersForGid(gid):
     ld = LDAPConn()
     ld.connectAnon()
     res = ld.l.search_s(settings.LDAP_USERDN, ldap.SCOPE_ONELEVEL, "gidNumber=" + str(gid))
-    return [attribs["uid"][0] for dn, attribs in res]
+    return [attribs["uid"][0].decode() for dn, attribs in res]
 
 
 def Exists(uid):
