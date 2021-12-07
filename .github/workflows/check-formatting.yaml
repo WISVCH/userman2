@@ -8,7 +8,7 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v1
     - name: Check formatting using Black
-      uses: docker://python:3.6
+      uses: docker://python:3.10
       with:
         entrypoint: /bin/bash
         args: >
