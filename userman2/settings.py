@@ -24,6 +24,10 @@ SITE_ID = 1
 # to load the internationalization machinery.
 USE_I18N = False
 
+# Do not use timezone-aware datetimes
+# https://docs.djangoproject.com/en/4.0/ref/settings/#std:setting-USE_TZ
+USE_TZ = False
+
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
 MEDIA_ROOT = ""
