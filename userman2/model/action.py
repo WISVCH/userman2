@@ -110,7 +110,6 @@ def GetAllActions(filter_data=False, ld=None):
         ld = LDAPConn()
         ld.connectAnon()
 
-    attrlist = ["description"]
     if filter_data:
         filter_string = "(&"
         if "actionName" in filter_data and filter_data["actionName"]:
@@ -120,9 +119,9 @@ def GetAllActions(filter_data=False, ld=None):
         if "cn" in filter_data and filter_data["cn"]:
             filter_string += "(cn=*" + filter_data["cn"] + "*)"
         filter_string += ")"
-        res = ld.l.search_s(settings.LDAP_ACTIONDN, ldap.SCOPE_SUBTREE, filter_string, attrlist=attrlist)
+        res = ld.l.search_s(settings.LDAP_ACTIONDN, ldap.SCOPE_SUBTREE, filter_string)
     else:
-        res = ld.l.search_s(settings.LDAP_ACTIONDN, ldap.SCOPE_SUBTREE, attrlist=attrlist)
+        res = ld.l.search_s(settings.LDAP_ACTIONDN, ldap.SCOPE_SUBTREE)
     res.sort()
     ret = [Action(dn, attrs) for (dn, attrs) in res]
     return ret
