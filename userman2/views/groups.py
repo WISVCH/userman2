@@ -72,10 +72,7 @@ def addGroup(request, parent):
         if form.is_valid():
             if group.Exists(form.cleaned_data["common_name"]):
                 return Error(request, "Alias already exists.")
-            newGroup = group.Add(parent, str(form.cleaned_data["common_name"]))
-            if not newGroup.parent == "None" and not newGroup.parent == "Besturen":
-                newAction = newGroup.createGroupDir("ank.chnet")
-                newAction.locked = False
+            group.Add(parent, str(form.cleaned_data["common_name"]))
             return HttpResponseRedirect("/groups/" + form.cleaned_data["common_name"])
     else:
         form = AddGroupForm()

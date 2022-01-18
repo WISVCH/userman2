@@ -2,14 +2,13 @@
 
 import os
 import tarfile
-from os import makedirs
 from os.path import abspath, exists
 from shutil import copy2, rmtree
 from time import time
 
 import config
 import ldap
-from group import Group
+
 from user import User
 
 
@@ -68,13 +67,7 @@ class Action:
 
     def execute(self):
         actionName = self.getActionName()
-        if actionName == "createGroupDir":
-            return self.createGroupDir()
-        elif actionName == "removeGroupDir":
-            return self.removeGroupDir()
-        elif actionName == "removeGroup":
-            return self.removeGroup()
-        elif actionName == "removeMailbox":
+        if actionName == "removeMailbox":
             return self.removeMailbox()
         elif actionName == "removeHomeDir":
             return self.removeHomeDir()
@@ -99,61 +92,6 @@ class Action:
             tar.close()
             rmtree(mailbox)
 
-        return True
-
-    def removeGroupDir(self):
-        if not config.enableGroupDirRemoval:
-            raise Exception("Group directory removal not enabled on host " + self.getHost())
-
-        group = Group(self.l, self.getAffectedDN())
-        homedir = abspath(os.path.join(config.groupDirBase, config.groupLocations[group.getParent()], group.getCN()))
-
-        if not exists(homedir):
-            raise Exception("Group directory " + homedir + " doesn't exist!")
-        if not homedir.startswith(config.groupDirBase):
-            raise Exception("Group directories must be created in " + config.groupDirBase)
-
-        tar = tarfile.open(
-            os.path.join(config.graveyardDir, "GROUP_" + group.getCN() + "-" + str(int(time())) + ".tar.gz"), "w:gz"
-        )
-        tar.add(homedir)
-        tar.close()
-        rmtree(homedir)
-
-        return True
-
-    def createGroupDir(self):
-        if not config.enableGroupDirCreation:
-            raise Exception("Group directory creation not enabled on host " + self.getHost())
-
-        group = Group(self.l, self.getAffectedDN())
-        homedir = abspath(os.path.join(config.groupDirBase, config.groupLocations[group.getParent()], group.getCN()))
-
-        if exists(homedir):
-            raise Exception("Group directory " + homedir + " already exists!")
-        if not homedir.startswith(config.groupDirBase):
-            raise Exception("Group directories must be created in " + config.homeDirBase)
-
-        makedirs(homedir)
-        self.chownTree(homedir, 0, group.getGIDNumber())
-        os.system(
-            "setfacl -R --set u::rwx,g::rwx,o:---,d:o:---,d:g::---,d:u::rwx,d:g:vc:rx,g:vc:rx,d:g:bestuur:rx,g:bestuur:rx,d:g:"
-            + group.getCN()
-            + ":rwx,g:"
-            + group.getCN()
-            + ":rwx "
-            + homedir
-        )
-
-        return True
-
-    def removeGroup(
-        self,
-    ):
-        if not config.enableGroupRemoval:
-            raise Exception("Group removal not enabled on host " + self.getHost())
-
-        self.l.delete_s(self.getAffectedDN())
         return True
 
     def removeHomeDir(self):

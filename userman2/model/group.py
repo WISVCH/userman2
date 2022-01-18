@@ -4,7 +4,6 @@ import ldap
 from django.conf import settings
 from ldap.cidict import cidict
 
-from userman2.model import action
 from .ldapconn import LDAPConn
 
 
@@ -55,26 +54,14 @@ class Group(LDAPConn):
         self.addEntries({"memberUid": member})
 
     def remove(self):
-        if self.parent == "None" or self.parent == "Besturen":
-            ld = LDAPConn()
-            ld.connectRoot()
-            ld.l.delete_s(self.dn)
-        else:
-            removeAction = action.Add("removeGroup", "ank.chnet", self.dn, "Remove group entry in LDAP for " + self.dn)
-            removeAnkGroupDirAction = self.removeGroupDir("ank.chnet", removeAction)
-            removeAnkGroupDirAction.locked = False
-            removeAction.locked = False
+        ld = LDAPConn()
+        ld.connectRoot()
+        ld.l.delete_s(self.dn)
 
     def getPrimaryMembers(self):
         from userman2.model import user
 
         return user.GetPrimaryMembersForGid(self.gidNumber)
-
-    def removeGroupDir(self, host, parent):
-        return action.Add("removeGroupDir", host, self.dn, "Remove group directory on ank.chnet for " + self.cn, parent)
-
-    def createGroupDir(self, host):
-        return action.Add("createGroupDir", host, self.dn, "Create group directory on host " + host + " for " + self.cn)
 
     def __str__(self):
         return "Group: [ dn:'" + self.dn + ", cn:'" + self.cn + "' ]"
