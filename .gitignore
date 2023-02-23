@@ -3,6 +3,8 @@
 *.pyc
 cron/config.py
 userman2/local.py
+google/local.py
+google/service-account.json
 /static
 /env/
 /venv/
@@ -11,3 +13,4 @@ userman2/local.py
 *.iml
 userman2/static/lib
 privkey
+secret/

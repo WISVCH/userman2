@@ -1,0 +1,3 @@
+# Setup Google Directory API
+GOOGLE_SERVICE_ACCOUNT = "service-account.json"
+GOOGLE_ADMIN_EMAIL = ""
