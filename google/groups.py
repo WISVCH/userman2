@@ -6,18 +6,22 @@ from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
-def getGoogleService(scopes = []):
+
+def getGoogleService(scopes=[]):
     """Returns a Google Directory API service object"""
-    credentials = service_account.Credentials.from_service_account_file(
-        env.GOOGLE_SERVICE_ACCOUNT,
-        scopes=scopes
-    )
+    credentials = service_account.Credentials.from_service_account_file(env.GOOGLE_SERVICE_ACCOUNT, scopes=scopes)
     delegated_credentials = credentials.with_subject(env.GOOGLE_ADMIN_EMAIL)
     return build("admin", "directory_v1", credentials=delegated_credentials)
 
+
 def getGoogleGroups(domains=["wisv.ch", "ch.tudelft.nl"]):
     """Returns all Google Groups"""
-    service = getGoogleService(["https://www.googleapis.com/auth/admin.directory.group.readonly", "https://www.googleapis.com/auth/admin.directory.group.member.readonly"])
+    service = getGoogleService(
+        [
+            "https://www.googleapis.com/auth/admin.directory.group.readonly",
+            "https://www.googleapis.com/auth/admin.directory.group.member.readonly",
+        ]
+    )
 
     groups = []
     for domain in domains:
@@ -26,9 +30,15 @@ def getGoogleGroups(domains=["wisv.ch", "ch.tudelft.nl"]):
             groups += data["groups"]
     return groups
 
+
 def getGoogleGroup(group_name):
     """Returns a Google Group object with the members"""
-    service = getGoogleService(["https://www.googleapis.com/auth/admin.directory.group.readonly", "https://www.googleapis.com/auth/admin.directory.group.member.readonly"])
+    service = getGoogleService(
+        [
+            "https://www.googleapis.com/auth/admin.directory.group.readonly",
+            "https://www.googleapis.com/auth/admin.directory.group.member.readonly",
+        ]
+    )
 
     group = service.groups().get(groupKey=group_name).execute()
     members = service.members().list(groupKey=group_name).execute()
@@ -44,14 +54,11 @@ def getGoogleGroup(group_name):
             output["members"] += [member["email"]]
     return output
 
+
 def createGoogleGroup(email, name, description=""):
     """Creates a Google Group"""
     service = getGoogleService(["https://www.googleapis.com/auth/admin.directory.group"])
-    group = {
-        "email": email,
-        "name": name,
-        "description": description
-    }
+    group = {"email": email, "name": name, "description": description}
 
     try:
         service.groups().insert(body=group).execute()
@@ -61,13 +68,11 @@ def createGoogleGroup(email, name, description=""):
         else:
             raise e
 
-def addMemberToGoogleGroup(email, group_name):
+
+def addMemberToGoogleGroup(email, group_name, role="MEMBER"):
     """Adds a member to a Google Group"""
     service = getGoogleService(["https://www.googleapis.com/auth/admin.directory.group.member"])
-    member = {
-        "email": email,
-        "role": "MEMBER"
-    }
+    member = {"email": email, "role": role}
 
     try:
         service.members().insert(groupKey=group_name, body=member).execute()
@@ -76,6 +81,7 @@ def addMemberToGoogleGroup(email, group_name):
             print("- Member {} already exists in group {}".format(email, group_name))
         else:
             raise e
+
 
 def getAllLdapGroups(filter_data=False):
     """Returns all groups under LDAP_GROUPDN, in a dictionary sorted by their ou"""
@@ -103,6 +109,7 @@ def getAllLdapGroups(filter_data=False):
         #     ret[group.parent] = []
         # ret[group.parent] += [group]
     return ret
+
 
 if __name__ == "__main__":
     print(getAllLdapGroups())

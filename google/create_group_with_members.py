@@ -1,6 +1,7 @@
 from groups import *
 
-def createGoogleGroupWithMembers(group_name: str, group_domain: str, domains = [], users = []):
+
+def createGoogleGroupWithMembers(group_name: str, group_domain: str, domains=[], users=[]):
     """
     Creates a Google Group with the given name and email [group_name]@[group_domain] and adds the given users to the group.
     If the group already exists, the users are added to the group.
@@ -40,7 +41,7 @@ def createGoogleGroupWithMembers(group_name: str, group_domain: str, domains = [
                 if user in group["members"]:
                     print("-- User {} is already a member of group {}".format(user, group_name))
                     continue
-            
+
             # Add user to group
             addMemberToGoogleGroup(user, group["email"])
             print("-- Added {} to group {}".format(user, group_name))
@@ -55,5 +56,11 @@ def createGoogleGroupWithMembers(group_name: str, group_domain: str, domains = [
             addMemberToGoogleGroup(user, group_email)
             print("-- Added {} to group {}".format(user, group_name))
 
+
 if __name__ == "__main__":
-    createGoogleGroupWithMembers("test", "ch.tudelft.nl", ["ch.tudelft.nl", "wisv.ch"], ["joepj@ch.tudelft.nl", "joep@lezenisadten.nl", "beheer@wisv.ch"])
+    createGoogleGroupWithMembers(
+        "test",
+        "ch.tudelft.nl",
+        ["ch.tudelft.nl", "wisv.ch"],
+        ["joepj@ch.tudelft.nl", "testje@ch.tudelft.nl", "beheer@wisv.ch"],
+    )
