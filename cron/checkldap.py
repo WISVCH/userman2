@@ -56,7 +56,7 @@ try:
 
     res = l.search_s(config.ldapActionsOU, ldap.SCOPE_ONELEVEL)
 
-    for (dn, _) in res:
+    for dn, _ in res:
         action = Action(l, dn)
         process(action)
 

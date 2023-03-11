@@ -92,7 +92,6 @@ INSTALLED_APPS = (
     "django_extensions",
     "django_request_logger",
     "health_check",
-    "ddtrace.contrib.django",
     "userman2",
 )
 
