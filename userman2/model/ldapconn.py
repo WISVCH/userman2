@@ -66,7 +66,7 @@ class LDAPConn(object):
         if not self.connected or not self.privileged:
             self.connectRoot()
         mod_attrs = []
-        for (k, v) in changes.items():
+        for k, v in changes.items():
             if isinstance(v, str):
                 mod_attrs.append((k, v.encode()))
             elif isinstance(v, list):
@@ -90,7 +90,7 @@ class LDAPConn(object):
         if not self.connected or not self.privileged:
             self.connectRoot()
         mod_attrs = []
-        for (k, v) in changes.items():
+        for k, v in changes.items():
             if isinstance(v, str):
                 mod_attrs.append((ldap.MOD_DELETE, k, v.encode()))
             elif isinstance(v, list):
